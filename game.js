@@ -32,11 +32,7 @@ export class Game {
         this.cellSize = this.screenSize / this.gridSize;
         this.setupCanvas();
         this.initializeGameState();
-    }
-
-    setupCanvas() {
-        this.screen.height = this.screen.width = this.screenSize;
-        this.screen.tabIndex = 1;
+        this.initializeResources();
     }
 
     initializeGameState() {
@@ -57,6 +53,48 @@ export class Game {
             moveHistory: [],
             exploredCells: new Set()
         };
+        this.hiddenGrids = new Map();
+    }
+
+
+    setupCanvas() {
+        this.screen.height = this.screen.width = this.screenSize;
+        this.screen.tabIndex = 1;
+    }
+
+    initializeResources() {
+        const resources = [
+            { type: 1, color: '#800080' },
+            { type: 2, color: '#FF4500' },
+            { type: 3, color: '#20B2AA' }
+        ];
+
+        for (const resource of resources) {
+            let placed = 0;
+            while (placed < 3) {
+                const x = Math.floor(Math.random() * (this.gridSize - 1));
+                const y = Math.floor(Math.random() * (this.gridSize - 1));
+
+                let isOccupied = false;
+                for (let dy = 0; dy < 2 && !isOccupied; dy++) {
+                    for (let dx = 0; dx < 2; dx++) {
+                        if (this.hiddenGrids.has(`${x + dx},${y + dy}`)) {
+                            isOccupied = true;
+                            break;
+                        }
+                    }
+                }
+
+                if (!isOccupied) {
+                    for (let dy = 0; dy < 2; dy++) {
+                        for (let dx = 0; dx < 2; dx++) {
+                            this.hiddenGrids.set(`${x + dx},${y + dy}`, resource);
+                        }
+                    }
+                    placed++;
+                }
+            }
+        }
     }
 
     updateFlare() {
@@ -120,16 +158,23 @@ export class Game {
                 const isFlare = this.gameState.flare.active && this.gameState.flare.x === x && this.gameState.flare.y === y;
                 const isFlareTrail = this.gameState.flare.path.has(`${x},${y}`);
                 const isGrayFlareTrail = this.gameState.flare.grayPath.has(`${x},${y}`);
+                const resource = this.hiddenGrids.get(`${x},${y}`);
 
                 const cellX = Math.floor(x * this.cellSize);
                 const cellY = Math.floor(y * this.cellSize);
-                const cellWidth = Math.ceil(this.cellSize + 0.5); // Slightly larger to prevent gaps
+                const cellWidth = Math.ceil(this.cellSize + 0.5);
                 const cellHeight = Math.ceil(this.cellSize + 0.5);
 
-                if (isVisible) {
+                if (resource && isVisible) {
+                    this.paint.fillStyle = resource.color;
+                } else if (isVisible) {
                     this.paint.fillStyle = 'green';
                 } else if (isExplored || isGrayFlareTrail) {
-                    this.paint.fillStyle = '#333';
+                    if (resource) {
+                        this.paint.fillStyle = resource.color;
+                    } else {
+                        this.paint.fillStyle = '#333';
+                    }
                 } else {
                     this.paint.fillStyle = 'black';
                 }
@@ -139,8 +184,10 @@ export class Game {
                     this.paint.fillStyle = 'blue';
                     this.paint.fillRect(cellX, cellY, cellWidth, cellHeight);
                 } else if (isFlare || isFlareTrail) {
-                    this.paint.fillStyle = 'yellow';
-                    this.paint.fillRect(cellX, cellY, cellWidth, cellHeight);
+                    if (!resource) {  // Only draw flare trail if not a resource square
+                        this.paint.fillStyle = 'yellow';
+                        this.paint.fillRect(cellX, cellY, cellWidth, cellHeight);
+                    }
                 }
             }
         }
@@ -210,6 +257,10 @@ export class Game {
                     return;
             }
 
+            if (this.hiddenGrids.has(`${newX},${newY}`)) {
+                return;
+            }
+
             if (newX !== this.gameState.player.x || newY !== this.gameState.player.y) {
                 this.gameState.moveHistory.push({x: this.gameState.player.x, y: this.gameState.player.y});
 
@@ -232,6 +283,6 @@ export class Game {
         this.gameState.moveHistory.push({x: this.gameState.player.x, y: this.gameState.player.y});
         this.updateExploredCells();
         this.draw();
-        this.screen.focus(); // Add this to ensure keyboard input works
+        this.screen.focus();
     }
 }
