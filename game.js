@@ -3,6 +3,8 @@ export class Game {
         this.level = level;
         this.screen = document.createElement('canvas');
         this.paint = this.screen.getContext('2d');
+        this.treeImage = new Image();
+        this.treeImage.src = "./assets/tree.png";
 
         this.screenSize = 800;
 
@@ -219,7 +221,7 @@ export class Game {
 
     drawResourceBar() {
         const barHeight = 80;
-        const barWidth = 300; // Fixed width
+        const barWidth = 300;
         const barY = this.screen.height - barHeight - 20;
         const barX = (this.screen.width - barWidth) / 2;
         const boxSize = 60;
@@ -229,7 +231,7 @@ export class Game {
         this.paint.fillRect(barX, barY, barWidth, barHeight);
 
         const resources = [
-            { color: '#800080', amount: 0 },
+            { isImage: true, image: this.treeImage, amount: 0 },
             { color: '#FF4500', amount: 0 },
             { color: '#20B2AA', amount: 0 }
         ];
@@ -240,8 +242,12 @@ export class Game {
             this.paint.fillStyle = 'rgba(255, 255, 255, 0.1)';
             this.paint.fillRect(x, barY + 10, boxSize, boxSize);
 
-            this.paint.fillStyle = resource.color;
-            this.paint.fillRect(x + 15, barY + 25, 30, 30);
+            if (resource.isImage && resource.image.complete) {
+                this.paint.drawImage(resource.image, x + 15, barY + 25, 30, 30);
+            } else {
+                this.paint.fillStyle = resource.color;
+                this.paint.fillRect(x + 15, barY + 25, 30, 30);
+            }
 
             this.paint.fillStyle = 'white';
             this.paint.font = '16px Arial';
