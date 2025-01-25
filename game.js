@@ -209,6 +209,7 @@ export class Game {
         }
 
         this.drawResourceBar();
+        this.drawMinimap();
 
         if (this.gameState.flare.active) {
             this.updateFlare();
@@ -247,6 +248,42 @@ export class Game {
             this.paint.textAlign = 'center';
             this.paint.fillText(resource.amount, x + boxSize/2, barY + boxSize + 5);
         });
+    }
+
+    drawMinimap() {
+        const mapSize = 150; // Size of minimap
+        const padding = 20;
+        const scale = mapSize / this.gridSize;
+
+        this.paint.strokeStyle = 'rgba(255, 255, 255, 0.3)';
+        this.paint.lineWidth = 2;
+        this.paint.strokeRect(padding - 1, this.screen.height - mapSize - padding - 1, mapSize + 2, mapSize + 2);
+
+        this.paint.fillStyle = 'rgba(0, 0, 0, 0.3)';
+        this.paint.fillRect(padding, this.screen.height - mapSize - padding, mapSize, mapSize);
+
+        for (let y = 0; y < this.gridSize; y++) {
+            for (let x = 0; x < this.gridSize; x++) {
+                const isExplored = this.gameState.exploredCells.has(`${x},${y}`);
+                const resource = this.hiddenGrids.get(`${x},${y}`);
+                const miniX = padding + (x * scale);
+                const miniY = this.screen.height - mapSize - padding + (y * scale);
+
+                if (isExplored) {
+                    if (resource) {
+                        this.paint.fillStyle = resource.color;
+                    } else {
+                        this.paint.fillStyle = '#333';
+                    }
+                    this.paint.fillRect(miniX, miniY, scale, scale);
+                }
+            }
+        }
+
+        const playerX = padding + (this.gameState.player.x * scale);
+        const playerY = this.screen.height - mapSize - padding + (this.gameState.player.y * scale);
+        this.paint.fillStyle = 'blue';
+        this.paint.fillRect(playerX, playerY, scale, scale);
     }
 
     setupEventListeners() {
