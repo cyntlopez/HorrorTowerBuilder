@@ -146,6 +146,9 @@ export class Game {
     }
 
     draw() {
+        const viewOffsetX = this.screen.width/2 - (this.gameState.player.x * this.cellSize);
+        const viewOffsetY = this.screen.height/2 - (this.gameState.player.y * this.cellSize);
+
         this.paint.fillStyle = 'black';
         this.paint.fillRect(0, 0, this.screen.width + 1, this.screen.height + 1);
 
@@ -160,10 +163,15 @@ export class Game {
                 const isGrayFlareTrail = this.gameState.flare.grayPath.has(`${x},${y}`);
                 const resource = this.hiddenGrids.get(`${x},${y}`);
 
-                const cellX = Math.floor(x * this.cellSize);
-                const cellY = Math.floor(y * this.cellSize);
+                const cellX = Math.floor(x * this.cellSize + viewOffsetX);
+                const cellY = Math.floor(y * this.cellSize + viewOffsetY);
                 const cellWidth = Math.ceil(this.cellSize + 0.5);
                 const cellHeight = Math.ceil(this.cellSize + 0.5);
+
+                if (cellX + cellWidth < 0 || cellX > this.screen.width ||
+                    cellY + cellHeight < 0 || cellY > this.screen.height) {
+                    continue;
+                }
 
                 if (resource && isVisible) {
                     this.paint.fillStyle = resource.color;
@@ -183,11 +191,12 @@ export class Game {
                 if (isPlayer) {
                     this.paint.fillStyle = 'blue';
                     this.paint.fillRect(cellX, cellY, cellWidth, cellHeight);
-                } else if (isFlare || isFlareTrail) {
-                    if (!resource) {  // Only draw flare trail if not a resource square
-                        this.paint.fillStyle = 'yellow';
-                        this.paint.fillRect(cellX, cellY, cellWidth, cellHeight);
-                    }
+                } else if ((isFlare || isFlareTrail) && !resource) {
+                    this.paint.fillStyle = 'yellow';
+                    this.paint.fillRect(cellX, cellY, cellWidth, cellHeight);
+                } else if (resource && isVisible) {
+                    this.paint.fillStyle = resource.color;
+                    this.paint.fillRect(cellX, cellY, cellWidth, cellHeight);
                 }
             }
         }
@@ -199,10 +208,45 @@ export class Game {
             this.gameState.flare.path.clear();
         }
 
+        this.drawResourceBar();
+
         if (this.gameState.flare.active) {
             this.updateFlare();
             requestAnimationFrame(() => this.draw());
         }
+    }
+
+    drawResourceBar() {
+        const barHeight = 80;
+        const barWidth = 300; // Fixed width
+        const barY = this.screen.height - barHeight - 20;
+        const barX = (this.screen.width - barWidth) / 2;
+        const boxSize = 60;
+        const spacing = 20;
+
+        this.paint.fillStyle = 'rgba(0, 0, 0, 0.3)';
+        this.paint.fillRect(barX, barY, barWidth, barHeight);
+
+        const resources = [
+            { color: '#800080', amount: 0 },
+            { color: '#FF4500', amount: 0 },
+            { color: '#20B2AA', amount: 0 }
+        ];
+
+        resources.forEach((resource, i) => {
+            const x = barX + spacing + (boxSize + spacing) * i;
+
+            this.paint.fillStyle = 'rgba(255, 255, 255, 0.1)';
+            this.paint.fillRect(x, barY + 10, boxSize, boxSize);
+
+            this.paint.fillStyle = resource.color;
+            this.paint.fillRect(x + 15, barY + 25, 30, 30);
+
+            this.paint.fillStyle = 'white';
+            this.paint.font = '16px Arial';
+            this.paint.textAlign = 'center';
+            this.paint.fillText(resource.amount, x + boxSize/2, barY + boxSize + 5);
+        });
     }
 
     setupEventListeners() {
