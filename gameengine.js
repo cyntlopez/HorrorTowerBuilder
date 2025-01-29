@@ -6,10 +6,11 @@ class GameEngine {
         this.entities = [];
 
         // // Information on the input
-        // this.click = null;
-        // this.mouse = null;
-        // this.wheel = null;
-        // this.keys = {};
+        this.click = null;
+        this.mouse = null;
+        this.wheel = null;
+        this.keys = {};
+        this.camera = null;
 
         // initialize the keys for the character
         this.left = false;
@@ -23,8 +24,9 @@ class GameEngine {
         };
     };
 
-    init(ctx) {
+    init(ctx, camera) {
         this.ctx = ctx;
+        this.camera = camera;
         this.startInput();
         this.timer = new Timer();
     };
@@ -39,77 +41,43 @@ class GameEngine {
     };
 
     startInput() {
-        var that = this;
-
-        // const getXandY = e => ({
-        //     x: e.clientX - this.ctx.canvas.getBoundingClientRect().left,
-        //     y: e.clientY - this.ctx.canvas.getBoundingClientRect().top
-        // });
-        //
-        // this.ctx.canvas.addEventListener("mousemove", e => {
-        //     if (this.options.debugging) {
-        //         console.log("MOUSE_MOVE", getXandY(e));
-        //     }
-        //     this.mouse = getXandY(e);
-        // });
-        //
-        // this.ctx.canvas.addEventListener("click", e => {
-        //     if (this.options.debugging) {
-        //         console.log("CLICK", getXandY(e));
-        //     }
-        //     this.click = getXandY(e);
-        // });
-        //
-        // this.ctx.canvas.addEventListener("wheel", e => {
-        //     if (this.options.debugging) {
-        //         console.log("WHEEL", getXandY(e), e.wheelDelta);
-        //     }
-        //     e.preventDefault(); // Prevent Scrolling
-        //     this.wheel = e;
-        // });
-        //
-        // this.ctx.canvas.addEventListener("contextmenu", e => {
-        //     if (this.options.debugging) {
-        //         console.log("RIGHT_CLICK", getXandY(e));
-        //     }
-        //     e.preventDefault(); // Prevent Context Menu
-        //     this.rightclick = getXandY(e);
-        // });
-
-
-        this.ctx.canvas.addEventListener("keydown", function (keys) {
-            console.log("key down");
-            switch (keys.code) {
-                case "KeyW":
-                    that.up = true;
-                    break;
-                case "KeyA":
-                    that.left = true;
-                    break;
-                case "KeyD":
-                    that.right = true;
-                    break;
-                case "KeyS":
-                    that.down = true;
-                    break;
-            }
+        const getXandY = e => ({
+            x: e.clientX - this.ctx.canvas.getBoundingClientRect().left,
+            y: e.clientY - this.ctx.canvas.getBoundingClientRect().top
         });
-        this.ctx.canvas.addEventListener("keyup", function (keys) {
-            switch (keys.code) {
-                case "KeyW":
-                    that.up = false;
-                    break;
-                case "KeyA":
-                    that.left = false;
-                    break;
-                case "KeyD":
-                    that.right = false;
-                    break;
-                case "KeyS":
-                    that.down = false;
-                    break;
+
+        this.ctx.canvas.addEventListener("mousemove", e => {
+            if (this.options.debugging) {
+                console.log("MOUSE_MOVE", getXandY(e));
             }
+            this.mouse = getXandY(e);
         });
+
+        this.ctx.canvas.addEventListener("click", e => {
+            if (this.options.debugging) {
+                console.log("CLICK", getXandY(e));
+            }
+            this.click = getXandY(e);
+        });
+
+        this.ctx.canvas.addEventListener("wheel", e => {
+            if (this.options.debugging) {
+                console.log("WHEEL", getXandY(e), e.wheelDelta);
+            }
+            e.preventDefault(); // Prevent Scrolling
+            this.wheel = e;
+        });
+
+        this.ctx.canvas.addEventListener("contextmenu", e => {
+            if (this.options.debugging) {
+                console.log("RIGHT_CLICK", getXandY(e));
+            }
+            e.preventDefault(); // Prevent Context Menu
+            this.rightclick = getXandY(e);
+        });
+
+        this.ctx.canvas.addEventListener("keydown", event => this.keys[event.key] = true);
+        this.ctx.canvas.addEventListener("keyup", event => this.keys[event.key] = false);
     };
 
     addEntity(entity) {
@@ -120,13 +88,19 @@ class GameEngine {
         // Clear the whole canvas with transparent color (rgba(0, 0, 0, 0))
         this.ctx.clearRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height);
 
+        if (this.camera) this.camera.applyTransformations(this.ctx);
+
         // Draw latest things first
         for (let i = this.entities.length - 1; i >= 0; i--) {
             this.entities[i].draw(this.ctx, this);
         }
+
+        if (this.camera) this.camera.resetTransformations(this.ctx);
     };
 
     update() {
+        this.camera.update();
+
         let entitiesCount = this.entities.length;
 
         for (let i = 0; i < entitiesCount; i++) {
