@@ -10,6 +10,15 @@ class Hero {
         this.health = 100;
         this.removeFromWorld = false;
 
+        // Attack properties
+        this.isAttacking = false;
+        this.attackCooldown = 0.5;
+        this.lastAttackTime = 0;
+        this.attackRange = 40;
+        this.attackDamage = 20;
+
+        this.setupAttackControls();
+
         // hero's animations
         this.animation = [];
         this.loadAnimation();
@@ -20,6 +29,31 @@ class Hero {
         this.validPlacementTile = []; // List of tiles that can be highlighted
 
     }
+
+    setupAttackControls() {
+        window.addEventListener("load", () => {
+            const canvas = this.game.ctx?.canvas; // ✅ Check if canvas exists
+            if (!canvas) {
+                console.error("Error: Game canvas is not available!");
+                return;
+            }
+
+            // ✅ Mouse down starts attack (only if NOT in placement mode)
+            canvas.addEventListener("mousedown", () => {
+                if (!this.placementMode) {
+                    this.isAttacking = true;
+                }
+            });
+
+            // ✅ Mouse up stops attack
+            canvas.addEventListener("mouseup", () => {
+                this.isAttacking = false;
+            });
+
+            console.log("Attack controls set up successfully.");
+        });
+    }
+
 
     loadAnimation() {
         for (let i = 0; i < 5; i++) { // 4 states
@@ -67,6 +101,11 @@ class Hero {
         this.handleMovement();
 
         this.handlePlacementMode();
+
+        if (this.isAttacking && (this.game.timer.gameTime - this.lastAttackTime) >= this.attackCooldown) {
+            this.attack();
+            this.lastAttackTime = this.game.timer.gameTime;
+        }
 
         /**
         if (this.game.up) {
@@ -188,6 +227,31 @@ class Hero {
         }
     }
 
+    attack() {
+        console.log("Player attacking");
+
+        let attackX = this.x;
+        let attackY = this.y;
+
+        if (this.facing === 0) attackY += this.attackRange; // Down
+        else if (this.facing === 1) attackY -= this.attackRange; // Up
+        else if (this.facing === 2) attackX -= this.attackRange; // Left
+        else if (this.facing === 3) attackX += this.attackRange; // Right
+
+        for (let entity of this.game.entities) {
+            if (entity instanceof Enemy) {
+                const dx = entity.x - attackX;
+                const dy = entity.y - attackY;
+                const distance = Math.sqrt(dx * dx + dy * dy);
+
+                if (distance < this.attackRange) {
+                    entity.takeDamage(this.attackDamage);
+                    console.log("Enemy hit!");
+                }
+            }
+        }
+    }
+
     draw(ctx) {
         const spriteWidth = 64;
         const spriteHeight = 64;
@@ -207,5 +271,24 @@ class Hero {
             ctx.arc(this.x, this.y, this.placementRadius * this.tileMap.tileSize, 0, Math.PI * 2);
             ctx.stroke();
         }
+
+        if (this.isAttacking) {
+            ctx.fillStyle = "rgba(255, 0, 0, 0.5)";
+            let attackX = this.x, attackY = this.y;
+            if (this.facing === 0) attackY += this.attackRange;
+            else if (this.facing === 1) attackY -= this.attackRange;
+            else if (this.facing === 2) attackX -= this.attackRange;
+            else if (this.facing === 3) attackX += this.attackRange;
+
+            ctx.beginPath();
+            ctx.arc(attackX, attackY, 15, 0, Math.PI * 2);
+            ctx.fill();
+        }
+
+        // Health bar
+        ctx.fillStyle = "red";
+        ctx.fillRect(this.x - 20, this.y - 25, (40 * this.health) / 100, 5);
+
+
     };
 }

@@ -139,10 +139,23 @@ class Enemy {
         }
     }
 
+    takeDamage(damage) {
+        this.health -= damage;
+
+        if (this.health <= 0) {
+            this.removeFromWorld = true;
+        }
+    }
+
     draw(ctx) {
         ctx.fillStyle = "red";
         ctx.beginPath();
         ctx.arc(this.x, this.y, 10, 0, Math.PI * 2);
         ctx.fill();
+
+        // Draw health bar
+        ctx.fillStyle = "green";
+        ctx.fillRect(this.x - 10, this.y - 15, (20 * this.health) / 100, 3);
+
     }
 }
