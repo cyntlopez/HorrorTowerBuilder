@@ -1,7 +1,8 @@
 class EnemySpawner {
-    constructor(game, tilemap) {
+    constructor(game, tilemap, player) {
         this.game = game;
         this.tileMap = tilemap;
+        this.player = player;
 
         this.spawnInterval = 5;
         this.lastSpawnTime = 0;
@@ -41,7 +42,7 @@ class EnemySpawner {
         const targetX = this.tileMap.cols * this.tileMap.tileSize / 2;
         const targetY = this.tileMap.rows * this.tileMap.tileSize / 2;
 
-        const enemy = new Enemy(this.game, x, y, targetX, targetY, this.tileMap);
+        const enemy = new Enemy(this.game, x, y, targetX, targetY, this.tileMap, this.player);
         this.game.addEntity(enemy);
         console.log("Spawned enemy at (${x}, ${y}) targeting (${targetX}, ${targetY})")
     }

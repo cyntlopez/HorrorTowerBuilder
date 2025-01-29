@@ -16,7 +16,7 @@ ASSET_MANAGER.downloadAll(() => {
 
     const camera = new Camera(gameEngine, player, canvas.width, canvas.height);
 
-    const enemySpawner = new EnemySpawner(gameEngine, tilemap);
+    const enemySpawner = new EnemySpawner(gameEngine, tilemap, player);
 
     gameEngine.addEntity(player);
     gameEngine.addEntity(tilemap);

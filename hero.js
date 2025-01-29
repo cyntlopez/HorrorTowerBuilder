@@ -7,6 +7,7 @@ class Hero {
         this.state = 0; // 0 = idle, 1 = walking, 2 = running, 3 = throwing, 4 = dying
         this.speed = 85;
         this.dead = false;
+        this.health = 100;
         this.removeFromWorld = false;
 
         // hero's animations
@@ -57,6 +58,12 @@ class Hero {
     }
 
     update() {
+        if (this.health <= 0) {
+            this.dead = true;
+            console.log("Player died");
+            return;
+        }
+
         this.handleMovement();
 
         this.handlePlacementMode();
