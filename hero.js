@@ -92,13 +92,20 @@ class Hero {
     }
 
     handleMovement() {
-        // Handle movement input
-        const movementDeltas = {x : 0, y : 0};
+        // Movement direction tracking
+        const movementDeltas = { x: 0, y: 0 };
+        let newFacing = this.facing; // Keep current facing direction by default
 
-        if (this.game.keys["w"] || this.game.keys["ArrowUp"]) movementDeltas.y -= 1;
-        if (this.game.keys["a"] || this.game.keys["ArrowLeft"]) movementDeltas.x -= 1;
-        if (this.game.keys["s"] || this.game.keys["ArrowDown"]) movementDeltas.y += 1;
-        if (this.game.keys["d"] || this.game.keys["ArrowRight"]) movementDeltas.x += 1;
+        const movingUp = this.game.keys["w"] || this.game.keys["ArrowUp"];
+        const movingDown = this.game.keys["s"] || this.game.keys["ArrowDown"];
+        const movingLeft = this.game.keys["a"] || this.game.keys["ArrowLeft"];
+        const movingRight = this.game.keys["d"] || this.game.keys["ArrowRight"];
+
+        // Apply movement but don't change facing if diagonal
+        if (movingUp) movementDeltas.y -= 1;
+        if (movingDown) movementDeltas.y += 1;
+        if (movingLeft) movementDeltas.x -= 1;
+        if (movingRight) movementDeltas.x += 1;
 
         // Normalize diagonal movement
         const magnitude = Math.sqrt(movementDeltas.x ** 2 + movementDeltas.y ** 2);
@@ -107,26 +114,22 @@ class Hero {
             movementDeltas.y /= magnitude;
         }
 
-        // Update position
+        // Apply movement
         this.x += movementDeltas.x * this.speed * this.game.clockTick;
         this.y += movementDeltas.y * this.speed * this.game.clockTick;
 
-        // Update facing direction
-        if (movementDeltas.y < 0) {
-            this.facing = 1;
-            this.state = 1;
-        } else if (movementDeltas.y > 0) {
-            this.facing = 0;
-            this.state = 1;
-        } else if (movementDeltas.x < 0) {
-            this.facing = 2;
-            this.state = 1;
-        } else if (movementDeltas.x > 0) {
-            this.facing = 3;
-            this.state = 1;
-        } else {
-            this.state = 0;
+        // Update facing direction ONLY if moving in a single direction
+        if ((movingUp || movingDown) && !(movingLeft || movingRight)) {
+            newFacing = movingUp ? 1 : 0; // 1 = Up, 0 = Down
+        } else if ((movingLeft || movingRight) && !(movingUp || movingDown)) {
+            newFacing = movingLeft ? 2 : 3; // 2 = Left, 3 = Right
         }
+
+        // Update facing direction if it's not diagonal movement
+        this.facing = newFacing;
+
+        // Set animation state (1 = walking, 0 = idle)
+        this.state = (magnitude > 0) ? 1 : 0;
 
         // Handle canvas bounds
         this.x = Math.max(0, Math.min(this.x, this.game.ctx.canvas.width));
