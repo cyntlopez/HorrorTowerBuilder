@@ -13,7 +13,7 @@ ASSET_MANAGER.downloadAll(() => {
     gameEngine.addEntity(new Hero(gameEngine, 50, 50, heroWalking));
 
     const cabin = ASSET_MANAGER.getAsset("assets/landscape/cabin.png");
-    gameEngine.addEntity(new Cabin(gameEngine, 200, 500, cabin));
+    gameEngine.addEntity(new Cabin(gameEngine, 300, 250, cabin));
 
     gameEngine.init(ctx);
 
