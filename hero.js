@@ -62,25 +62,25 @@ class Hero {
         this.handlePlacementMode();
 
         /**
-        if (this.game.up) {
+         if (this.game.up) {
             this.y -= this.speed * this.game.clockTick; // walk up
             this.facing = 1;
             this.state = 1;
-        } else if (this.game.down) {
+         } else if (this.game.down) {
             this.y += this.speed * this.game.clockTick; // walk down
             this.facing = 0;
             this.state = 1;
-        } else if (this.game.left) {
+         } else if (this.game.left) {
             this.x -= this.speed * this.game.clockTick; // walk left
             this.facing = 2;
             this.state = 1;
-        } else if (this.game.right) {
+         } else if (this.game.right) {
             this.x += this.speed * this.game.clockTick; // walk right
             this.facing = 3;
             this.state = 1;
-        } else {
+         } else {
             this.state = 0; // idle
-        }
+         }
          */
     }
 
