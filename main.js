@@ -16,6 +16,8 @@ ASSET_MANAGER.downloadAll(() => {
 
     const camera = new Camera(gameEngine, player, canvas.width, canvas.height);
 
+    const enemySpawner = new EnemySpawner(gameEngine, tilemap, player);
+
     gameEngine.addEntity(player);
     gameEngine.addEntity(tilemap);
 
@@ -33,7 +35,7 @@ ASSET_MANAGER.downloadAll(() => {
     const cabin = ASSET_MANAGER.getAsset("assets/landscape/cabin.png");
     gameEngine.addEntity(new Cabin(gameEngine, 300, 250, cabin));
 
-    gameEngine.init(ctx, camera);
+    gameEngine.init(ctx, camera, enemySpawner);
 
     gameEngine.start();
 });

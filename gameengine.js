@@ -11,6 +11,7 @@ class GameEngine {
         this.wheel = null;
         this.keys = {};
         this.camera = null;
+        this.enemySpawner = null;
 
         // initialize the keys for the character
         this.left = false;
@@ -24,11 +25,12 @@ class GameEngine {
         };
     };
 
-    init(ctx, camera) {
+    init(ctx, camera, enemySpawner) {
         this.ctx = ctx;
         this.camera = camera;
         this.startInput();
         this.timer = new Timer();
+        this.enemySpawner = enemySpawner;
     };
 
     start() {
@@ -100,6 +102,10 @@ class GameEngine {
 
     update() {
         this.camera.update();
+
+        if (this.enemySpawner) {
+            this.enemySpawner.update();
+        }
 
         let entitiesCount = this.entities.length;
 
