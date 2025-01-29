@@ -4,6 +4,8 @@ class Building {
         this.col = col;
         this.width = tileSize;
         this.height = tileSize;
+
+        this.health = 100;
     }
 
     draw(ctx) {
