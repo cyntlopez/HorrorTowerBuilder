@@ -1,23 +1,24 @@
 class Building {
-
-    constructor(health) {
-        this.health = health;
+    constructor(row, col, tileSize) {
+        this.row = row;
+        this.col = col;
+        this.width = tileSize;
+        this.height = tileSize;
     }
 
-    takeDamage(amount) {
-        this.health -= amount;
+    draw(ctx) {
+        const x = this.col * this.width;
+        const y = this.row * this.height;
+
+        ctx.fillStyle = 'brown';
+        ctx.fillRect(x, y, this.width, this.height);
+
+        // Optional: Draw outline
+        ctx.strokeStyle = 'black';
+        ctx.strokeRect(x, y, this.width, this.height);
     }
 
-    upgrade(health) {
-        this.health = health;
-    }
-
-    fix(amount) {
-        this.health += amount;
-    }
-
-    //Blank until grid system is in place.
-    place() {
+    update() {
 
     }
 }
