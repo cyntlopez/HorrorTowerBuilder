@@ -17,7 +17,7 @@ class Hero {
         this.attackRange = 40;
         this.attackDamage = 20;
 
-        this.setupAttackControls();
+        this.setupControls();
 
         // hero's animations
         this.animation = [];
@@ -26,26 +26,24 @@ class Hero {
         // Building placement mode
         this.placementMode = false;
         this.placementRadius = 3; //Radius in tiles
+        this.selectedBuilding = "ArcherTower";
         this.validPlacementTile = []; // List of tiles that can be highlighted
-
     }
 
-    setupAttackControls() {
+    setupControls() {
         window.addEventListener("load", () => {
-            const canvas = this.game.ctx?.canvas; // ✅ Check if canvas exists
+            const canvas = this.game.ctx?.canvas;
             if (!canvas) {
                 console.error("Error: Game canvas is not available!");
                 return;
             }
 
-            // ✅ Mouse down starts attack (only if NOT in placement mode)
             canvas.addEventListener("mousedown", () => {
                 if (!this.placementMode) {
                     this.isAttacking = true;
                 }
             });
 
-            // ✅ Mouse up stops attack
             canvas.addEventListener("mouseup", () => {
                 this.isAttacking = false;
             });
