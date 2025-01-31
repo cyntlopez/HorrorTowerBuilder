@@ -2,7 +2,7 @@ class Hero {
     constructor(game, x, y, spritesheet, tileMap) {
         Object.assign(this, {game, x, y, spritesheet, tileMap});
 
-        // hero's state variables
+        // entities state variables
         this.facing = 0; // 0 = down, 1 = up, 2 = left, 3 = right
         this.state = 0; // 0 = idle, 1 = walking, 2 = running, 3 = throwing, 4 = dying
         this.speed = 85;
@@ -19,7 +19,7 @@ class Hero {
 
         this.setupAttackControls();
 
-        // hero's animations
+        // entities's graphics
         this.animation = [];
         this.loadAnimation();
 

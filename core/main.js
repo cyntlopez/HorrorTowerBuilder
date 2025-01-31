@@ -2,8 +2,8 @@ const gameEngine = new GameEngine();
 
 const ASSET_MANAGER = new AssetManager();
 
-ASSET_MANAGER.queueDownload("assets/hero/hero_walking.png");
-ASSET_MANAGER.queueDownload("assets/landscape/cabin.png");
+ASSET_MANAGER.queueDownload("assets/sprites/hero/hero_walking.png");
+ASSET_MANAGER.queueDownload("assets/sprites/landscape/cabin.png");
 
 ASSET_MANAGER.downloadAll(() => {
     const canvas = document.getElementById("gameWorld");
@@ -11,7 +11,7 @@ ASSET_MANAGER.downloadAll(() => {
 
     const tilemap = new TileMap(20, 20, 40);
 
-    const heroWalking = ASSET_MANAGER.getAsset("assets/hero/hero_walking.png");
+    const heroWalking = ASSET_MANAGER.getAsset("assets/sprites/hero/hero_walking.png");
     const player = new Hero(gameEngine, 50, 50, heroWalking, tilemap);
 
     const camera = new Camera(gameEngine, player, canvas.width, canvas.height);
@@ -32,7 +32,7 @@ ASSET_MANAGER.downloadAll(() => {
         camera.adjustZoom(e.deltaY > 0 ? -0.1 : 0.1);
     });
 
-    const cabin = ASSET_MANAGER.getAsset("assets/landscape/cabin.png");
+    const cabin = ASSET_MANAGER.getAsset("assets/sprites/landscape/cabin.png");
     gameEngine.addEntity(new Cabin(gameEngine, 300, 250, cabin));
 
     gameEngine.init(ctx, camera, enemySpawner);
