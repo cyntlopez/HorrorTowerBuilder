@@ -156,6 +156,5 @@ class Enemy {
         // Draw health bar
         ctx.fillStyle = "green";
         ctx.fillRect(this.x - 10, this.y - 15, (20 * this.health) / 100, 3);
-
     }
 }

@@ -18,6 +18,7 @@ class Building {
         // Optional: Draw outline
         ctx.strokeStyle = 'black';
         ctx.strokeRect(x, y, this.width, this.height);
+
     }
 
     update() {

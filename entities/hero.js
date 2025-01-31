@@ -2,7 +2,7 @@ class Hero {
     constructor(game, x, y, spritesheet, tileMap) {
         Object.assign(this, {game, x, y, spritesheet, tileMap});
 
-        // entities state variables
+        // hero's state variables
         this.facing = 0; // 0 = down, 1 = up, 2 = left, 3 = right
         this.state = 0; // 0 = idle, 1 = walking, 2 = running, 3 = throwing, 4 = dying
         this.speed = 85;
@@ -17,35 +17,33 @@ class Hero {
         this.attackRange = 40;
         this.attackDamage = 20;
 
-        this.setupAttackControls();
+        this.setupControls();
 
-        // entities's graphics
+        // hero's animations
         this.animation = [];
         this.loadAnimation();
 
         // Building placement mode
         this.placementMode = false;
         this.placementRadius = 3; //Radius in tiles
+        this.selectedBuilding = "ArcherTower";
         this.validPlacementTile = []; // List of tiles that can be highlighted
-
     }
 
-    setupAttackControls() {
+    setupControls() {
         window.addEventListener("load", () => {
-            const canvas = this.game.ctx?.canvas; // ✅ Check if canvas exists
+            const canvas = this.game.ctx?.canvas;
             if (!canvas) {
                 console.error("Error: Game canvas is not available!");
                 return;
             }
 
-            // ✅ Mouse down starts attack (only if NOT in placement mode)
             canvas.addEventListener("mousedown", () => {
                 if (!this.placementMode) {
                     this.isAttacking = true;
                 }
             });
 
-            // ✅ Mouse up stops attack
             canvas.addEventListener("mouseup", () => {
                 this.isAttacking = false;
             });
@@ -109,23 +107,23 @@ class Hero {
 
         /**
          if (this.game.up) {
-            this.y -= this.speed * this.game.clockTick; // walk up
-            this.facing = 1;
-            this.state = 1;
+         this.y -= this.speed * this.game.clockTick; // walk up
+         this.facing = 1;
+         this.state = 1;
          } else if (this.game.down) {
-            this.y += this.speed * this.game.clockTick; // walk down
-            this.facing = 0;
-            this.state = 1;
+         this.y += this.speed * this.game.clockTick; // walk down
+         this.facing = 0;
+         this.state = 1;
          } else if (this.game.left) {
-            this.x -= this.speed * this.game.clockTick; // walk left
-            this.facing = 2;
-            this.state = 1;
+         this.x -= this.speed * this.game.clockTick; // walk left
+         this.facing = 2;
+         this.state = 1;
          } else if (this.game.right) {
-            this.x += this.speed * this.game.clockTick; // walk right
-            this.facing = 3;
-            this.state = 1;
+         this.x += this.speed * this.game.clockTick; // walk right
+         this.facing = 3;
+         this.state = 1;
          } else {
-            this.state = 0; // idle
+         this.state = 0; // idle
          }
          */
     }
