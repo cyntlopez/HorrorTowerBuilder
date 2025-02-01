@@ -4,12 +4,9 @@ class AssetManager {
         this.errorCount = 0;
         this.cache = [];
         this.downloadQueue = [];
-<<<<<<< HEAD
-=======
         this.currentMusic = null;
         this.isMuted = false;
         this.volume = 0.1;
->>>>>>> eric-branch
     };
 
     queueDownload(path) {
@@ -24,27 +21,6 @@ class AssetManager {
     downloadAll(callback) {
         if (this.downloadQueue.length === 0) setTimeout(callback, 10);
         for (let i = 0; i < this.downloadQueue.length; i++) {
-<<<<<<< HEAD
-            const img = new Image();
-
-            const path = this.downloadQueue[i];
-            console.log(path);
-
-            img.addEventListener("load", () => {
-                console.log("Loaded " + img.src);
-                this.successCount++;
-                if (this.isDone()) callback();
-            });
-
-            img.addEventListener("error", () => {
-                console.log("Error loading " + img.src);
-                this.errorCount++;
-                if (this.isDone()) callback();
-            });
-
-            img.src = path;
-            this.cache[path] = img;
-=======
 
             var that = this;
 
@@ -101,15 +77,12 @@ class AssetManager {
                     break;
             }
             
->>>>>>> eric-branch
         }
     };
 
     getAsset(path) {
         return this.cache[path];
     };
-<<<<<<< HEAD
-=======
 
     playAsset(path) {
         if (this.currentMusic) {
@@ -167,5 +140,4 @@ class AssetManager {
             aud.play();
         });
     };
->>>>>>> eric-branch
 }

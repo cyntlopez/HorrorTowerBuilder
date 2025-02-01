@@ -63,8 +63,4 @@ class TileMap {
         }
         return false;
     }
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> eric-branch

@@ -5,9 +5,6 @@ const ASSET_MANAGER = new AssetManager();
 ASSET_MANAGER.queueDownload("assets/sprites/hero/hero_walking.png");
 ASSET_MANAGER.queueDownload("assets/sprites/landscape/cabin.png");
 
-<<<<<<< HEAD
-ASSET_MANAGER.downloadAll(() => {
-=======
 ASSET_MANAGER.queueDownload("assets/audio/title-screen-music.wav");
 ASSET_MANAGER.queueDownload("assets/audio/title-screen-music2.wav");
 
@@ -33,7 +30,6 @@ ASSET_MANAGER.downloadAll(() => {
         ASSET_MANAGER.adjustVolume(volumeLevel);
     });
 
->>>>>>> eric-branch
     const canvas = document.getElementById("gameWorld");
     const ctx = canvas.getContext("2d");
 

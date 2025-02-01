@@ -31,8 +31,4 @@ class Camera {
     }
 }
 
-<<<<<<< HEAD
 window.Camera = Camera;
-=======
-window.Camera = Camera;
->>>>>>> eric-branch
