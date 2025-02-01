@@ -7,7 +7,17 @@ class Hero {
         this.state = 0; // 0 = idle, 1 = walking, 2 = running, 3 = throwing, 4 = dying
         this.speed = 85;
         this.dead = false;
+        this.health = 100;
         this.removeFromWorld = false;
+
+        // Attack properties
+        this.isAttacking = false;
+        this.attackCooldown = 0.5;
+        this.lastAttackTime = 0;
+        this.attackRange = 40;
+        this.attackDamage = 20;
+
+        this.setupControls();
 
         // hero's animations
         this.animation = [];
@@ -16,9 +26,32 @@ class Hero {
         // Building placement mode
         this.placementMode = false;
         this.placementRadius = 3; //Radius in tiles
+        this.selectedBuilding = "ArcherTower";
         this.validPlacementTile = []; // List of tiles that can be highlighted
-
     }
+
+    setupControls() {
+        window.addEventListener("load", () => {
+            const canvas = this.game.ctx?.canvas;
+            if (!canvas) {
+                console.error("Error: Game canvas is not available!");
+                return;
+            }
+
+            canvas.addEventListener("mousedown", () => {
+                if (!this.placementMode) {
+                    this.isAttacking = true;
+                }
+            });
+
+            canvas.addEventListener("mouseup", () => {
+                this.isAttacking = false;
+            });
+
+            console.log("Attack controls set up successfully.");
+        });
+    }
+
 
     loadAnimation() {
         for (let i = 0; i < 5; i++) { // 4 states
@@ -57,41 +90,59 @@ class Hero {
     }
 
     update() {
+        if (this.health <= 0) {
+            this.dead = true;
+            console.log("Player died");
+            return;
+        }
+
         this.handleMovement();
 
         this.handlePlacementMode();
 
-        /**
-        if (this.game.up) {
-            this.y -= this.speed * this.game.clockTick; // walk up
-            this.facing = 1;
-            this.state = 1;
-        } else if (this.game.down) {
-            this.y += this.speed * this.game.clockTick; // walk down
-            this.facing = 0;
-            this.state = 1;
-        } else if (this.game.left) {
-            this.x -= this.speed * this.game.clockTick; // walk left
-            this.facing = 2;
-            this.state = 1;
-        } else if (this.game.right) {
-            this.x += this.speed * this.game.clockTick; // walk right
-            this.facing = 3;
-            this.state = 1;
-        } else {
-            this.state = 0; // idle
+        if (this.isAttacking && (this.game.timer.gameTime - this.lastAttackTime) >= this.attackCooldown) {
+            this.attack();
+            this.lastAttackTime = this.game.timer.gameTime;
         }
+
+        /**
+         if (this.game.up) {
+         this.y -= this.speed * this.game.clockTick; // walk up
+         this.facing = 1;
+         this.state = 1;
+         } else if (this.game.down) {
+         this.y += this.speed * this.game.clockTick; // walk down
+         this.facing = 0;
+         this.state = 1;
+         } else if (this.game.left) {
+         this.x -= this.speed * this.game.clockTick; // walk left
+         this.facing = 2;
+         this.state = 1;
+         } else if (this.game.right) {
+         this.x += this.speed * this.game.clockTick; // walk right
+         this.facing = 3;
+         this.state = 1;
+         } else {
+         this.state = 0; // idle
+         }
          */
     }
 
     handleMovement() {
-        // Handle movement input
-        const movementDeltas = {x : 0, y : 0};
+        // Movement direction tracking
+        const movementDeltas = { x: 0, y: 0 };
+        let newFacing = this.facing; // Keep current facing direction by default
 
-        if (this.game.keys["w"] || this.game.keys["ArrowUp"]) movementDeltas.y -= 1;
-        if (this.game.keys["a"] || this.game.keys["ArrowLeft"]) movementDeltas.x -= 1;
-        if (this.game.keys["s"] || this.game.keys["ArrowDown"]) movementDeltas.y += 1;
-        if (this.game.keys["d"] || this.game.keys["ArrowRight"]) movementDeltas.x += 1;
+        const movingUp = this.game.keys["w"] || this.game.keys["ArrowUp"];
+        const movingDown = this.game.keys["s"] || this.game.keys["ArrowDown"];
+        const movingLeft = this.game.keys["a"] || this.game.keys["ArrowLeft"];
+        const movingRight = this.game.keys["d"] || this.game.keys["ArrowRight"];
+
+        // Apply movement but don't change facing if diagonal
+        if (movingUp) movementDeltas.y -= 1;
+        if (movingDown) movementDeltas.y += 1;
+        if (movingLeft) movementDeltas.x -= 1;
+        if (movingRight) movementDeltas.x += 1;
 
         // Normalize diagonal movement
         const magnitude = Math.sqrt(movementDeltas.x ** 2 + movementDeltas.y ** 2);
@@ -100,26 +151,22 @@ class Hero {
             movementDeltas.y /= magnitude;
         }
 
-        // Update position
+        // Apply movement
         this.x += movementDeltas.x * this.speed * this.game.clockTick;
         this.y += movementDeltas.y * this.speed * this.game.clockTick;
 
-        // Update facing direction
-        if (movementDeltas.y < 0) {
-            this.facing = 1;
-            this.state = 1;
-        } else if (movementDeltas.y > 0) {
-            this.facing = 0;
-            this.state = 1;
-        } else if (movementDeltas.x < 0) {
-            this.facing = 2;
-            this.state = 1;
-        } else if (movementDeltas.x > 0) {
-            this.facing = 3;
-            this.state = 1;
-        } else {
-            this.state = 0;
+        // Update facing direction ONLY if moving in a single direction
+        if ((movingUp || movingDown) && !(movingLeft || movingRight)) {
+            newFacing = movingUp ? 1 : 0; // 1 = Up, 0 = Down
+        } else if ((movingLeft || movingRight) && !(movingUp || movingDown)) {
+            newFacing = movingLeft ? 2 : 3; // 2 = Left, 3 = Right
         }
+
+        // Update facing direction if it's not diagonal movement
+        this.facing = newFacing;
+
+        // Set animation state (1 = walking, 0 = idle)
+        this.state = (magnitude > 0) ? 1 : 0;
 
         // Handle canvas bounds
         this.x = Math.max(0, Math.min(this.x, this.game.ctx.canvas.width));
@@ -178,6 +225,31 @@ class Hero {
         }
     }
 
+    attack() {
+        console.log("Player attacking");
+
+        let attackX = this.x;
+        let attackY = this.y;
+
+        if (this.facing === 0) attackY += this.attackRange; // Down
+        else if (this.facing === 1) attackY -= this.attackRange; // Up
+        else if (this.facing === 2) attackX -= this.attackRange; // Left
+        else if (this.facing === 3) attackX += this.attackRange; // Right
+
+        for (let entity of this.game.entities) {
+            if (entity instanceof Enemy) {
+                const dx = entity.x - attackX;
+                const dy = entity.y - attackY;
+                const distance = Math.sqrt(dx * dx + dy * dy);
+
+                if (distance < this.attackRange) {
+                    entity.takeDamage(this.attackDamage);
+                    console.log("Enemy hit!");
+                }
+            }
+        }
+    }
+
     draw(ctx) {
         const spriteWidth = 64;
         const spriteHeight = 64;
@@ -197,5 +269,24 @@ class Hero {
             ctx.arc(this.x, this.y, this.placementRadius * this.tileMap.tileSize, 0, Math.PI * 2);
             ctx.stroke();
         }
+
+        if (this.isAttacking) {
+            ctx.fillStyle = "rgba(255, 0, 0, 0.5)";
+            let attackX = this.x, attackY = this.y;
+            if (this.facing === 0) attackY += this.attackRange;
+            else if (this.facing === 1) attackY -= this.attackRange;
+            else if (this.facing === 2) attackX -= this.attackRange;
+            else if (this.facing === 3) attackX += this.attackRange;
+
+            ctx.beginPath();
+            ctx.arc(attackX, attackY, 15, 0, Math.PI * 2);
+            ctx.fill();
+        }
+
+        // Health bar
+        ctx.fillStyle = "red";
+        ctx.fillRect(this.x - 20, this.y - 25, (40 * this.health) / 100, 5);
+
+
     };
 }

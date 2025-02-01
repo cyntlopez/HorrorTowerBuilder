@@ -4,6 +4,8 @@ class Building {
         this.col = col;
         this.width = tileSize;
         this.height = tileSize;
+
+        this.health = 100;
     }
 
     draw(ctx) {
@@ -16,6 +18,7 @@ class Building {
         // Optional: Draw outline
         ctx.strokeStyle = 'black';
         ctx.strokeRect(x, y, this.width, this.height);
+
     }
 
     update() {

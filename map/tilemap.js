@@ -33,7 +33,7 @@ class TileMap {
 
                 const x = c * this.tileSize;
                 const y = r * this.tileSize;
-                ctx.fillStyle = 'red';
+                ctx.fillStyle = 'blue';
                 if (this.grid[r][c] !== null) ctx.fillRect(x, y, this.tileSize, this.tileSize);
 
                 ctx.strokeStyle = 'gray';
