@@ -5,7 +5,35 @@ const ASSET_MANAGER = new AssetManager();
 ASSET_MANAGER.queueDownload("assets/sprites/hero/hero_walking.png");
 ASSET_MANAGER.queueDownload("assets/sprites/landscape/cabin.png");
 
+<<<<<<< HEAD
 ASSET_MANAGER.downloadAll(() => {
+=======
+ASSET_MANAGER.queueDownload("assets/audio/title-screen-music.wav");
+ASSET_MANAGER.queueDownload("assets/audio/title-screen-music2.wav");
+
+
+ASSET_MANAGER.downloadAll(() => {
+
+    document.getElementById("playMusic").addEventListener("click", () => {
+        const selectedTrack = document.getElementById("trackSelector").value;
+        ASSET_MANAGER.playAsset(selectedTrack);
+    });
+
+    document.getElementById("stopMusic").addEventListener("click", () => {
+        ASSET_MANAGER.stopMusic();
+    });
+
+    document.getElementById("muteMusic").addEventListener("click", () => {
+        const selectedTrack = document.getElementById("trackSelector").value;
+        ASSET_MANAGER.muteAudio(selectedTrack);
+    });
+
+    document.getElementById("volume").addEventListener("input", (event) => {
+        const volumeLevel = event.target.value;
+        ASSET_MANAGER.adjustVolume(volumeLevel);
+    });
+
+>>>>>>> eric-branch
     const canvas = document.getElementById("gameWorld");
     const ctx = canvas.getContext("2d");
 
