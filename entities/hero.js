@@ -104,28 +104,6 @@ class Hero {
             this.attack();
             this.lastAttackTime = this.game.timer.gameTime;
         }
-
-        /**
-         if (this.game.up) {
-         this.y -= this.speed * this.game.clockTick; // walk up
-         this.facing = 1;
-         this.state = 1;
-         } else if (this.game.down) {
-         this.y += this.speed * this.game.clockTick; // walk down
-         this.facing = 0;
-         this.state = 1;
-         } else if (this.game.left) {
-         this.x -= this.speed * this.game.clockTick; // walk left
-         this.facing = 2;
-         this.state = 1;
-         } else if (this.game.right) {
-         this.x += this.speed * this.game.clockTick; // walk right
-         this.facing = 3;
-         this.state = 1;
-         } else {
-         this.state = 0; // idle
-         }
-         */
     }
 
     handleMovement() {
