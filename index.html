@@ -32,5 +32,22 @@
 <body>
 <canvas id="gameWorld" width="800" style="background-image: url('assets/sprites/landscape/grass.png');
        background-repeat: repeat; background-size: 100px 100px" height="800" tabindex="0" autofocus></canvas>
+
+<div>
+  <br />
+  <select id="trackSelector">
+    <option value="assets/audio/title-screen-music.wav">Track 1</option>
+    <option value="assets/audio/title-screen-music2.wav">Track 2</option>
+    <option value="assets/audio/level-1-music.wav">Track 3</option>
+    <option value="assets/audio/level-2-music.wav">Track 4</option>
+  </select>
+  <br />
+  <button id="playMusic">Play</button>
+  <button id="stopMusic">Stop</button>
+  <button id="muteMusic">Mute</button>   
+  <br />
+  <br />
+  <input type="range" id="volume" min="0" max="1" value="0.1" step="0.05"> Volume
+</div>
 </body>
 </html>
