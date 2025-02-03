@@ -7,6 +7,8 @@ ASSET_MANAGER.queueDownload("assets/sprites/landscape/cabin.png");
 
 ASSET_MANAGER.queueDownload("assets/audio/title-screen-music.wav");
 ASSET_MANAGER.queueDownload("assets/audio/title-screen-music2.wav");
+ASSET_MANAGER.queueDownload("assets/audio/level-1-music.wav");
+ASSET_MANAGER.queueDownload("assets/audio/level-2-music.wav");
 
 
 ASSET_MANAGER.downloadAll(() => {
