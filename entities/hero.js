@@ -18,6 +18,7 @@ class Hero {
         this.attackDamage = 20;
 
         this.setupControls();
+        this.setupGUI();
 
         // hero's animations
         this.animation = [];
@@ -52,6 +53,31 @@ class Hero {
         });
     }
 
+    setupGUI() {
+        document.getElementById("archerTowerBtn").addEventListener("click", () => {
+            this.selectedBuilding = "ArcherTower";
+            this.updateGUI();
+        });
+
+        document.getElementById("wallBtn").addEventListener("click", () => {
+            this.selectedBuilding = "Wall";
+            this.updateGUI();
+        });
+
+        this.updateGUI();
+    }
+
+    updateGUI() {
+        document.querySelectorAll(".buildingButton").forEach(button => button.classList.remove("selected"));
+
+        if (this.selectedBuilding === "ArcherTower") {
+            document.getElementById("archerTowerBtn").classList.add("selected");
+        } else if (this.selectedBuilding === "Wall") {
+            document.getElementById("wallBtn").classList.add("selected");
+        }
+
+        console.log(`Selected Building: ${this.selectedBuilding}`);
+    }
 
     loadAnimation() {
         for (let i = 0; i < 5; i++) { // 4 states
@@ -177,9 +203,13 @@ class Hero {
 
             // Check if the clicked tile is valid
             if (this.validPlacementTiles.some(tile => tile.row === row && tile.col === col)) {
-                const building = new Building(row, col, this.tileMap.tileSize);
-                this.tileMap.placeBuilding(row, col, building);
-                this.game.click = null; // Clear the click after placing the building
+                const building = BuildingFactory.createBuilding(this.selectedBuilding, row, col, this.tileMap.tileSize);
+
+                if (building) {
+                    this.tileMap.placeBuilding(row, col, building);
+                    this.game.addEntity(building);
+                    console.log(`${this.selectedBuilding} placed at (${row}, ${col})`);
+                }
             }
 
             this.game.click = null;
