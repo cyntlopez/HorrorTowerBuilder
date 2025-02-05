@@ -162,7 +162,6 @@ class Hero {
             newFacing = movingLeft ? 2 : 3; // 2 = Left, 3 = Right
         }
 
-        // Update facing direction if it's not diagonal movement
         this.facing = newFacing;
 
         // Set animation state (1 = walking, 0 = idle)
