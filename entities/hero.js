@@ -18,7 +18,6 @@ class Hero {
         this.attackDamage = 20;
 
         this.setupControls();
-        this.setupGUI();
 
         // hero's animations
         this.animation = [];
@@ -27,7 +26,6 @@ class Hero {
         // Building placement mode
         this.placementMode = false;
         this.placementRadius = 3; //Radius in tiles
-        this.selectedBuilding = "ArcherTower";
         this.validPlacementTile = []; // List of tiles that can be highlighted
     }
 
@@ -51,32 +49,6 @@ class Hero {
 
             console.log("Attack controls set up successfully.");
         });
-    }
-
-    setupGUI() {
-        document.getElementById("archerTowerBtn").addEventListener("click", () => {
-            this.selectedBuilding = "ArcherTower";
-            this.updateGUI();
-        });
-
-        document.getElementById("wallBtn").addEventListener("click", () => {
-            this.selectedBuilding = "Wall";
-            this.updateGUI();
-        });
-
-        this.updateGUI();
-    }
-
-    updateGUI() {
-        document.querySelectorAll(".buildingButton").forEach(button => button.classList.remove("selected"));
-
-        if (this.selectedBuilding === "ArcherTower") {
-            document.getElementById("archerTowerBtn").classList.add("selected");
-        } else if (this.selectedBuilding === "Wall") {
-            document.getElementById("wallBtn").classList.add("selected");
-        }
-
-        console.log(`Selected Building: ${this.selectedBuilding}`);
     }
 
     loadAnimation() {
@@ -203,12 +175,12 @@ class Hero {
 
             // Check if the clicked tile is valid
             if (this.validPlacementTiles.some(tile => tile.row === row && tile.col === col)) {
-                const building = BuildingFactory.createBuilding(this.selectedBuilding, row, col, this.tileMap.tileSize);
+                const building = BuildingFactory.createBuilding(gameEngine.selectedBuilding, row, col, this.tileMap, this.tileMap.tileSize);
 
                 if (building) {
                     this.tileMap.placeBuilding(row, col, building);
                     this.game.addEntity(building);
-                    console.log(`${this.selectedBuilding} placed at (${row}, ${col})`);
+                    console.log(`${gameEngine.selectedBuilding} placed at (${row}, ${col})`);
                 }
             }
 

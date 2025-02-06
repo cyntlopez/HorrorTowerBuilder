@@ -5,6 +5,8 @@ class GameEngine {
         // Everything that will be updated and drawn each frame
         this.entities = [];
 
+        this.selectedBuilding = "ArcherTower";
+
         // // Information on the input
         this.click = null;
         this.mouse = null;
@@ -78,8 +80,22 @@ class GameEngine {
             this.rightclick = getXandY(e);
         });
 
-        this.ctx.canvas.addEventListener("keydown", event => this.keys[event.key] = true);
+        this.ctx.canvas.addEventListener("keydown", (event) => {
+            this.keys[event.key] = true
+
+            switch (event.key) {
+                case '1':
+                    this.selectedBuilding = "ArcherTower";
+                    console.log("Selected: Archer Tower");
+                    break;
+                case '2':
+                    this.selectedBuilding = "Wall";
+                    console.log("Selected: Wall");
+                    break;
+            }
+        });
         this.ctx.canvas.addEventListener("keyup", event => this.keys[event.key] = false);
+
     };
 
     addEntity(entity) {
