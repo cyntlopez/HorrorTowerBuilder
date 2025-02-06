@@ -108,9 +108,32 @@ class GameEngine {
 
         if (this.camera) this.camera.applyTransformations(this.ctx);
 
-        // Draw latest things first
-        for (let i = this.entities.length - 1; i >= 0; i--) {
-            this.entities[i].draw(this.ctx, this);
+        let buildings = [];
+        let projectiles = [];
+        let creatures = [];
+
+        for (let entity of this.entities) {
+            if (entity instanceof Building) {
+                buildings.push(entity);
+            } else if (entity instanceof Arrow) {
+                projectiles.push(entity);
+            } else if (entity instanceof Enemy || entity instanceof Hero) {
+                creatures.push(entity);
+            } else {
+                entity.draw(this.ctx);
+            }
+        }
+
+        for (let building of buildings) {
+            building.draw(this.ctx);
+        }
+
+        for (let creature of creatures) {
+            creature.draw(this.ctx);
+        }
+
+        for (let projectile of projectiles) {
+            projectile.draw(this.ctx);
         }
 
         if (this.camera) this.camera.resetTransformations(this.ctx);
