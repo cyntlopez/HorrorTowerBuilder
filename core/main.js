@@ -5,6 +5,7 @@ const ASSET_MANAGER = new AssetManager();
 ASSET_MANAGER.queueDownload("assets/sprites/hero/hero_walking.png");
 ASSET_MANAGER.queueDownload("assets/sprites/hero/hero_dying.png");
 ASSET_MANAGER.queueDownload("assets/sprites/landscape/cabin.png");
+ASSET_MANAGER.queueDownload("assets/sprites/resources/campfire.png")
 ASSET_MANAGER.queueDownload("assets/sprites/pumpkin_head/killer_walk.png");
 ASSET_MANAGER.queueDownload("assets/sprites/pumpkin_head/killer_attack.png");
 
@@ -38,7 +39,7 @@ ASSET_MANAGER.downloadAll(() => {
     const canvas = document.getElementById("gameWorld");
     const ctx = canvas.getContext("2d");
 
-    const tilemap = new TileMap(20, 20, 40);
+    const tilemap = new TileMap(20, 20, 40, gameEngine);
 
     const heroWalking = ASSET_MANAGER.getAsset("assets/sprites/hero/hero_walking.png");
     const player = new Hero(gameEngine, 50, 50, heroWalking, tilemap);

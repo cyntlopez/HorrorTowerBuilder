@@ -218,11 +218,7 @@ class Enemy {
         const drawX = this.x - offsetX;
         const drawY = this.y - offsetY;
 
-        if (this.state === 1) {
-            this.animation[1][this.facing].drawFrame(this.game.clockTick, ctx, drawX, drawY, 1);
-        } else {
-            this.animation[0][this.facing].drawFrame(this.game.clockTick, ctx, drawX, drawY, 1);
-        }
+        this.animation[this.state][this.facing].drawFrame(this.game.clockTick, ctx, drawX, drawY, 1);
 
         // Draw health bar
         ctx.fillStyle = "rgba(57, 255, 20, 1)";
