@@ -3,9 +3,11 @@ const gameEngine = new GameEngine();
 const ASSET_MANAGER = new AssetManager();
 
 ASSET_MANAGER.queueDownload("assets/sprites/hero/hero_walking.png");
+ASSET_MANAGER.queueDownload("assets/sprites/hero/hero_dying.png");
 ASSET_MANAGER.queueDownload("assets/sprites/landscape/cabin.png");
+ASSET_MANAGER.queueDownload("assets/sprites/resources/campfire.png")
 ASSET_MANAGER.queueDownload("assets/sprites/pumpkin_head/killer_walk.png");
-// ASSET_MANAGER.queueDownload("assets/sprites/pumpkin_head/killer_attack.png");
+ASSET_MANAGER.queueDownload("assets/sprites/pumpkin_head/killer_attack.png");
 
 ASSET_MANAGER.queueDownload("assets/audio/title-screen-music.wav");
 ASSET_MANAGER.queueDownload("assets/audio/title-screen-music2.wav");
@@ -34,10 +36,14 @@ ASSET_MANAGER.downloadAll(() => {
         ASSET_MANAGER.adjustVolume(volumeLevel);
     });
 
+    const loseScreen = new LoseScreen(gameEngine);
+    gameEngine.loseScreen = loseScreen;
+    gameEngine.addEntity(loseScreen);
+
     const canvas = document.getElementById("gameWorld");
     const ctx = canvas.getContext("2d");
 
-    const tilemap = new TileMap(20, 20, 40);
+    const tilemap = new TileMap(20, 20, 40, gameEngine);
 
     const heroWalking = ASSET_MANAGER.getAsset("assets/sprites/hero/hero_walking.png");
     const player = new Hero(gameEngine, 50, 50, heroWalking, tilemap);
@@ -62,7 +68,7 @@ ASSET_MANAGER.downloadAll(() => {
     });
 
     const cabin = ASSET_MANAGER.getAsset("assets/sprites/landscape/cabin.png");
-    gameEngine.addEntity(new Cabin(gameEngine, 300, 250, cabin));
+    gameEngine.addEntity(new Cabin(gameEngine, 600, 10, cabin));
 
     gameEngine.init(ctx, camera, enemySpawner);
 

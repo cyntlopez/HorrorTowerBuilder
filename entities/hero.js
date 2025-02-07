@@ -4,7 +4,7 @@ class Hero {
 
         // hero's state variables
         this.facing = 0; // 0 = down, 1 = up, 2 = left, 3 = right
-        this.state = 0; // 0 = idle, 1 = walking, 2 = running, 3 = throwing, 4 = dying
+        this.state = 0; // 0 = idle, 1 = walking, 2 = throwing, 3 = dying
         this.speed = 85;
         this.dead = false;
         this.health = 100;
@@ -54,7 +54,7 @@ class Hero {
 
 
     loadAnimation() {
-        for (let i = 0; i < 5; i++) { // 4 states
+        for (let i = 0; i < 4; i++) { // 4 states
             this.animation.push([]);
             for (let j = 0; j < 4; j++) { // 4 facing directions
                 this.animation[i].push([]);
@@ -87,12 +87,30 @@ class Hero {
         // facing right = 3
         this.animation[1][3] = new Animator(this.spritesheet, 0, 195, 64, 64.5, 9, 0.1, 0,false, true);
 
+        // dying animation for state = 3
+        // facing down = 0
+        const dyingSheet = ASSET_MANAGER.getAsset("assets/sprites/hero/hero_dying.png");
+        this.animation[3][0] = new Animator(dyingSheet, 0, 0, 64, 64.5, 6, 0.5, 0,false, false);
+
+        // facing up = 1
+        this.animation[3][1] = new Animator(dyingSheet, 0, 0, 64, 64.5, 6, 0.5, 0,false, false);
+
+        // facing left = 2
+        this.animation[3][2] = new Animator(dyingSheet, 0, 0, 64, 64.5, 6, 0.5, 0,false, false);
+
+        // facing right = 3
+        this.animation[3][3] = new Animator(dyingSheet, 0, 0, 64, 64.5, 6, 0.5, 0,false, false);
+
     }
 
     update() {
         if (this.health <= 0) {
             this.dead = true;
+            this.state = 3;
             console.log("Player died");
+
+            this.game.loseScreen.activate();
+
             return;
         }
 
@@ -262,9 +280,9 @@ class Hero {
         }
 
         // Health bar
-        ctx.fillStyle = "red";
-        ctx.fillRect(this.x - 20, this.y - 25, (40 * this.health) / 100, 5);
-
-
+        if (this.health >= 0) {
+            ctx.fillStyle = "red";
+            ctx.fillRect(this.x - 20, this.y - 25, (40 * this.health) / 100, 5);
+        }
     };
 }
