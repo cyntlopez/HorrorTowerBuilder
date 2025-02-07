@@ -36,6 +36,10 @@ ASSET_MANAGER.downloadAll(() => {
         ASSET_MANAGER.adjustVolume(volumeLevel);
     });
 
+    const loseScreen = new LoseScreen(gameEngine);
+    gameEngine.loseScreen = loseScreen;
+    gameEngine.addEntity(loseScreen);
+
     const canvas = document.getElementById("gameWorld");
     const ctx = canvas.getContext("2d");
 
@@ -64,7 +68,7 @@ ASSET_MANAGER.downloadAll(() => {
     });
 
     const cabin = ASSET_MANAGER.getAsset("assets/sprites/landscape/cabin.png");
-    gameEngine.addEntity(new Cabin(gameEngine, 300, 250, cabin));
+    gameEngine.addEntity(new Cabin(gameEngine, 600, 10, cabin));
 
     gameEngine.init(ctx, camera, enemySpawner);
 

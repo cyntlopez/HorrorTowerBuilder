@@ -108,6 +108,9 @@ class Hero {
             this.dead = true;
             this.state = 3;
             console.log("Player died");
+
+            this.game.loseScreen.activate();
+
             return;
         }
 
