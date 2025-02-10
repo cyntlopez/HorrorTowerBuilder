@@ -96,6 +96,18 @@ class AssetManager {
         }
     };
 
+
+    // Gonna add this to footsteps later. Using audio class for now
+    playSoundEffect(path) {
+        const sound = this.cache[path];
+        if (sound && !this.isMuted) {
+            if (sound.paused) {
+                sound.volume = this.volume;
+                sound.play();
+            }
+        }
+    }
+
     muteAudio() {
         if (this.currentMusic) {
             this.isMuted = !this.isMuted;

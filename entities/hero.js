@@ -28,6 +28,11 @@ class Hero {
         this.placementRadius = 3; //Radius in tiles
         this.selectedBuilding = "ArcherTower";
         this.validPlacementTile = []; // List of tiles that can be highlighted
+
+
+        this.walkingSound = new Audio("assets/audio/effects/Grass_walk4.wav");
+        this.walkingSound.loop = true;
+        this.isWalkingSound = false;
     }
 
     setupControls() {
@@ -163,6 +168,19 @@ class Hero {
 
         // Set animation state (1 = walking, 0 = idle)
         this.state = (magnitude > 0) ? 1 : 0;
+
+    if (this.state == 1) {
+        if (!this.isWalkingSoundPlaying) {
+            this.walkingSound.play();
+            this.isWalkingSoundPlaying = true;
+        }
+    } else {
+        if (this.isWalkingSoundPlaying) {
+            this.walkingSound.pause();
+            this.walkingSound.currentTime = 0; // Reset the sound
+            this.isWalkingSoundPlaying = false;
+        }
+    }
 
         // Handle canvas bounds
         this.x = Math.max(0, Math.min(this.x, this.game.ctx.canvas.width));
