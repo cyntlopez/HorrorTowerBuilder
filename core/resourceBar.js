@@ -6,7 +6,7 @@ class ResourceBar {
         this.boxSize = 60;
         this.spacing = 20;
 
-        this.treeImage = ASSET_MANAGER.getAsset("assets/sprites/resources/tree.png");
+        this.treeImage = ASSET_MANAGER.getAsset("assets/sprites/landscape/tree.png");
 
         this.resources = [
             { isImage: true, image: this.treeImage, amount: 0 },
@@ -42,8 +42,12 @@ class ResourceBar {
             ctx.fillRect(x, barY + 10, this.boxSize, this.boxSize);
 
             // Resource icon
-            ctx.fillStyle = resource.color;
-            ctx.fillRect(x + 15, barY + 25, 30, 30);
+            if (resource.isImage && resource.image) {
+                ctx.drawImage(resource.image, x + 15, barY + 25, 30, 30);
+            } else {
+                ctx.fillStyle = resource.color;
+                ctx.fillRect(x + 15, barY + 25, 30, 30);
+            }
 
             // Resource amount
             ctx.fillStyle = 'white';

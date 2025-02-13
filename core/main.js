@@ -5,9 +5,11 @@ const ASSET_MANAGER = new AssetManager();
 ASSET_MANAGER.queueDownload("assets/sprites/hero/hero_walking.png");
 ASSET_MANAGER.queueDownload("assets/sprites/hero/hero_dying.png");
 ASSET_MANAGER.queueDownload("assets/sprites/landscape/cabin.png");
+ASSET_MANAGER.queueDownload("assets/sprites/landscape/tree.png");
 ASSET_MANAGER.queueDownload("assets/sprites/resources/campfire.png")
 ASSET_MANAGER.queueDownload("assets/sprites/pumpkin_head/killer_walk.png");
 ASSET_MANAGER.queueDownload("assets/sprites/pumpkin_head/killer_attack.png");
+
 
 ASSET_MANAGER.queueDownload("assets/audio/title-screen-music.wav");
 ASSET_MANAGER.queueDownload("assets/audio/title-screen-music2.wav");
