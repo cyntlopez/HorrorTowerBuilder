@@ -70,7 +70,9 @@ ASSET_MANAGER.downloadAll(() => {
 
     const gameSetting = new Settings(gameEngine)
     const minimap = new Minimap(gameEngine);
+    const resourceBar = new ResourceBar(gameEngine);
 
+    gameEngine.addEntity(resourceBar);
     gameEngine.addEntity(gameSetting)
     gameEngine.addEntity(minimap);
 
