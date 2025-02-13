@@ -66,6 +66,9 @@ ASSET_MANAGER.downloadAll(() => {
     const enemyWalking = ASSET_MANAGER.getAsset("assets/sprites/pumpkin_head/killer_walk.png");
     const enemySpawner = new EnemySpawner(gameEngine, tilemap, player, enemyWalking);
 
+    const gameSetting = new GameLogic(gameEngine)
+    gameEngine.addEntity(gameSetting)
+
     gameEngine.addEntity(player);
     gameEngine.addEntity(tilemap);
 
@@ -82,6 +85,7 @@ ASSET_MANAGER.downloadAll(() => {
 
     const cabin = ASSET_MANAGER.getAsset("assets/sprites/landscape/cabin.png");
     gameEngine.addEntity(new Cabin(gameEngine, 600, 10, cabin));
+
 
     gameEngine.init(ctx, camera, enemySpawner);
 
