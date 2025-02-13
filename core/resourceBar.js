@@ -1,20 +1,20 @@
 class ResourceBar {
     constructor(game) {
         this.game = game;
+        this.barHeight = 80;
+        this.barWidth = 300;
         this.boxSize = 60;
         this.spacing = 20;
-        this.barHeight = 80;
 
-        // Calculate barWidth based on boxes and spacing
-        // For 3 resources: spacing + box + spacing + box + spacing + box + spacing
-        this.barWidth = this.spacing + (this.boxSize + this.spacing) * 3;
+        this.treeImage = ASSET_MANAGER.getAsset("assets/sprites/resources/tree.png");
 
         this.resources = [
-            { color: '#4CAF50', amount: 0 }, // Green
-            { color: '#FF4500', amount: 0 }, // Orange/red
-            { color: '#20B2AA', amount: 0 }  // Light blue
+            { isImage: true, image: this.treeImage, amount: 0 },
+            { color: '#FF4500', amount: 0 },
+            { color: '#20B2AA', amount: 0 }
         ];
     }
+
 
     update() {
         // Update resource amounts if needed
