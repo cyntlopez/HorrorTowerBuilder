@@ -5,9 +5,11 @@ const ASSET_MANAGER = new AssetManager();
 ASSET_MANAGER.queueDownload("assets/sprites/hero/hero_walking.png");
 ASSET_MANAGER.queueDownload("assets/sprites/hero/hero_dying.png");
 ASSET_MANAGER.queueDownload("assets/sprites/landscape/cabin.png");
+ASSET_MANAGER.queueDownload("assets/sprites/landscape/tree.png");
 ASSET_MANAGER.queueDownload("assets/sprites/resources/campfire.png")
 ASSET_MANAGER.queueDownload("assets/sprites/pumpkin_head/killer_walk.png");
 ASSET_MANAGER.queueDownload("assets/sprites/pumpkin_head/killer_attack.png");
+
 
 ASSET_MANAGER.queueDownload("assets/audio/title-screen-music.wav");
 ASSET_MANAGER.queueDownload("assets/audio/title-screen-music2.wav");
@@ -66,6 +68,16 @@ ASSET_MANAGER.downloadAll(() => {
     const enemyWalking = ASSET_MANAGER.getAsset("assets/sprites/pumpkin_head/killer_walk.png");
     const enemySpawner = new EnemySpawner(gameEngine, tilemap, player, enemyWalking);
 
+    gameEngine.addEntity(tilemap);
+
+    const gameSetting = new Settings(gameEngine)
+    const minimap = new Minimap(gameEngine);
+    const resourceBar = new ResourceBar(gameEngine);
+
+    gameEngine.addEntity(resourceBar);
+    gameEngine.addEntity(gameSetting)
+    gameEngine.addEntity(minimap);
+
     gameEngine.addEntity(player);
     gameEngine.addEntity(tilemap);
 
@@ -82,6 +94,7 @@ ASSET_MANAGER.downloadAll(() => {
 
     const cabin = ASSET_MANAGER.getAsset("assets/sprites/landscape/cabin.png");
     gameEngine.addEntity(new Cabin(gameEngine, 600, 10, cabin));
+
 
     gameEngine.init(ctx, camera, enemySpawner);
 
