@@ -27,24 +27,17 @@ class TileMap {
 
     }
 
-    draw(ctx, mouse, validTiles = []) {
-        let hoveredTile = null;
-        if (mouse) {
-            hoveredTile = this.screenToGrid(mouse.x, mouse.y);
-        }
-
+    draw(ctx) {
         for (let r = 0; r < this.rows; r++) {
             for (let c = 0; c < this.cols; c++) {
-                let fillColor = this.grid[r][c] ? 'lightblue' : 'white';
+                const building = this.grid[r][c];
 
-                // Highlight valid placement tiles
-                if (validTiles.some(tile => tile.row === r && tile.col === c)) {
-                    fillColor = 'rgba(0, 255, 0, 0.3)';
-                }
+                if (!building) {
+                    ctx.strokeStyle = "gray";
+                    ctx.strokeRect(c * this.tileSize, r * this.tileSize, this.tileSize, this.tileSize);
+                } else {
+                    building.draw(ctx);
 
-                // Highlight hovered tile
-                if (hoveredTile && r === hoveredTile.row && c === hoveredTile.col) {
-                    fillColor = 'yellow';
                 }
 
                 const x = c * this.tileSize;
