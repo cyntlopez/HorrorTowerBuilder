@@ -66,8 +66,13 @@ ASSET_MANAGER.downloadAll(() => {
     const enemyWalking = ASSET_MANAGER.getAsset("assets/sprites/pumpkin_head/killer_walk.png");
     const enemySpawner = new EnemySpawner(gameEngine, tilemap, player, enemyWalking);
 
-    const gameSetting = new GameLogic(gameEngine)
+    gameEngine.addEntity(tilemap);
+
+    const gameSetting = new Settings(gameEngine)
+    const minimap = new Minimap(gameEngine);
+
     gameEngine.addEntity(gameSetting)
+    gameEngine.addEntity(minimap);
 
     gameEngine.addEntity(player);
     gameEngine.addEntity(tilemap);

@@ -1,4 +1,4 @@
-class GameLogic {
+class Settings {
     constructor(game) {
         this.game = game;
         this.active = false;
