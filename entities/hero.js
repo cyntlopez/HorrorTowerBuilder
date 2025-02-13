@@ -26,7 +26,6 @@ class Hero {
         // Building placement mode
         this.placementMode = false;
         this.placementRadius = 3; //Radius in tiles
-        this.selectedBuilding = "ArcherTower";
         this.validPlacementTile = []; // List of tiles that can be highlighted
     }
 
@@ -51,7 +50,6 @@ class Hero {
             console.log("Attack controls set up successfully.");
         });
     }
-
 
     loadAnimation() {
         for (let i = 0; i < 4; i++) { // 4 states
@@ -158,7 +156,6 @@ class Hero {
             newFacing = movingLeft ? 2 : 3; // 2 = Left, 3 = Right
         }
 
-        // Update facing direction if it's not diagonal movement
         this.facing = newFacing;
 
         // Set animation state (1 = walking, 0 = idle)
@@ -196,9 +193,13 @@ class Hero {
 
             // Check if the clicked tile is valid
             if (this.validPlacementTiles.some(tile => tile.row === row && tile.col === col)) {
-                const building = new Building(row, col, this.tileMap.tileSize);
-                this.tileMap.placeBuilding(row, col, building);
-                this.game.click = null; // Clear the click after placing the building
+                const building = BuildingFactory.createBuilding(gameEngine.selectedBuilding, row, col, this.tileMap, this.tileMap.tileSize);
+
+                if (building) {
+                    this.tileMap.placeBuilding(row, col, building);
+                    this.game.addEntity(building);
+                    console.log(`${gameEngine.selectedBuilding} placed at (${row}, ${col})`);
+                }
             }
 
             this.game.click = null;

@@ -175,13 +175,8 @@ class Enemy {
 
     attack(building) {
         if (this.game.timer.gameTime - this.lastAttackTime >= this.attackCooldown) {
-            building.health -= this.attackPower;
+            building.takeDamage(this.attackPower);
             console.log(`Enemy attacked building at (${building.row}, ${building.col}). Health: ${building.health}`);
-
-            if (building.health <= 0) {
-                this.tileMap.grid[building.row][building.col] = null; // Remove destroyed building
-                console.log("Building destroyed!");
-            }
 
             this.lastAttackTime = this.game.timer.gameTime;
         }
