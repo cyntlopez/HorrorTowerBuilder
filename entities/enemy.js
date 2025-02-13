@@ -24,7 +24,7 @@ class Enemy {
     }
 
     loadAnimation() {
-        for (let i = 0; i < 1; i++) { // 2 states
+        for (let i = 0; i < 2; i++) { // 2 states
             this.animation.push([]);
             for (let j = 0; j < 4; j++) { // 4 facing directions
                 this.animation[i].push([]);
@@ -44,22 +44,22 @@ class Enemy {
         // facing right = 3
         this.animation[0][3] = new Animator(this.spritesheet, 0, 195, 64, 64.5, 9, 0.1, 0, false, true);
 
-        // if (this.state === 1) {
-        //     // attacking animation for state = 1
-        //     // facing down = 0
-        //     const attackSpriteSheet = "assets/sprites/pumpkin_head/killer_attack.png";
-        //     ASSET_MANAGER.getAsset(attackSpriteSheet);
-        //     this.animation[1][0] = new Animator(attackSpriteSheet, 0, 138, 64, 64.5, 6, 0.1, 0,false, true);
-        //
-        //     // facing up = 1
-        //     this.animation[1][1] = new Animator(attackSpriteSheet, 1, 1, 64, 64.5, 6, 0.1, 0,false, true);
-        //
-        //     // facing left = 2
-        //     this.animation[1][2] = new Animator(attackSpriteSheet, 0, 69, 64, 64.5, 6, 0.1, 0,false, true);
-        //
-        //     // facing right = 3
-        //     this.animation[1][3] = new Animator(attackSpriteSheet, 0, 200, 64, 64.5, 6, 0.1, 0,false, true);
-        // }
+
+        // attacking animation for state = 1
+        // facing down = 0
+        const attackSpriteSheet = ASSET_MANAGER.getAsset("assets/sprites/pumpkin_head/killer_attack.png");
+
+        this.animation[1][0] = new Animator(attackSpriteSheet, 0, 138, 64, 64.5, 6, 0.1, 0,false, true);
+
+            // facing up = 1
+        this.animation[1][1] = new Animator(attackSpriteSheet, 1, 1, 64, 64.5, 6, 0.1, 0,false, true);
+
+            // facing left = 2
+        this.animation[1][2] = new Animator(attackSpriteSheet, 0, 69, 64, 64.5, 6, 0.1, 0,false, true);
+
+            // facing right = 3
+        this.animation[1][3] = new Animator(attackSpriteSheet, 0, 200, 64, 64.5, 6, 0.1, 0,false, true);
+
     }
 
     update() {
@@ -76,17 +76,21 @@ class Enemy {
 
             if (distance > this.attackRange) {
                 // Move towards the building
+                this.state = 0;
                 this.x += (dx / distance) * this.speed * this.game.clockTick;
                 this.y += (dy / distance) * this.speed * this.game.clockTick;
 
             } else {
                 // Attack the building if in range
+                this.state = 1;
                 this.attack(nearestBuilding);
             }
         } else {
+            this.state = 0;
             this.moveToward(this.player.x, this.player.y);
 
             if (this.isInAttackRange(this.player.x, this.player.y)) {
+                this.state = 1;
                 this.attackPlayer();
             }
         }

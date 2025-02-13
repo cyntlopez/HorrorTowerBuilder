@@ -3,9 +3,11 @@ const gameEngine = new GameEngine();
 const ASSET_MANAGER = new AssetManager();
 
 ASSET_MANAGER.queueDownload("assets/sprites/hero/hero_walking.png");
+ASSET_MANAGER.queueDownload("assets/sprites/hero/hero_dying.png");
 ASSET_MANAGER.queueDownload("assets/sprites/landscape/cabin.png");
+ASSET_MANAGER.queueDownload("assets/sprites/resources/campfire.png")
 ASSET_MANAGER.queueDownload("assets/sprites/pumpkin_head/killer_walk.png");
-// ASSET_MANAGER.queueDownload("assets/sprites/pumpkin_head/killer_attack.png");
+ASSET_MANAGER.queueDownload("assets/sprites/pumpkin_head/killer_attack.png");
 
 ASSET_MANAGER.queueDownload("assets/audio/title-screen-music.wav");
 ASSET_MANAGER.queueDownload("assets/audio/title-screen-music2.wav");
@@ -15,29 +17,46 @@ ASSET_MANAGER.queueDownload("assets/audio/level-2-music.wav");
 
 ASSET_MANAGER.downloadAll(() => {
 
+    const canvas = document.getElementById("gameWorld");
+
+    // Helps refocus the camera after interating with audio.
+    function refocusCanvas() {
+        setTimeout(() => canvas.focus(), 50);
+    }
+
     document.getElementById("playMusic").addEventListener("click", () => {
         const selectedTrack = document.getElementById("trackSelector").value;
         ASSET_MANAGER.playAsset(selectedTrack);
+        refocusCanvas();
     });
 
     document.getElementById("stopMusic").addEventListener("click", () => {
         ASSET_MANAGER.stopMusic();
+        refocusCanvas();
     });
 
     document.getElementById("muteMusic").addEventListener("click", () => {
         const selectedTrack = document.getElementById("trackSelector").value;
         ASSET_MANAGER.muteAudio(selectedTrack);
+        refocusCanvas();
     });
 
     document.getElementById("volume").addEventListener("input", (event) => {
         const volumeLevel = event.target.value;
         ASSET_MANAGER.adjustVolume(volumeLevel);
+        refocusCanvas();
     });
 
-    const canvas = document.getElementById("gameWorld");
+    document.getElementById("trackSelector").addEventListener("change", refocusCanvas);
+
+    const loseScreen = new LoseScreen(gameEngine);
+    gameEngine.loseScreen = loseScreen;
+    gameEngine.addEntity(loseScreen);
+
+    canvas.setAttribute("tabindex","0");
     const ctx = canvas.getContext("2d");
 
-    const tilemap = new TileMap(20, 20, 40);
+    const tilemap = new TileMap(20, 20, 40, gameEngine);
 
     const heroWalking = ASSET_MANAGER.getAsset("assets/sprites/hero/hero_walking.png");
     const player = new Hero(gameEngine, 50, 50, heroWalking, tilemap);
@@ -62,7 +81,7 @@ ASSET_MANAGER.downloadAll(() => {
     });
 
     const cabin = ASSET_MANAGER.getAsset("assets/sprites/landscape/cabin.png");
-    gameEngine.addEntity(new Cabin(gameEngine, 300, 250, cabin));
+    gameEngine.addEntity(new Cabin(gameEngine, 600, 10, cabin));
 
     gameEngine.init(ctx, camera, enemySpawner);
 
