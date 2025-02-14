@@ -21,6 +21,14 @@ ASSET_MANAGER.downloadAll(() => {
 
     const canvas = document.getElementById("gameWorld");
 
+    const startMusic = () => {
+        const defaultTrack = "assets/audio/title-screen-music.wav";
+        ASSET_MANAGER.playAsset(defaultTrack);
+        ASSET_MANAGER.adjustVolume(0.1);
+        // Remove the listener after first interaction
+        document.removeEventListener('click', startMusic);
+        document.removeEventListener('keydown', startMusic);
+    };
     // Helps refocus the camera after interating with audio.
     function refocusCanvas() {
         setTimeout(() => canvas.focus(), 50);
@@ -67,7 +75,6 @@ ASSET_MANAGER.downloadAll(() => {
 
     const enemyWalking = ASSET_MANAGER.getAsset("assets/sprites/pumpkin_head/killer_walk.png");
     const enemySpawner = new EnemySpawner(gameEngine, tilemap, player, enemyWalking);
-
     gameEngine.addEntity(tilemap);
 
     const gameSetting = new Settings(gameEngine)
@@ -97,6 +104,5 @@ ASSET_MANAGER.downloadAll(() => {
 
 
     gameEngine.init(ctx, camera, enemySpawner);
-
     gameEngine.start();
 });

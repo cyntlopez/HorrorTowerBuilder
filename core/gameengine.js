@@ -21,10 +21,14 @@ class GameEngine {
         this.up = false;
         this.down = false;
 
+        this.paused = false;
+
         // Options and the Details
         this.options = options || {
             debugging: false,
         };
+
+
     };
 
     init(ctx, camera, enemySpawner) {

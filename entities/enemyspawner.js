@@ -47,4 +47,5 @@ class EnemySpawner {
         this.game.addEntity(enemy);
         console.log("Spawned enemy at (${x}, ${y}) targeting (${targetX}, ${targetY})")
     }
+
 }
