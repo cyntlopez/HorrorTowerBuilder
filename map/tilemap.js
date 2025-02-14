@@ -1,6 +1,7 @@
 class TileMap {
-    constructor(rows, cols, tileSize, game) {
+    constructor(rows, cols, tileSize, game, spritesheet) {
         this.rows = rows;
+        this.spritesheet = spritesheet;
         this.cols = cols;
         this.tileSize = tileSize;
         this.state = 0; // 0 = lit fire, 1 = dying fire
@@ -17,6 +18,7 @@ class TileMap {
             this.animation.push([]);
         }
 
+        // TODO: Change campfire image
         const campfireSpriteSheet = ASSET_MANAGER.getAsset("assets/sprites/resources/campfire.png");
 
         this.animation[0] = new Animator(campfireSpriteSheet, 2, 2, 64.1, 63, 6, 0.5, 0,false, true);
@@ -33,7 +35,7 @@ class TileMap {
                 const building = this.grid[r][c];
 
                 if (!building) {
-                    ctx.strokeStyle = "gray";
+                    ctx.strokeStyle = rgba(0,0,0,0)
                     ctx.strokeRect(c * this.tileSize, r * this.tileSize, this.tileSize, this.tileSize);
                 } else {
                     building.draw(ctx);
@@ -43,10 +45,10 @@ class TileMap {
                 const x = c * this.tileSize;
                 const y = r * this.tileSize;
 
-                if (this.grid[r][c] !== null) this.animation[this.state].drawFrame(this.game.clockTick, ctx, x, y, 1);
-
-                ctx.strokeStyle = 'gray';
-                ctx.strokeRect(x, y, this.tileSize, this.tileSize);
+                if (this.grid[r][c] !== null) {
+                    this.animation[this.state].drawFrame(this.game.clockTick, ctx, x, y, 1);
+                }
+                ctx.drawImage(this.spritesheet, x, y, this.tileSize, this.tileSize);
             }
         }
     }

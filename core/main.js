@@ -9,7 +9,7 @@ ASSET_MANAGER.queueDownload("assets/sprites/landscape/tree.png");
 ASSET_MANAGER.queueDownload("assets/sprites/resources/campfire.png")
 ASSET_MANAGER.queueDownload("assets/sprites/pumpkin_head/killer_walk.png");
 ASSET_MANAGER.queueDownload("assets/sprites/pumpkin_head/killer_attack.png");
-
+ASSET_MANAGER.queueDownload("assets/sprites/landscape/grass.png");
 
 ASSET_MANAGER.queueDownload("assets/audio/title-screen-music.wav");
 ASSET_MANAGER.queueDownload("assets/audio/title-screen-music2.wav");
@@ -53,12 +53,12 @@ ASSET_MANAGER.downloadAll(() => {
 
     const loseScreen = new LoseScreen(gameEngine);
     gameEngine.loseScreen = loseScreen;
-    gameEngine.addEntity(loseScreen);
 
     canvas.setAttribute("tabindex","0");
     const ctx = canvas.getContext("2d");
 
-    const tilemap = new TileMap(20, 20, 40, gameEngine);
+    const grass = ASSET_MANAGER.getAsset("assets/sprites/landscape/grass.png");
+    const tilemap = new TileMap(20, 20, 40, gameEngine, grass);
 
     const heroWalking = ASSET_MANAGER.getAsset("assets/sprites/hero/hero_walking.png");
     const player = new Hero(gameEngine, 50, 50, heroWalking, tilemap);
@@ -67,24 +67,20 @@ ASSET_MANAGER.downloadAll(() => {
 
     const enemyWalking = ASSET_MANAGER.getAsset("assets/sprites/pumpkin_head/killer_walk.png");
     const enemySpawner = new EnemySpawner(gameEngine, tilemap, player, enemyWalking);
-
-    gameEngine.addEntity(tilemap);
+    const cabin = ASSET_MANAGER.getAsset("assets/sprites/landscape/cabin.png");
 
     const gameSetting = new Settings(gameEngine)
     const minimap = new Minimap(gameEngine);
     const resourceBar = new ResourceBar(gameEngine);
 
-    gameEngine.addEntity(resourceBar);
-    gameEngine.addEntity(gameSetting)
-    gameEngine.addEntity(minimap);
-
-    gameEngine.addEntity(player);
-    gameEngine.addEntity(tilemap);
-
     const originalDraw = gameEngine.draw.bind(gameEngine);
     gameEngine.draw = function () {
         tilemap.draw(ctx, this.mouse, player.validPlacementTiles); // Pass valid tiles
         originalDraw();
+
+        if (loseScreen.active) {
+            loseScreen.draw(ctx);
+        }
     };
 
     canvas.addEventListener("wheel", (e) => {
@@ -92,10 +88,13 @@ ASSET_MANAGER.downloadAll(() => {
         camera.adjustZoom(e.deltaY > 0 ? -0.1 : 0.1);
     });
 
-    const cabin = ASSET_MANAGER.getAsset("assets/sprites/landscape/cabin.png");
     gameEngine.addEntity(new Cabin(gameEngine, 600, 10, cabin));
-
-
+    gameEngine.addEntity(tilemap);
+    gameEngine.addEntity(gameSetting);
+    gameEngine.addEntity(player);
+    gameEngine.addEntity(tilemap);
+    gameEngine.addEntity(resourceBar);
+    gameEngine.addEntity(minimap);
     gameEngine.init(ctx, camera, enemySpawner);
 
     gameEngine.start();
