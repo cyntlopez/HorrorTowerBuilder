@@ -22,6 +22,9 @@ class Enemy {
 
         this.animation = [];
         this.loadAnimation();
+
+        this.slashSoundPath = "assets/audio/effects/killer-slash.wav";
+        this.isSlashing = false;
     }
 
     loadAnimation() {
@@ -96,6 +99,9 @@ class Enemy {
             }
         }
         this.avoidOtherEnemies();
+
+
+
     }
 
     findNearestBuilding() {
@@ -187,7 +193,30 @@ class Enemy {
         if (this.game.timer.gameTime - this.lastAttackTime >= this.attackCooldown) {
             this.player.health -= this.attackPower;
             console.log(`Enemy attacked the player! Player health: ${this.player.health}`);
+            
+    
 
+            
+            if (!this.isSoundPlaying) {
+                const sound = ASSET_MANAGER.getAsset(this.slashSoundPath);
+                if (sound) {
+                    sound.loop = false;
+                    this.isSoundPlaying = true;
+                    
+                    
+                    const onSoundEnd = () => {
+                        this.isSoundPlaying = false;
+                        console.log("sound ended")
+                        sound.removeEventListener('ended', onSoundEnd);
+                    };
+                    
+                    sound.addEventListener('ended', onSoundEnd);
+                    sound.currentTime = 0;
+                    sound.play();
+                    console.log("this is being triggered");
+                }
+            }
+        
             if (this.player.health <= 0) {
                 console.log("Player is dead!");
             }

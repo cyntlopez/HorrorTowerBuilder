@@ -106,6 +106,7 @@ class AssetManager {
             }
         }
     }
+    
 
     muteAudio() {
         if (this.currentMusic) {

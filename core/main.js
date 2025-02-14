@@ -2,6 +2,7 @@ const gameEngine = new GameEngine();
 
 const ASSET_MANAGER = new AssetManager();
 
+//Sprites
 ASSET_MANAGER.queueDownload("assets/sprites/hero/hero_walking.png");
 ASSET_MANAGER.queueDownload("assets/sprites/hero/hero_dying.png");
 ASSET_MANAGER.queueDownload("assets/sprites/landscape/cabin.png");
@@ -11,12 +12,15 @@ ASSET_MANAGER.queueDownload("assets/sprites/pumpkin_head/killer_walk.png");
 ASSET_MANAGER.queueDownload("assets/sprites/pumpkin_head/killer_attack.png");
 ASSET_MANAGER.queueDownload("assets/sprites/landscape/grass.png");
 
+//Music
 ASSET_MANAGER.queueDownload("assets/audio/music/title-screen-music.wav");
 ASSET_MANAGER.queueDownload("assets/audio/music/title-screen-music2.wav");
 ASSET_MANAGER.queueDownload("assets/audio/music/level-1-music.wav");
 ASSET_MANAGER.queueDownload("assets/audio/music/level-2-music.wav");
 
+//Effects
 ASSET_MANAGER.queueDownload("assets/audio/effects/Grass_walk5.wav");
+ASSET_MANAGER.queueDownload("assets/audio/effects/killer-slash.wav");
 
 
 ASSET_MANAGER.downloadAll(() => {
