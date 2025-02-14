@@ -55,6 +55,13 @@ ASSET_MANAGER.downloadAll(() => {
         refocusCanvas();
     });
 
+    document.getElementById("effectVolume").addEventListener("input", (event) => {
+        const effectLevel = event.target.value;
+        ASSET_MANAGER.adjustEffect(effectLevel);
+        refocusCanvas();
+    });
+
+
     document.getElementById("trackSelector").addEventListener("change", refocusCanvas);
 
     const loseScreen = new LoseScreen(gameEngine);

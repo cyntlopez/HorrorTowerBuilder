@@ -7,6 +7,7 @@ class AssetManager {
         this.currentMusic = null;
         this.isMuted = false;
         this.volume = 0.1;
+        this.effectVolume = 0.1;
     };
 
     queueDownload(path) {
@@ -100,7 +101,7 @@ class AssetManager {
         const sound = this.cache[path];
         if (sound && !this.isMuted) {
             if (sound.paused || sound.ended) {
-                sound.volume = this.volume;
+                sound.volume = this.effectVolume;
                 sound.currentTime = 0;
                 sound.play();
             }
@@ -134,6 +135,10 @@ class AssetManager {
         if (this.currentMusic) {
             this.currentMusic.volume = volume;
         }
+    };
+
+    adjustEffect(volume) {
+        this.effectVolume = volume;
     };
 
     pauseBackgroundMusic() {

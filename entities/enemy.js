@@ -196,24 +196,22 @@ class Enemy {
             
     
 
-            
+            // Only play sound if it's not already playing
             if (!this.isSoundPlaying) {
+                // Make sure to get the sound before going to the if statement.
                 const sound = ASSET_MANAGER.getAsset(this.slashSoundPath);
                 if (sound) {
                     sound.loop = false;
                     this.isSoundPlaying = true;
                     
-                    
+                    // Set up the ended event listener
                     const onSoundEnd = () => {
                         this.isSoundPlaying = false;
-                        console.log("sound ended")
                         sound.removeEventListener('ended', onSoundEnd);
                     };
                     
                     sound.addEventListener('ended', onSoundEnd);
-                    sound.currentTime = 0;
-                    sound.play();
-                    console.log("this is being triggered");
+                    ASSET_MANAGER.playSoundEffect(this.slashSoundPath);
                 }
             }
         
