@@ -96,8 +96,6 @@ class AssetManager {
         }
     };
 
-
-    
     playSoundEffect(path) {
         const sound = this.cache[path];
         if (sound && !this.isMuted) {

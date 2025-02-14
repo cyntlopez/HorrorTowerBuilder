@@ -26,13 +26,7 @@ class Hero {
         // Building placement mode
         this.placementMode = false;
         this.placementRadius = 3; //Radius in tiles
-        this.selectedBuilding = "ArcherTower";
         this.validPlacementTile = []; // List of tiles that can be highlighted
-
-
-        // this.walkingSound = new Audio("assets/audio/effects/Grass_walk5.wav");
-        // this.walkingSound.loop = true;
-        // this.isWalkingSound = false;
 
         this.walkingSoundPath = "assets/audio/effects/Grass_walk5.wav";
         this.isWalking = false;
@@ -59,7 +53,6 @@ class Hero {
             console.log("Attack controls set up successfully.");
         });
     }
-
 
     loadAnimation() {
         for (let i = 0; i < 4; i++) { // 4 states
@@ -166,27 +159,26 @@ class Hero {
             newFacing = movingLeft ? 2 : 3; // 2 = Left, 3 = Right
         }
 
-        // Update facing direction if it's not diagonal movement
         this.facing = newFacing;
 
         // Set animation state (1 = walking, 0 = idle)
         this.state = (magnitude > 0) ? 1 : 0;
-
-    if (this.state == 1) {
-        if (!this.isWalking) {
-            ASSET_MANAGER.playSoundEffect(this.walkingSoundPath);
-            this.isWalking = true;
-        }
-    } else {
-        if (this.isWalking) {
-            const sound = ASSET_MANAGER.getAsset(this.walkingSoundPath);
-            if (sound) {
-                sound.pause();
-                sound.currentTime = 0;
+        
+        if (this.state == 1) {
+            if (!this.isWalking) {
+                ASSET_MANAGER.playSoundEffect(this.walkingSoundPath);
+                this.isWalking = true;
             }
-            this.isWalking = false;
+        } else {
+            if (this.isWalking) {
+                const sound = ASSET_MANAGER.getAsset(this.walkingSoundPath);
+                if (sound) {
+                    sound.pause();
+                    sound.currentTime = 0;
+                }
+                this.isWalking = false;
+            }
         }
-    }
 
         // Handle canvas bounds
         this.x = Math.max(0, Math.min(this.x, this.game.ctx.canvas.width));
@@ -220,9 +212,13 @@ class Hero {
 
             // Check if the clicked tile is valid
             if (this.validPlacementTiles.some(tile => tile.row === row && tile.col === col)) {
-                const building = new Building(row, col, this.tileMap.tileSize);
-                this.tileMap.placeBuilding(row, col, building);
-                this.game.click = null; // Clear the click after placing the building
+                const building = BuildingFactory.createBuilding(gameEngine.selectedBuilding, row, col, this.tileMap, this.tileMap.tileSize);
+
+                if (building) {
+                    this.tileMap.placeBuilding(row, col, building);
+                    this.game.addEntity(building);
+                    console.log(`${gameEngine.selectedBuilding} placed at (${row}, ${col})`);
+                }
             }
 
             this.game.click = null;
