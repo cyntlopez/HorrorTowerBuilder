@@ -30,9 +30,12 @@ class Hero {
         this.validPlacementTile = []; // List of tiles that can be highlighted
 
 
-        this.walkingSound = new Audio("assets/audio/effects/Grass_walk4.wav");
-        this.walkingSound.loop = true;
-        this.isWalkingSound = false;
+        // this.walkingSound = new Audio("assets/audio/effects/Grass_walk5.wav");
+        // this.walkingSound.loop = true;
+        // this.isWalkingSound = false;
+
+        this.walkingSoundPath = "assets/audio/effects/Grass_walk5.wav";
+        this.isWalking = false;
     }
 
     setupControls() {
@@ -170,15 +173,18 @@ class Hero {
         this.state = (magnitude > 0) ? 1 : 0;
 
     if (this.state == 1) {
-        if (!this.isWalkingSoundPlaying) {
-            this.walkingSound.play();
-            this.isWalkingSoundPlaying = true;
+        if (!this.isWalking) {
+            ASSET_MANAGER.playSoundEffect(this.walkingSoundPath);
+            this.isWalking = true;
         }
     } else {
-        if (this.isWalkingSoundPlaying) {
-            this.walkingSound.pause();
-            this.walkingSound.currentTime = 0; // Reset the sound
-            this.isWalkingSoundPlaying = false;
+        if (this.isWalking) {
+            const sound = ASSET_MANAGER.getAsset(this.walkingSoundPath);
+            if (sound) {
+                sound.pause();
+                sound.currentTime = 0;
+            }
+            this.isWalking = false;
         }
     }
 

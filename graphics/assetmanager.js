@@ -97,12 +97,13 @@ class AssetManager {
     };
 
 
-    // Gonna add this to footsteps later. Using audio class for now
+    
     playSoundEffect(path) {
         const sound = this.cache[path];
         if (sound && !this.isMuted) {
-            if (sound.paused) {
+            if (sound.paused || sound.ended) {
                 sound.volume = this.volume;
+                sound.currentTime = 0;
                 sound.play();
             }
         }
