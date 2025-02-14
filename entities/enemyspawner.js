@@ -1,3 +1,4 @@
+
 class EnemySpawner {
     constructor(game, tilemap, player, spritesheet) {
         this.game = game;

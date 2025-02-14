@@ -1,3 +1,4 @@
+
 class Enemy {
     constructor(game, x, y, targetX, targetY, tilemap, player, spritesheet) {
         this.game = game;

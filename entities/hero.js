@@ -27,6 +27,9 @@ class Hero {
         this.placementMode = false;
         this.placementRadius = 3; //Radius in tiles
         this.validPlacementTile = []; // List of tiles that can be highlighted
+
+        this.walkingSoundPath = "assets/audio/effects/Grass_walk5.wav";
+        this.isWalking = false;
     }
 
     setupControls() {
@@ -160,6 +163,22 @@ class Hero {
 
         // Set animation state (1 = walking, 0 = idle)
         this.state = (magnitude > 0) ? 1 : 0;
+        
+        if (this.state == 1) {
+            if (!this.isWalking) {
+                ASSET_MANAGER.playSoundEffect(this.walkingSoundPath);
+                this.isWalking = true;
+            }
+        } else {
+            if (this.isWalking) {
+                const sound = ASSET_MANAGER.getAsset(this.walkingSoundPath);
+                if (sound) {
+                    sound.pause();
+                    sound.currentTime = 0;
+                }
+                this.isWalking = false;
+            }
+        }
 
         // Handle canvas bounds
         this.x = Math.max(0, Math.min(this.x, this.game.ctx.canvas.width));

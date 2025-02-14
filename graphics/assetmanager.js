@@ -96,6 +96,17 @@ class AssetManager {
         }
     };
 
+    playSoundEffect(path) {
+        const sound = this.cache[path];
+        if (sound && !this.isMuted) {
+            if (sound.paused || sound.ended) {
+                sound.volume = this.volume;
+                sound.currentTime = 0;
+                sound.play();
+            }
+        }
+    }
+
     muteAudio() {
         if (this.currentMusic) {
             this.isMuted = !this.isMuted;
