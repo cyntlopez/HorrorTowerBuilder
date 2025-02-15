@@ -24,7 +24,8 @@ class Enemy {
         this.loadAnimation();
 
         this.slashSoundPath = "assets/audio/effects/killer-slash.wav";
-        this.isSlashing = false;
+        this.slashSoundPool = ASSET_MANAGER.createAudioPool(this.slashSoundPath, 3);
+     //   this.isSlashing = false;
     }
 
     loadAnimation() {
@@ -196,24 +197,26 @@ class Enemy {
             
     
 
-            // Only play sound if it's not already playing
-            if (!this.isSoundPlaying) {
-                // Make sure to get the sound before going to the if statement.
-                const sound = ASSET_MANAGER.getAsset(this.slashSoundPath);
-                if (sound) {
-                    sound.loop = false;
-                    this.isSoundPlaying = true;
+            // // Only play sound if it's not already playing
+            // if (!this.isSoundPlaying) {
+            //     // Make sure to get the sound before going to the if statement.
+            //     const sound = ASSET_MANAGER.getAsset(this.slashSoundPath);
+            //     if (sound) {
+            //         sound.loop = false;
+            //         this.isSoundPlaying = true;
                     
-                    // Set up the ended event listener
-                    const onSoundEnd = () => {
-                        this.isSoundPlaying = false;
-                        sound.removeEventListener('ended', onSoundEnd);
-                    };
+            //         // Set up the ended event listener
+            //         const onSoundEnd = () => {
+            //             this.isSoundPlaying = false;
+            //             sound.removeEventListener('ended', onSoundEnd);
+            //         };
                     
-                    sound.addEventListener('ended', onSoundEnd);
-                    ASSET_MANAGER.playSoundEffect(this.slashSoundPath);
-                }
-            }
+            //         sound.addEventListener('ended', onSoundEnd);
+            //         ASSET_MANAGER.playSoundEffect(this.slashSoundPath);
+            //     }
+            // }
+
+            ASSET_MANAGER.playFromPool(this.slashSoundPool);
         
             if (this.player.health <= 0) {
                 console.log("Player is dead!");

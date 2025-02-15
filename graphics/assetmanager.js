@@ -157,4 +157,46 @@ class AssetManager {
             aud.play();
         });
     };
+
+    // This allows multiple audio clips to play at the same time.
+    createAudioPool(path, size) {
+        const audioPool = [];
+        const originalAudio = this.cache[path];
+        
+        if (!originalAudio) {
+            console.error(`Audio file not found: ${path}`);
+            return audioPool;
+        }
+        
+        // Create clones of the original audio
+        for (let i = 0; i < size; i++) {
+            const audio = new Audio(originalAudio.src);
+            audio.volume = this.effectVolume;
+            audioPool.push(audio);
+        }
+        
+        return audioPool;
+    }
+
+    // Add this method to play from a pool
+    playFromPool(audioPool) {
+        if (this.isMuted || audioPool.length === 0) return;
+        
+        // Find an audio element that's not playing
+        for (let audio of audioPool) {
+            if (audio.paused || audio.ended) {
+                audio.volume = this.effectVolume;
+                audio.currentTime = 0;
+                audio.loop = false;
+                audio.play().catch(e => console.error("Error playing audio:", e));
+                return;
+            }
+        }
+        
+        // If all are playing, use the first one (oldest)
+        const audio = audioPool[0];
+        audio.currentTime = 0;
+        audio.play().catch(e => console.error("Error playing audio:", e));
+    }
+
 }
