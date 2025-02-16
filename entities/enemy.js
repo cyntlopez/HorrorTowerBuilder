@@ -22,6 +22,10 @@ class Enemy {
 
         this.animation = [];
         this.loadAnimation();
+
+        this.slashSoundPath = "assets/audio/effects/killer-slash.wav";
+        this.slashSoundPool = ASSET_MANAGER.createAudioPool(this.slashSoundPath, 3);
+     //   this.isSlashing = false;
     }
 
     loadAnimation() {
@@ -96,6 +100,9 @@ class Enemy {
             }
         }
         this.avoidOtherEnemies();
+
+
+
     }
 
     findNearestBuilding() {
@@ -187,7 +194,30 @@ class Enemy {
         if (this.game.timer.gameTime - this.lastAttackTime >= this.attackCooldown) {
             this.player.health -= this.attackPower;
             console.log(`Enemy attacked the player! Player health: ${this.player.health}`);
+            
+    
 
+            // // Only play sound if it's not already playing
+            // if (!this.isSoundPlaying) {
+            //     // Make sure to get the sound before going to the if statement.
+            //     const sound = ASSET_MANAGER.getAsset(this.slashSoundPath);
+            //     if (sound) {
+            //         sound.loop = false;
+            //         this.isSoundPlaying = true;
+                    
+            //         // Set up the ended event listener
+            //         const onSoundEnd = () => {
+            //             this.isSoundPlaying = false;
+            //             sound.removeEventListener('ended', onSoundEnd);
+            //         };
+                    
+            //         sound.addEventListener('ended', onSoundEnd);
+            //         ASSET_MANAGER.playSoundEffect(this.slashSoundPath);
+            //     }
+            // }
+
+            ASSET_MANAGER.playFromPool(this.slashSoundPool);
+        
             if (this.player.health <= 0) {
                 console.log("Player is dead!");
             }
