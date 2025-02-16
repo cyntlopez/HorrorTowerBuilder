@@ -22,6 +22,7 @@ ASSET_MANAGER.queueDownload("assets/audio/music/level-2-music.wav");
 ASSET_MANAGER.queueDownload("assets/audio/effects/Grass_walk5.wav");
 ASSET_MANAGER.queueDownload("assets/audio/effects/killer-slash.wav");
 ASSET_MANAGER.queueDownload("assets/audio/effects/enemySpawn.wav");
+ASSET_MANAGER.queueDownload("assets/audio/effects/enemy_entrance.wav");
 
 
 ASSET_MANAGER.downloadAll(() => {
