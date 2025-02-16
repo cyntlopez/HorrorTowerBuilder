@@ -1,4 +1,3 @@
-
 class BuildingFactory {
     static createBuilding(type, row, col, tileMap, tileSize) {
         switch (type) {
