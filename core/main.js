@@ -17,6 +17,7 @@ ASSET_MANAGER.queueDownload("assets/audio/music/title-screen-music.wav");
 ASSET_MANAGER.queueDownload("assets/audio/music/title-screen-music2.wav");
 ASSET_MANAGER.queueDownload("assets/audio/music/level-1-music.wav");
 ASSET_MANAGER.queueDownload("assets/audio/music/level-2-music.wav");
+ASSET_MANAGER.queueDownload("assets/audio/music/Track-5-music.wav");
 
 //Effects
 ASSET_MANAGER.queueDownload("assets/audio/effects/Grass_walk5.wav");
