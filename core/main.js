@@ -87,6 +87,7 @@ ASSET_MANAGER.downloadAll(() => {
 
     const heroWalking = ASSET_MANAGER.getAsset("assets/sprites/hero/hero_walking.png");
     const player = new Hero(gameEngine, 50, 50, heroWalking, tilemap);
+    tilemap.player = player;
 
     const camera = new Camera(gameEngine, player, canvas.width, canvas.height);
 
