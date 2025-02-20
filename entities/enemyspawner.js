@@ -1,51 +1,120 @@
 
 class EnemySpawner {
-    constructor(game, tilemap, player, spritesheet) {
+    constructor(game, tileMap, player, spritesheet) {
         this.game = game;
-        this.tileMap = tilemap;
+        this.tileMap = tileMap;
         this.player = player;
         this.spritesheet = spritesheet;
-
+      
         this.spawnInterval = 5;
         this.lastSpawnTime = 0;
+
+        //this.isSoundPlaying = false;
+        this.enemySpawnPath = "assets/audio/effects/enemy_entrance.wav";
+        this.spawnSoundPool = ASSET_MANAGER.createAudioPool(this.enemySpawnPath, 3);
+        this.waveNumber = 1;
+        this.enemiesRemaining = 0;
+        this.timeBetweenWaves = 10; // Seconds
+        this.lastWaveEndTime = 0;
+        this.spawning = false;
     }
 
     update() {
-        if (this.game.timer.gameTime - this.lastSpawnTime >= this.spawnInterval) {
-            this.spawnEnemy();
-            this.lastSpawnTime = this.game.timer.gameTime;
+        const currentTime = this.game.timer.gameTime;
+
+        // If all enemies are dead, start the next wave after delay
+        if (this.enemiesRemaining <= 0 && !this.spawning) {
+            if (currentTime - this.lastWaveEndTime >= this.timeBetweenWaves) {
+                this.startNextWave();
+            }
         }
     }
 
+    startNextWave() {
+        console.log(`Starting Wave ${this.waveNumber}`);
+
+        this.spawning = true;
+        const enemiesToSpawn = 5 + this.waveNumber * 2; // Increase enemies per wave
+
+        this.enemiesRemaining = enemiesToSpawn;
+        let enemiesSpawned = 0;
+
+        // Spawn enemies gradually
+        const spawnInterval = setInterval(() => {
+            if (enemiesSpawned < enemiesToSpawn) {
+                this.spawnEnemy();
+                enemiesSpawned++;
+            } else {
+                clearInterval(spawnInterval);
+                this.spawning = false;
+                this.lastWaveEndTime = this.game.timer.gameTime;
+                this.waveNumber++;
+                console.log(`Wave ${this.waveNumber - 1} Complete!`);
+            }
+        }, 1000); // Spawn every second
+    }
+
     spawnEnemy() {
-        const edge = Math.floor(Math.random() * 4); // spawn enemies at random edge
+        const edge = Math.floor(Math.random() * 4); // Random edge
         let x, y;
         const mapSize = this.tileMap.rows * this.tileMap.tileSize;
 
         switch (edge) {
-            case 0: // top edge
-                x = Math.random() * mapSize;
-                y = -20;
-                break;
-            case 1: // bottom edge
-                x = Math.random() * mapSize;
-                y = mapSize + 20;
-                break;
-            case 2: // left edge
-                x = -20;
-                y = Math.random() * mapSize;
-                break;
-            case 3: // right edge
-                x = mapSize + 20;
-                y = Math.random() * mapSize;
-                break;
+            case 0: x = Math.random() * mapSize; y = -20; break;      // Top edge
+            case 1: x = Math.random() * mapSize; y = mapSize + 20; break; // Bottom edge
+            case 2: x = -20; y = Math.random() * mapSize; break;      // Left edge
+            case 3: x = mapSize + 20; y = Math.random() * mapSize; break; // Right edge
         }
 
-        const targetX = this.tileMap.cols * this.tileMap.tileSize / 2;
-        const targetY = this.tileMap.rows * this.tileMap.tileSize / 2;
+        const enemy = new Enemy(
+            this.game,
+            x,
+            y,
+            this.tileMap.cols * this.tileMap.tileSize / 2,
+            this.tileMap.rows * this.tileMap.tileSize / 2,
+            this.tileMap,
+            this.player,
+            this.spritesheet
+        );
 
-        const enemy = new Enemy(this.game, x, y, targetX, targetY, this.tileMap, this.player, this.spritesheet);
+        // Scale health and speed with wave
+        enemy.health = 100 + this.waveNumber * 10;
+        enemy.speed = 50 + this.waveNumber * 2;
+
         this.game.addEntity(enemy);
-        console.log("Spawned enemy at (${x}, ${y}) targeting (${targetX}, ${targetY})")
+
+        //  // Only play sound if it's not already playing
+        //  if (!this.isSoundPlaying) {
+        //     // Make sure to get the sound before going to the if statement.
+        //     const sound = ASSET_MANAGER.getAsset(this.enemySpawnPath);
+        //     if (sound) {
+        //         sound.loop = false;
+        //         this.isSoundPlaying = true;
+                
+        //         // Set up the ended event listener
+        //         const onSoundEnd = () => {
+        //             this.isSoundPlaying = false;
+        //             sound.removeEventListener('ended', onSoundEnd);
+        //         };
+                
+        //         sound.addEventListener('ended', onSoundEnd);
+        //         ASSET_MANAGER.playSoundEffect(this.enemySpawnPath);
+        //     }
+        // }
+
+        ASSET_MANAGER.playFromPool(this.spawnSoundPool);
+        console.log(`Spawned enemy at (${x}, ${y}) with ${enemy.health} HP.`);
+    }
+
+    enemyDefeated() {
+        this.enemiesRemaining--;
+        console.log(`Enemy defeated! ${this.enemiesRemaining} remaining.`);
+    }
+
+    draw(ctx) {
+        ctx.fillStyle = "white";
+        ctx.font = "20px Arial";
+        ctx.fillText(`Wave: ${this.waveNumber}`, 10, 30);
+        ctx.fillText(`Enemies Remaining: ${this.enemiesRemaining}`, 10, 60);
     }
 }

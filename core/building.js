@@ -39,6 +39,44 @@ class Building {
     update() {
 
     }
+
+    findNearestEnemy(range) {
+        let closestEnemy = null;
+        let closestDistance = range;
+
+        if (!gameEngine || !gameEngine.entities) {
+            console.error("ArcherTower Error: gameEngine or entities undefined");
+            return null;
+        }
+
+        for (let entity of gameEngine.entities) {
+            if (entity instanceof Enemy) {
+                const dx = entity.x - (this.col * this.width + this.width / 2);
+                const dy = entity.y - (this.row * this.height + this.height / 2);
+                const distance = Math.sqrt(dx * dx + dy * dy);
+
+                if (distance < closestDistance) {
+                    closestEnemy = entity;
+                    closestDistance = distance;
+                }
+            }
+        }
+        return closestEnemy;
+    }
+
+    drawFiringRadius(ctx, range) {
+        const x = this.col * this.width + this.width / 2;
+        const y = this.row * this.height + this.height / 2;
+
+        if (range) {  // Only draw if the building has a range
+            ctx.strokeStyle = "rgba(0, 255, 0, 0.5)"; // Light green circle
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.arc(x, y, range, 0, Math.PI * 2);
+            ctx.stroke();
+        }
+    }
+
 }
 
 class Wall extends Building {
@@ -67,9 +105,24 @@ class ArcherTower extends Building {
         this.lastShotTime = 0;
     }
 
+    draw(ctx) {
+        const x = this.col * this.width;
+        const y = this.row * this.height;
+
+        ctx.fillStyle = 'orange';
+        ctx.fillRect(x, y, this.width, this.height);
+
+        // Optional: Draw outline
+        ctx.strokeStyle = 'black';
+        ctx.strokeRect(x, y, this.width, this.height);
+
+        this.drawFiringRadius(ctx, this.range);
+
+    }
+
     update() {
         if (gameEngine.timer.gameTime - this.lastShotTime >= this.fireRate) {
-            const target = this.findNearestEnemy();
+            const target = this.findNearestEnemy(this.range);
             if (target) {
                 this.shootArrow(target);
                 this.lastShotTime = gameEngine.timer.gameTime;
@@ -77,49 +130,162 @@ class ArcherTower extends Building {
         }
     }
 
-    findNearestEnemy() {
-        let closestEnemy = null;
-        let closestDistance = this.range;
-
-        if (!gameEngine || !gameEngine.entities) {
-            console.error("ArcherTower Error: gameEngine or entities undefined");
-            return null;
-        }
-
-        for (let entity of gameEngine.entities) {
-            if (entity instanceof Enemy) {
-                const dx = entity.x - (this.col * this.width + this.width / 2);
-                const dy = entity.y - (this.row * this.height + this.height / 2);
-                const distance = Math.sqrt(dx * dx + dy * dy);
-
-                if (distance < closestDistance) {
-                    closestEnemy = entity;
-                    closestDistance = distance;
-                }
-            }
-        }
-        return closestEnemy;
-    }
-
     shootArrow(target) {
-        console.log("Archer Tower fires an arrow!");
 
-        const arrow = new Arrow(
+
+        const arrow = new Projectile(
             this.col * this.width + this.width / 2,
             this.row * this.height + this.height / 2,
-            target
+            target,
+            200,      // Speed
+            25,       // Damage
+            "arrow"   // Type
         );
+
         gameEngine.addEntity(arrow);
+    }
+}
+
+
+class Campfire extends Building {
+    constructor(row, col, tileMap, tileSize) {
+        super(row, col, tileMap, tileSize);
+        this.health = 200;
     }
 
     draw(ctx) {
         const x = this.col * this.width;
         const y = this.row * this.height;
 
-        ctx.fillStyle = "brown";
+        ctx.fillStyle = "purple";
         ctx.fillRect(x, y, this.width, this.height);
 
-        ctx.strokeStyle = "rgba(255, 255, 0, 0.5)";
+        ctx.strokeStyle = "black";
+        ctx.strokeRect(x, y, this.width, this.height);
+    }
+}
+
+class MageTower extends Building {
+    constructor(row, col, tileMap, tileSize) {
+        super(row, col, tileMap, tileSize);
+        this.range = 250;
+        this.fireRate = 2;
+        this.lastShotTime = 0;
+    }
+
+    draw(ctx) {
+        const x = this.col * this.width;
+        const y = this.row * this.height;
+
+        ctx.fillStyle = "cyan";
+        ctx.fillRect(x, y, this.width, this.height);
+
+        ctx.strokeStyle = "black";
+        ctx.strokeRect(x, y, this.width, this.height);
+
+        this.drawFiringRadius(ctx, this.range);
+    }
+
+    update() {
+        if (gameEngine.timer.gameTime - this.lastShotTime >= this.fireRate) {
+            const target = this.findNearestEnemy(this.range);
+            if (target) {
+                this.castSpell(target);
+                this.lastShotTime = gameEngine.timer.gameTime;
+            }
+        }
+    }
+
+    castSpell(target) {
+        const spell = new Projectile(
+            this.col * this.width + this.width / 2,
+            this.row * this.height + this.height / 2,
+            target,
+            200,      // Speed
+            40,       // Damage
+            "spell"   // Type
+        );
+
+        gameEngine.addEntity(spell);
+    }
+}
+
+
+class BombTower extends Building {
+    constructor(row, col, tileMap, tileSize) {
+        super(row, col, tileMap, tileSize);
+        this.range = 200;
+        this.fireRate = 3;
+        this.lastShotTime = 0;
+    }
+
+    draw(ctx) {
+        const x = this.col * this.width;
+        const y = this.row * this.height;
+
+        ctx.fillStyle = "orange";
+        ctx.fillRect(x, y, this.width, this.height);
+
+        ctx.strokeStyle = "black";
+        ctx.strokeRect(x, y, this.width, this.height);
+
+        this.drawFiringRadius(ctx, this.range);
+    }
+
+    update() {
+        if (gameEngine.timer.gameTime - this.lastShotTime >= this.fireRate) {
+            const target = this.findNearestEnemy(this.range);
+            if (target) {
+                this.launchBomb(target);
+                this.lastShotTime = gameEngine.timer.gameTime;
+            }
+        }
+    }
+
+    launchBomb(target) {
+        const bomb = new Projectile(
+            this.col * this.width + this.width / 2,
+            this.row * this.height + this.height / 2,
+            target,
+            150,      // Speed
+            30,       // Damage
+            "bomb",   // Type
+            50        // Explosion radius
+        );
+
+        gameEngine.addEntity(bomb);
+    }
+}
+
+
+
+class MeleeTower extends Building {
+    constructor(row, col, tileMap, tileSize) {
+        super(row, col, tileMap, tileSize);
+        this.range = 100;
+        this.attackPower = 20;
+        this.attackCooldown = 1;
+        this.lastAttackTime = 0;
+    }
+
+    update() {
+        if (gameEngine.timer.gameTime - this.lastAttackTime >= this.attackCooldown) {
+            const target = this.findNearestEnemy();
+            if (target) {
+                target.takeDamage(this.attackPower);
+                this.lastAttackTime = gameEngine.timer.gameTime;
+            }
+        }
+    }
+
+    draw(ctx) {
+        const x = this.col * this.width;
+        const y = this.row * this.height;
+
+        ctx.fillStyle = "green";
+        ctx.fillRect(x, y, this.width, this.height);
+
+        ctx.strokeStyle = "rgba(0, 255, 0, 0.5)";
         ctx.beginPath();
         ctx.arc(x + this.width / 2, y + this.height / 2, this.range, 0, Math.PI * 2);
         ctx.stroke();

@@ -21,10 +21,14 @@ class GameEngine {
         this.up = false;
         this.down = false;
 
+        this.paused = false;
+
         // Options and the Details
         this.options = options || {
             debugging: false,
         };
+
+
     };
 
     init(ctx, camera, enemySpawner) {
@@ -86,11 +90,21 @@ class GameEngine {
             switch (event.key) {
                 case '1':
                     this.selectedBuilding = "ArcherTower";
-                    console.log("Selected: Archer Tower");
                     break;
                 case '2':
                     this.selectedBuilding = "Wall";
-                    console.log("Selected: Wall");
+                    break;
+                case '3':
+                    this.selectedBuilding = "Campfire";
+                    break;
+                case '4':
+                    this.selectedBuilding = "MageTower";
+                    break;
+                case '5':
+                    this.selectedBuilding = "BombTower";
+                    break;
+                case '6':
+                    this.selectedBuilding = "MeleeTower";
                     break;
             }
         });
@@ -99,8 +113,20 @@ class GameEngine {
     };
 
     addEntity(entity) {
-        this.entities.push(entity);
-    };
+        if (entity) {
+            this.entities.push(entity);
+            console.log(`Entity added: ${entity.constructor.name}`);
+        } else {
+            console.error("Tried to add an undefined entity.");
+        }
+    }
+
+    removeEntity(entity) {
+        const index = this.entities.indexOf(entity);
+        if (index > -1) {
+            this.entities.splice(index, 1);
+        }
+    }
 
     draw() {
         // Clear the whole canvas with transparent color (rgba(0, 0, 0, 0))
@@ -115,7 +141,7 @@ class GameEngine {
         for (let entity of this.entities) {
             if (entity instanceof Building) {
                 buildings.push(entity);
-            } else if (entity instanceof Arrow) {
+            } else if (entity instanceof Projectile) {
                 projectiles.push(entity);
             } else if (entity instanceof Enemy || entity instanceof Hero) {
                 creatures.push(entity);
@@ -136,6 +162,8 @@ class GameEngine {
             projectile.draw(this.ctx);
         }
 
+        if (this.enemySpawner) this.enemySpawner.draw(this.ctx);
+
         if (this.camera) this.camera.resetTransformations(this.ctx);
     };
 
@@ -148,16 +176,14 @@ class GameEngine {
 
         let entitiesCount = this.entities.length;
 
-        for (let i = 0; i < entitiesCount; i++) {
+        for (let i = this.entities.length - 1; i >= 0; --i) {
             let entity = this.entities[i];
-
             if (!entity.removeFromWorld) {
                 entity.update();
-            }
-        }
-
-        for (let i = this.entities.length - 1; i >= 0; --i) {
-            if (this.entities[i].removeFromWorld) {
+            } else {
+                if (entity instanceof Enemy) {
+                    this.enemySpawner.enemyDefeated();
+                }
                 this.entities.splice(i, 1);
             }
         }
