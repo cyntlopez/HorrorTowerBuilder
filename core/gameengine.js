@@ -117,6 +117,12 @@ class GameEngine {
         }
     }
 
+    removeEntity(entity) {
+        const index = this.entities.indexOf(entity);
+        if (index > -1) {
+            this.entities.splice(index, 1);
+        }
+    }
 
     draw() {
         // Clear the whole canvas with transparent color (rgba(0, 0, 0, 0))
@@ -152,6 +158,8 @@ class GameEngine {
             projectile.draw(this.ctx);
         }
 
+        if (this.enemySpawner) this.enemySpawner.draw(this.ctx);
+
         if (this.camera) this.camera.resetTransformations(this.ctx);
     };
 
@@ -164,16 +172,14 @@ class GameEngine {
 
         let entitiesCount = this.entities.length;
 
-        for (let i = 0; i < entitiesCount; i++) {
+        for (let i = this.entities.length - 1; i >= 0; --i) {
             let entity = this.entities[i];
-
             if (!entity.removeFromWorld) {
                 entity.update();
-            }
-        }
-
-        for (let i = this.entities.length - 1; i >= 0; --i) {
-            if (this.entities[i].removeFromWorld) {
+            } else {
+                if (entity instanceof Enemy) {
+                    this.enemySpawner.enemyDefeated();
+                }
                 this.entities.splice(i, 1);
             }
         }
