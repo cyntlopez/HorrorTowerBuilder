@@ -1,6 +1,7 @@
 class TileMap {
-    constructor(rows, cols, tileSize, game) {
+    constructor(rows, cols, tileSize, game, spritesheet) {
         this.rows = rows;
+        this.spritesheet = spritesheet;
         this.cols = cols;
         this.tileSize = tileSize;
         this.state = 0; // 0 = lit fire, 1 = dying fire
@@ -18,6 +19,7 @@ class TileMap {
             this.animation.push([]);
         }
 
+        // TODO: Change campfire image
         const campfireSpriteSheet = ASSET_MANAGER.getAsset("assets/sprites/resources/campfire.png");
 
         this.animation[0] = new Animator(campfireSpriteSheet, 2, 2, 64.1, 63, 6, 0.5, 0, false, true);
@@ -31,7 +33,7 @@ class TileMap {
         // Only draw if the player is in placement mode.
         if (!this.player) return;
         if (!this.player.placementMode) return;
-
+      
         const radius = this.player.placementRadius; // Tile-based radius
         const playerTile = this.screenToGrid(this.player.x, this.player.y);
 

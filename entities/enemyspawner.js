@@ -1,10 +1,17 @@
+
 class EnemySpawner {
     constructor(game, tileMap, player, spritesheet) {
         this.game = game;
         this.tileMap = tileMap;
         this.player = player;
         this.spritesheet = spritesheet;
+      
+        this.spawnInterval = 5;
+        this.lastSpawnTime = 0;
 
+        //this.isSoundPlaying = false;
+        this.enemySpawnPath = "assets/audio/effects/enemy_entrance.wav";
+        this.spawnSoundPool = ASSET_MANAGER.createAudioPool(this.enemySpawnPath, 3);
         this.waveNumber = 1;
         this.enemiesRemaining = 0;
         this.timeBetweenWaves = 10; // Seconds
@@ -75,6 +82,27 @@ class EnemySpawner {
         enemy.speed = 50 + this.waveNumber * 2;
 
         this.game.addEntity(enemy);
+
+        //  // Only play sound if it's not already playing
+        //  if (!this.isSoundPlaying) {
+        //     // Make sure to get the sound before going to the if statement.
+        //     const sound = ASSET_MANAGER.getAsset(this.enemySpawnPath);
+        //     if (sound) {
+        //         sound.loop = false;
+        //         this.isSoundPlaying = true;
+                
+        //         // Set up the ended event listener
+        //         const onSoundEnd = () => {
+        //             this.isSoundPlaying = false;
+        //             sound.removeEventListener('ended', onSoundEnd);
+        //         };
+                
+        //         sound.addEventListener('ended', onSoundEnd);
+        //         ASSET_MANAGER.playSoundEffect(this.enemySpawnPath);
+        //     }
+        // }
+
+        ASSET_MANAGER.playFromPool(this.spawnSoundPool);
         console.log(`Spawned enemy at (${x}, ${y}) with ${enemy.health} HP.`);
     }
 
