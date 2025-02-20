@@ -173,10 +173,6 @@ class GameEngine {
             }
         }
 
-        if (player && tilemap) {
-            tilemap.updateVisibility(player.x, player.y);
-        }
-
         let entitiesCount = this.entities.length;
 
         for (let i = this.entities.length - 1; i >= 0; --i) {
@@ -190,8 +186,6 @@ class GameEngine {
                 this.entities.splice(i, 1);
             }
         }
-
-        tilemap.updateVisibility();
     };
 
     loop() {
