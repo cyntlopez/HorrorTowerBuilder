@@ -29,9 +29,17 @@ class TileMap {
         // Update logic if needed.
     }
 
+
     draw(ctx) {
         // Only draw if the player is in placement mode.
         if (!this.player) return;
+
+        for (let r = 0; r < this.rows; r++) {
+            for (let c = 0; c < this.cols; c++) {
+                ctx.drawImage(this.spritesheet, c * this.tileSize, r * this.tileSize, this.tileSize, this.tileSize);
+            }
+        }
+
         if (!this.player.placementMode) return;
       
         const radius = this.player.placementRadius; // Tile-based radius

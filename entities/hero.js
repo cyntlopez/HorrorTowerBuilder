@@ -164,7 +164,7 @@ class Hero {
         // Set animation state (1 = walking, 0 = idle)
         this.state = (magnitude > 0) ? 1 : 0;
         
-        if (this.state == 1) {
+        if (this.state === 1) {
             if (!this.isWalking) {
                 ASSET_MANAGER.playSoundEffect(this.walkingSoundPath);
                 this.isWalking = true;

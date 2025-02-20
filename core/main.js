@@ -110,6 +110,8 @@ ASSET_MANAGER.downloadAll(() => {
         }
     };
 
+
+
     // Zoom event listener
     canvas.addEventListener("wheel", (e) => {
         e.preventDefault();
