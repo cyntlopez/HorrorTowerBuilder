@@ -1,9 +1,11 @@
-class MenuScreen {
-    constructor() {
+class TitleScreen {
+    constructor(game, ctx, camera, enemySpawner) {
+        Object.assign(this, {game, ctx, camera, enemySpawner});
         this.menuDiv = document.createElement('div');
         this.setupMenuStyles();
         this.createTitle();
         this.createButtons();
+        this.show();
     }
 
     setupMenuStyles() {
@@ -44,7 +46,6 @@ class MenuScreen {
             padding: 30px;
         `;
 
-
             const button = document.createElement('button');
             button.textContent = `Play`;
             button.style.cssText = `
@@ -67,10 +68,8 @@ class MenuScreen {
 
             buttonContainer.appendChild(button);
 
-
         this.menuDiv.appendChild(buttonContainer);
     }
-
 
     show() {
         document.body.appendChild(this.menuDiv);
@@ -82,6 +81,8 @@ class MenuScreen {
 
     startLevel() {
         this.hide();
+        this.game.init(this.ctx, this.camera, this.enemySpawner);
+        this.game.start();
         setTimeout(() => document.getElementById("gameWorld").focus(), 0);
     }
 }
