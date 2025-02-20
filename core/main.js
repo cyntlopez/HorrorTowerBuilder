@@ -1,3 +1,5 @@
+
+
 const gameEngine = new GameEngine();
 
 const ASSET_MANAGER = new AssetManager();
@@ -23,7 +25,7 @@ ASSET_MANAGER.downloadAll(() => {
 
     const canvas = document.getElementById("gameWorld");
 
-    // Helps refocus the camera after interating with audio.
+    // Helps refocus the camera after iterating with audio.
     function refocusCanvas() {
         setTimeout(() => canvas.focus(), 50);
     }
@@ -69,7 +71,9 @@ ASSET_MANAGER.downloadAll(() => {
 
     const enemyWalking = ASSET_MANAGER.getAsset("assets/sprites/pumpkin_head/killer_walk.png");
     const enemySpawner = new EnemySpawner(gameEngine, tilemap, player, enemyWalking);
+
     const cabin = ASSET_MANAGER.getAsset("assets/sprites/landscape/cabin.png");
+    const cabinBase = new Cabin(gameEngine, 100, 100, cabin);
 
     const gameSetting = new Settings(gameEngine)
     const minimap = new Minimap(gameEngine);
@@ -77,7 +81,7 @@ ASSET_MANAGER.downloadAll(() => {
 
     const originalDraw = gameEngine.draw.bind(gameEngine);
     gameEngine.draw = function () {
-        tilemap.draw(ctx, this.mouse, player.validPlacementTiles); // Pass valid tiles
+        tilemap.draw(ctx, this.mouse, player.validPlacementTiles);
         originalDraw();
 
         if (loseScreen.active) {
@@ -90,14 +94,21 @@ ASSET_MANAGER.downloadAll(() => {
         camera.adjustZoom(e.deltaY > 0 ? -0.1 : 0.1);
     });
 
-    gameEngine.addEntity(new Cabin(gameEngine, 600, 10, cabin));
+    gameEngine.addEntity(cabinBase);
     gameEngine.addEntity(tilemap);
     gameEngine.addEntity(gameSetting);
     gameEngine.addEntity(player);
     gameEngine.addEntity(tilemap);
     gameEngine.addEntity(resourceBar);
     gameEngine.addEntity(minimap);
-    gameEngine.init(ctx, camera, enemySpawner);
 
-    gameEngine.start();
+    const menuScreen = new MenuScreen();
+    menuScreen.show();
+
+    menuScreen.startLevel = function() {
+        menuScreen.hide();
+        gameEngine.init(ctx, camera, enemySpawner);
+        gameEngine.start();
+        setTimeout(() => canvas.focus(), 0);
+    }
 });

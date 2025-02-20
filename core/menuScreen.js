@@ -1,12 +1,9 @@
-import { Game } from './game.js';
-
-export class MenuScreen {
+class MenuScreen {
     constructor() {
         this.menuDiv = document.createElement('div');
         this.setupMenuStyles();
         this.createTitle();
         this.createButtons();
-        this.addBackgroundMusic();
     }
 
     setupMenuStyles() {
@@ -29,7 +26,7 @@ export class MenuScreen {
 
     createTitle() {
         const title = document.createElement('h1'); 
-        title.textContent = 'Horror Tower Builder'; 
+        title.textContent = 'Horror Hideout';
         title.style.cssText = `
             font-size: 36px;
             color: red;
@@ -47,9 +44,9 @@ export class MenuScreen {
             padding: 30px;
         `;
 
-        for (let i = 1; i <= 3; i++) {
+
             const button = document.createElement('button');
-            button.textContent = `Level ${i}`;
+            button.textContent = `Play`;
             button.style.cssText = `
                 padding: 15px 30px;
                 width: 200px;
@@ -65,52 +62,13 @@ export class MenuScreen {
             button.onmouseout = () => button.style.background = '#333';
 
             button.onclick = () => {
-                this.startLevel(i);
+                this.startLevel();
             };
 
             buttonContainer.appendChild(button);
-        }
+
 
         this.menuDiv.appendChild(buttonContainer);
-    }
-
-    addBackgroundMusic() {
-        this.backgroundMusic = new Audio('audio/title-screen-music.wav');
-        this.backgroundMusic.loop = true;
-        this.backgroundMusic.volume = 0.5;
-
-        const musicButton = document.createElement('button');
-        musicButton.textContent = 'Listen to Music';
-        musicButton.style.cssText = `
-            position: absolute;
-            bottom: 20px;
-            right: 20px;
-            padding: 10px 20px;
-            background: #333;
-            color: white;
-            border: none;
-            cursor: pointer;
-        `;
-
-    musicButton.onmouseover = () => (musicButton.style.background = '#444');
-    musicButton.onmouseout = () => (musicButton.style.background = '#333');
-
-    musicButton.onclick = () => {
-        this.backgroundMusic
-            .play()
-            .then(() => {
-                console.log('Music is playing');
-                musicButton.textContent = 'Music is Playing';
-                musicButton.disabled = true;
-                musicButton.style.cursor = 'not-allowed';
-                musicButton.style.opacity = '0.7';
-            })
-            .catch((error) => {
-                console.error('Failed to play music:', error);
-            });
-    };
-
-        this.menuDiv.appendChild(musicButton);
     }
 
 
@@ -122,9 +80,8 @@ export class MenuScreen {
         this.menuDiv.remove();
     }
 
-    startLevel(level) {
+    startLevel() {
         this.hide();
-        const game = new Game(level);
-        game.start();
+        setTimeout(() => document.getElementById("gameWorld").focus(), 0);
     }
 }

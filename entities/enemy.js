@@ -47,18 +47,17 @@ class Enemy {
 
 
         // attacking animation for state = 1
-        // facing down = 0
         const attackSpriteSheet = ASSET_MANAGER.getAsset("assets/sprites/pumpkin_head/killer_attack.png");
-
+        // attacking down = 0
         this.animation[1][0] = new Animator(attackSpriteSheet, 0, 138, 64, 64.5, 6, 0.1, 0,false, true);
 
-            // facing up = 1
+        // attacking up = 1
         this.animation[1][1] = new Animator(attackSpriteSheet, 1, 1, 64, 64.5, 6, 0.1, 0,false, true);
 
-            // facing left = 2
-        this.animation[1][2] = new Animator(attackSpriteSheet, 0, 69, 64, 64.5, 6, 0.1, 0,false, true);
+        // attacking left = 2
+        this.animation[1][2] = new Animator(attackSpriteSheet, 0, 69, 63, 64.5, 6, 0.1, 0,false, true);
 
-            // facing right = 3
+        // attacking right = 3
         this.animation[1][3] = new Animator(attackSpriteSheet, 0, 200, 64, 64.5, 6, 0.1, 0,false, true);
 
     }
