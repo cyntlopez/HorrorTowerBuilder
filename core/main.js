@@ -17,6 +17,7 @@ ASSET_MANAGER.queueDownload("assets/audio/music/title-screen-music2.wav");
 ASSET_MANAGER.queueDownload("assets/audio/music/level-1-music.wav");
 ASSET_MANAGER.queueDownload("assets/audio/music/level-2-music.wav");
 ASSET_MANAGER.queueDownload("assets/audio/music/Track-5-music.wav");
+ASSET_MANAGER.queueDownload("assets/audio/music/Track-6-music.wav");
 
 // Effects
 ASSET_MANAGER.queueDownload("assets/audio/effects/Grass_walk5.wav");
@@ -66,7 +67,7 @@ ASSET_MANAGER.downloadAll(() => {
     });
 
     // Effect volume control from right snippet
-    document.getElementById("effectVolume").addEventListener("input", (event) => {
+    document.getElementById("Sound Effect").addEventListener("input", (event) => {
         const effectLevel = event.target.value;
         ASSET_MANAGER.adjustEffect(effectLevel);
         refocusCanvas();
