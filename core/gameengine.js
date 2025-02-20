@@ -86,11 +86,21 @@ class GameEngine {
             switch (event.key) {
                 case '1':
                     this.selectedBuilding = "ArcherTower";
-                    console.log("Selected: Archer Tower");
                     break;
                 case '2':
                     this.selectedBuilding = "Wall";
-                    console.log("Selected: Wall");
+                    break;
+                case '3':
+                    this.selectedBuilding = "Campfire";
+                    break;
+                case '4':
+                    this.selectedBuilding = "MageTower";
+                    break;
+                case '5':
+                    this.selectedBuilding = "BombTower";
+                    break;
+                case '6':
+                    this.selectedBuilding = "MeleeTower";
                     break;
             }
         });
@@ -99,8 +109,14 @@ class GameEngine {
     };
 
     addEntity(entity) {
-        this.entities.push(entity);
-    };
+        if (entity) {
+            this.entities.push(entity);
+            console.log(`Entity added: ${entity.constructor.name}`);
+        } else {
+            console.error("Tried to add an undefined entity.");
+        }
+    }
+
 
     draw() {
         // Clear the whole canvas with transparent color (rgba(0, 0, 0, 0))
@@ -115,7 +131,7 @@ class GameEngine {
         for (let entity of this.entities) {
             if (entity instanceof Building) {
                 buildings.push(entity);
-            } else if (entity instanceof Arrow) {
+            } else if (entity instanceof Projectile) {
                 projectiles.push(entity);
             } else if (entity instanceof Enemy || entity instanceof Hero) {
                 creatures.push(entity);
