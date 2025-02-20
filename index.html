@@ -41,36 +41,36 @@
       border: 2px solid black;
     }
 
-    /* ✅ GUI Styles */
-
-    /* ✅ Music Controls */
+    /* GUI Styles */
     #musicControls {
       display: flex;
       flex-direction: column;
       align-items: center;
       margin-top: 10px;
     }
+
   </style>
 </head>
 <body>
 <canvas id="gameWorld" width="800" height="800" tabindex="0" autofocus></canvas>
-  <div id="musicControls">
-    <br />
-    <label for="trackSelector"></label><select id="trackSelector">
-      <option value="assets/audio/music/title-screen-music.wav">Track 1</option>
-      <option value="assets/audio/music/title-screen-music2.wav">Track 2</option>
-      <option value="assets/audio/music/level-1-music.wav">Track 3</option>
-      <option value="assets/audio/music/level-2-music.wav">Track 4</option>
-      <option value="assets/audio/music/Track-5-music.wav">Track 5</option>
-    </select>
-    <br />
-    <button id="playMusic">Play</button>
-    <button id="stopMusic">Stop</button>
-    <button id="muteMusic">Mute</button>
-    <br />
-    <br />
-    <label for="volume"></label><input type="range" id="volume" min="0" max="1" value="0.1" step="0.05"> Volume
-    <label for="effectVolume"></label><input type="range" id="effectVolume" min="0" max="1" value="0.1" step="0.05"> effectVolume
-  </div>
+
+<div id="musicControls">
+  <br />
+  <label for="trackSelector"></label><select id="trackSelector">
+  <option value="assets/audio/music/title-screen-music.wav">Track 1</option>
+  <option value="assets/audio/music/title-screen-music2.wav">Track 2</option>
+  <option value="assets/audio/music/level-1-music.wav">Track 3</option>
+  <option value="assets/audio/music/level-2-music.wav">Track 4</option>
+  <option value="assets/audio/music/Track-5-music.wav">Track 5</option>
+</select>
+  <br />
+  <button id="playMusic">Play</button>
+  <button id="stopMusic">Stop</button>
+  <button id="muteMusic">Mute</button>
+  <br />
+  <br />
+  <label for="volume"></label><input type="range" id="volume" min="0" max="1" value="0.1" step="0.05"> Volume
+  <label for="effectVolume"></label><input type="range" id="effectVolume" min="0" max="1" value="0.1" step="0.05"> effectVolume
+</div>
 </body>
 </html>

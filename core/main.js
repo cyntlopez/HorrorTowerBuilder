@@ -83,11 +83,13 @@ ASSET_MANAGER.downloadAll(() => {
 
     // Important: Fix the TileMap creation by providing the grass spritesheet
     const grass = ASSET_MANAGER.getAsset("assets/sprites/landscape/grass.png");
-    const tilemap = new TileMap(20, 20, 40, gameEngine, grass);
+    const tree = ASSET_MANAGER.getAsset("assets/sprites/landscape/tree.png")
+    const tilemap = new TileMap(20, 20, 40, gameEngine, grass, tree);
 
     const heroWalking = ASSET_MANAGER.getAsset("assets/sprites/hero/hero_walking.png");
-    const player = new Hero(gameEngine, 50, 50, heroWalking, tilemap);
-    tilemap.player = player;
+    const centerX = canvas.width / 2;
+    const centerY = canvas.height / 2;
+    const player = new Hero(gameEngine, centerX, centerY, heroWalking, tilemap);
 
     const camera = new Camera(gameEngine, player, canvas.width, canvas.height);
 

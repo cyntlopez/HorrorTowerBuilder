@@ -30,6 +30,7 @@ class Hero {
 
         this.walkingSoundPath = "assets/audio/effects/Grass_walk5.wav";
         this.isWalking = false;
+        this.visionRadius = 5;
     }
 
     setupControls() {
@@ -127,6 +128,18 @@ class Hero {
             this.attack();
             this.lastAttackTime = this.game.timer.gameTime;
         }
+
+        this.updateFogOfWar();
+    }
+
+    updateFogOfWar() {
+        const playerTile = this.tileMap.screenToGrid(this.x, this.y);
+        this.tileMap.fogOfWarGrid = this.tileMap.fogOfWarGrid.map((row, rowIndex) =>
+            row.map((visibility, colIndex) => {
+                const distance = Math.sqrt(Math.pow(rowIndex - playerTile.row, 2) + Math.pow(colIndex - playerTile.col, 2));
+                return distance <= this.visionRadius;
+            })
+        );
     }
 
     handleMovement() {

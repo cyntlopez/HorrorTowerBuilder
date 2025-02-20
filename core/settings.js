@@ -66,6 +66,36 @@ class Settings {
             z-index: 1000;
         `;
 
+        this.hud = document.createElement('div');
+        this.hud.id = 'hud';
+        this.hud.style.cssText = `
+            position: fixed;
+            top: 60px; // Adjusted top position
+            left: 10px;
+            color: white;
+            font-family: sans-serif;
+            z-index: 1000;
+            pointer-events: none;
+            background-color: rgba(0, 0, 0, 0.5); // Added background
+            padding: 10px; // Added padding
+            border-radius: 5px; // Added border radius
+        `;
+
+
+        this.hud.innerHTML = `
+            Health: <span id="health">100</span><br>
+            Wave: <span id="resources">1</span><br>
+            Time: <span id="time">0:00</span>
+        `;
+
+        this.startTime = Date.now();
+        this.elapsedSeconds = 0;
+
+        this.timerPaused = false;
+        if (!this.timerPaused) {
+            this.startTimer();
+        }
+
         // Add hover effects
         [this.gearButton, this.musicButton].forEach(button => {
             button.addEventListener('mouseover', () => {
@@ -89,13 +119,50 @@ class Settings {
             this.game.timer.paused = this.active || this.showAudio;  // Check both states
         });
 
+
+
         document.body.appendChild(this.gearButton);
         document.body.appendChild(this.musicButton);
+        document.body.appendChild(this.hud);
+    }
+
+    startTimer() {
+        if (!this.timerInterval) { // Check if timer is already running
+            this.timerInterval = setInterval(() => {
+                if (!this.timerPaused) { // Only update if not paused
+                    this.updateTime();
+                }
+            }, 1000);
+        }
+    }
+
+    stopTimer() {
+        if (this.timerInterval) {
+            clearInterval(this.timerInterval);
+            this.timerInterval = null; // Clear the interval ID
+        }
+    }
+
+    updateTime() {
+        this.elapsedSeconds = Math.floor((Date.now() - this.startTime) / 1000);
+        const minutes = Math.floor(this.elapsedSeconds / 60);
+        const seconds = this.elapsedSeconds % 60;
+        const formattedTime = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`; // Add leading zero
+
+        const timeSpan = document.getElementById('time');
+        if (timeSpan) {
+            timeSpan.textContent = formattedTime;
+        }
     }
 
     toggleSettings() {
         this.active = !this.active;
         this.game.timer.paused = this.active || this.showAudio; // Pause for either menu
+        if (this.active) {
+            this.stopTimer();
+        } else {
+            this.startTimer();
+        }
     }
 
     toggleAudio() {
@@ -104,6 +171,11 @@ class Settings {
             this.audioControls.style.display = this.showAudio ? 'block' : 'none';
         }
         this.game.timer.paused = this.active || this.showAudio; // Pause for either menu
+        if (this.showAudio) {
+            this.stopTimer();
+        } else {
+            this.startTimer();
+        }
     }
 
     update() {
@@ -116,28 +188,28 @@ class Settings {
         ctx.save();
         this.game.camera.resetTransformations(ctx);
 
-        // Black background
-        ctx.fillStyle = 'rgb(0, 0, 0)';
+        // === Black transparent overlay ===
+        ctx.fillStyle = 'rgba(0, 0, 0, 0.7)'; // Semi-transparent black
         ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height);
 
-        // Settings panel
+        // === Settings Panel ===
         const panelX = (ctx.canvas.width - this.width) / 2;
         const panelY = (ctx.canvas.height - this.height) / 2;
 
-        // Draw a solid color rectangle first to completely cover grid lines
         ctx.fillStyle = 'rgb(20, 40, 20)';
-        // Make the background rectangle larger to cover all the text
         ctx.fillRect(panelX - 20, panelY - 20, this.width + 40, this.height + 40);
 
-        // White text
+        // === Settings Title ===
         ctx.fillStyle = '#FFFFFF';
         ctx.font = 'bold 24px Arial';
         ctx.textAlign = 'center';
-        ctx.fillText('Settings', panelX + this.width/2, panelY + 40);
+        ctx.fillText('Settings', panelX + this.width / 2, panelY + 40);
 
+        // === Controls Title ===
         ctx.font = 'bold 20px Arial';
-        ctx.fillText('CONTROLS', panelX + this.width/2, panelY + 80);
+        ctx.fillText('CONTROLS', panelX + this.width / 2, panelY + 80);
 
+        // === Controls List ===
         ctx.font = '18px Arial';
         ctx.textAlign = 'left';
         const controls = [
@@ -154,4 +226,6 @@ class Settings {
 
         ctx.restore();
     }
+
+
 }

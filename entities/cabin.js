@@ -5,6 +5,6 @@ class Cabin {
      update() {}
 
     draw(ctx) {
-        ctx.drawImage(this.spritesheet, this.x, this.y, 190, 240);
+        ctx.drawImage(this.spritesheet, this.x, this.y, 95, 120);
     }
 }

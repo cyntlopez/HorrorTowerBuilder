@@ -13,6 +13,7 @@ class Minimap {
                 this.scale = this.mapSize / Math.max(tilemap.rows, tilemap.cols);
             }
         }
+
     }
 
     draw(ctx) {
@@ -28,7 +29,7 @@ class Minimap {
         const resourceBarY = canvasHeight - resourceBarHeight - 20;
 
         // Adjust minimap position - further left and up
-        const minimapX = 20; // Move to far left with small padding
+        const minimapX = 50;  // Move to far left with small padding
         const minimapY = resourceBarY - 50; // Move up by 50px from resource bar
 
         // Draw border
