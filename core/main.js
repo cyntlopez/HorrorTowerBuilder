@@ -111,8 +111,6 @@ ASSET_MANAGER.downloadAll(() => {
         }
     };
 
-
-
     // Zoom event listener
     canvas.addEventListener("wheel", (e) => {
         e.preventDefault();
@@ -128,7 +126,6 @@ ASSET_MANAGER.downloadAll(() => {
     gameEngine.addEntity(minimap);
     gameEngine.addEntity(loseScreen);
 
-    // Initialize and start the game
-    gameEngine.init(ctx, camera, enemySpawner);
-    gameEngine.start();
+    // Create title screen
+    new TitleScreen(gameEngine, ctx, camera, enemySpawner);
 });
