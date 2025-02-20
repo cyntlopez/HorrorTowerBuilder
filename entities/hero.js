@@ -33,10 +33,11 @@ class Hero {
     }
 
     setupControls() {
-        window.addEventListener("load", () => {
+        const trySetupControls = () => {
             const canvas = this.game.ctx?.canvas;
             if (!canvas) {
                 console.error("Error: Game canvas is not available!");
+                setTimeout(trySetupControls, 100); // Retry the setupControls function itself after a delay
                 return;
             }
 
@@ -51,8 +52,11 @@ class Hero {
             });
 
             console.log("Attack controls set up successfully.");
-        });
+        };
+
+        window.addEventListener("load", trySetupControls);
     }
+
 
     loadAnimation() {
         for (let i = 0; i < 4; i++) { // 4 states
