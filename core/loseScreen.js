@@ -25,5 +25,6 @@ class LoseScreen {
 
     activate() {
         this.active = true;
+        this.game.settings.stopTimer();
     }
 }

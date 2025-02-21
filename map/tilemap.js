@@ -102,6 +102,35 @@ class TileMap {
         // ctx.lineWidth = 2;
         // ctx.stroke();
 
+        // Draw the red circle visibility indicator (centered on player)
+        ctx.beginPath();
+        ctx.arc(centerX, centerY, visRadiusInPixels, 0, Math.PI * 2);
+
+        // Calculate the second circle's position (fixed to camera center)
+        const secondCircleX = this.game.camera.x + (this.game.ctx.canvas.width / 2) / this.game.camera.zoomLevel;
+        const secondCircleY = this.game.camera.y + (this.game.ctx.canvas.height / 2) / this.game.camera.zoomLevel;
+        const secondCircleRadius = visRadiusInPixels / 2; // Example: half the size
+
+        // Draw the grass tiles within the second circle
+        ctx.save();
+        ctx.beginPath();
+        ctx.arc(secondCircleX, secondCircleY, secondCircleRadius, 0, Math.PI * 2);
+        ctx.clip(); // Clip the drawing area to the second circle
+
+        for (let r = 0; r < this.rows; r++) {
+            for (let c = 0; c < this.cols; c++) {
+                const x = c * this.tileSize;
+                const y = r * this.tileSize;
+                ctx.drawImage(this.spritesheet, x, y, this.tileSize, this.tileSize);
+            }
+        }
+
+        ctx.restore(); // Restore the clipping region
+
+        // Draw the second circle (invisible line)
+        ctx.beginPath();
+        ctx.arc(secondCircleX, secondCircleY, secondCircleRadius, 0, Math.PI * 2);
+
         // Restore the original context state
         ctx.restore();
     }

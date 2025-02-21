@@ -243,10 +243,31 @@ class Enemy {
         const drawX = this.x - offsetX;
         const drawY = this.y - offsetY;
 
-        this.animation[this.state][this.facing].drawFrame(this.game.clockTick, ctx, drawX, drawY, 1);
+        // Check if enemy is within the first visibility circle (around the player)
+        const playerX = this.player.x;
+        const playerY = this.player.y;
+        const visRadiusInPixels = (this.player.visionRadius * this.tileMap.tileSize) / 2;
+        const distanceFromPlayer = Math.sqrt(Math.pow(this.x - playerX, 2) + Math.pow(this.y - playerY, 2));
 
-        // Draw health bar
-        ctx.fillStyle = "rgba(57, 255, 20, 1)";
-        ctx.fillRect(this.x - 10, this.y - 25, (20 * this.health) / 100, 4);
+        // Check if enemy is within the second visibility circle (camera center)
+        const cameraX = this.game.camera.x + (this.game.ctx.canvas.width / 2) / this.game.camera.zoomLevel;
+        const cameraY = this.game.camera.y + (this.game.ctx.canvas.height / 2) / this.game.camera.zoomLevel;
+        const secondCircleRadius = visRadiusInPixels / 2;
+        const distanceFromCamera = Math.sqrt(Math.pow(this.x - cameraX, 2) + Math.pow(this.y - cameraY, 2));
+
+        const canvas = document.getElementById("gameWorld");
+        const cabinCircleX = (canvas.width / 2) + 250; // Adjust the x-coordinate as needed
+        const cabinCircleY = (canvas.height / 2) - 250; // Adjust the y-coordinate as needed
+        const cabinCircleRadius = 5 * this.tileMap.tileSize; // Adjust the radius as needed
+        const distanceFromCabin= Math.sqrt(Math.pow(this.x - cabinCircleX, 2) + Math.pow(this.y - cabinCircleY, 2));
+
+        // Draw the enemy only if it's within one of the visibility circles
+        if (distanceFromPlayer <= visRadiusInPixels || distanceFromCamera <= secondCircleRadius || distanceFromCabin <= cabinCircleRadius) {
+            this.animation[this.state][this.facing].drawFrame(this.game.clockTick, ctx, drawX, drawY, 1);
+
+            // Draw health bar
+            ctx.fillStyle = "rgba(57, 255, 20, 1)";
+            ctx.fillRect(this.x - 10, this.y - 25, (20 * this.health) / 100, 4);
+        }
     }
 }
