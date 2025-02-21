@@ -75,6 +75,27 @@ ASSET_MANAGER.downloadAll(() => {
 
     document.getElementById("trackSelector").addEventListener("change", refocusCanvas);
 
+    document.getElementById("enemySpawnToggle").addEventListener("change", (event) => {
+        gameSetting.toggleSoundEffect('enemySpawn');
+        refocusCanvas();
+    });
+    
+    document.getElementById("enemySlashToggle").addEventListener("change", (event) => {
+        gameSetting.toggleSoundEffect('enemySlash');
+        refocusCanvas();
+    });
+
+    document.getElementById("walkingToggle").addEventListener("change", (event) => {
+        gameSetting.toggleSoundEffect('walking');
+        // If turning off walking sound, stop it if it's currently playing
+        if (!event.target.checked && player.currentWalkSound) {
+            player.currentWalkSound.pause();
+            player.currentWalkSound.currentTime = 0;
+            player.isWalking = false;
+        }
+        refocusCanvas();
+    });
+
     // Game setup
     const loseScreen = new LoseScreen(gameEngine);
     gameEngine.loseScreen = loseScreen;
@@ -100,6 +121,7 @@ ASSET_MANAGER.downloadAll(() => {
     const cabin = ASSET_MANAGER.getAsset("assets/sprites/landscape/cabin.png");
     const gameSetting = new Settings(gameEngine);
     gameEngine.settings = gameSetting;
+    ASSET_MANAGER.setSettings(gameSetting);
     const minimap = new Minimap(gameEngine);
     const resourceBar = new ResourceBar(gameEngine);
 

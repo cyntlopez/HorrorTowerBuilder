@@ -215,7 +215,9 @@ class Enemy {
             //     }
             // }
 
-            ASSET_MANAGER.playFromPool(this.slashSoundPool);
+            if (ASSET_MANAGER.settings.isSoundEffectEnabled('enemySlash') && this.player.health > 0) {
+                ASSET_MANAGER.playFromPool(this.slashSoundPool, 'enemySlash');
+            }
         
             if (this.player.health <= 0) {
                 console.log("Player is dead!");

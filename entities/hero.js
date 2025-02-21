@@ -30,6 +30,7 @@ class Hero {
 
         this.walkingSoundPath = "assets/audio/effects/Grass_walk5.wav";
         this.isWalking = false;
+        this.currentWalkSound = null;
         this.visionRadius = 5;
     }
 
@@ -114,7 +115,7 @@ class Hero {
             this.dead = true;
             this.state = 3;
             console.log("Player died");
-
+            ASSET_MANAGER.stopAllSoundEffects();
             this.game.loseScreen.activate();
 
             return;
@@ -181,17 +182,32 @@ class Hero {
         // Set animation state (1 = walking, 0 = idle)
         this.state = (magnitude > 0) ? 1 : 0;
         
+        // if (this.state === 1) {
+        //     if (!this.isWalking) {
+        //         ASSET_MANAGER.playSoundEffect(this.walkingSoundPath);
+        //         this.isWalking = true;
+        //     }
+        // } else {
+        //     if (this.isWalking) {
+        //         const sound = ASSET_MANAGER.getAsset(this.walkingSoundPath);
+        //         if (sound) {
+        //             sound.pause();
+        //             sound.currentTime = 0;
+        //         }
+        //         this.isWalking = false;
+        //     }
+        // }
+
         if (this.state === 1) {
-            if (!this.isWalking) {
-                ASSET_MANAGER.playSoundEffect(this.walkingSoundPath);
+            if (!this.isWalking && ASSET_MANAGER.settings.isSoundEffectEnabled('walking')) {
+                this.currentWalkSound = ASSET_MANAGER.playSoundEffect(this.walkingSoundPath);
                 this.isWalking = true;
             }
         } else {
             if (this.isWalking) {
-                const sound = ASSET_MANAGER.getAsset(this.walkingSoundPath);
-                if (sound) {
-                    sound.pause();
-                    sound.currentTime = 0;
+                if (this.currentWalkSound) {
+                    this.currentWalkSound.pause();
+                    this.currentWalkSound.currentTime = 0;
                 }
                 this.isWalking = false;
             }

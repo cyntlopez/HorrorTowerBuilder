@@ -8,6 +8,9 @@ class AssetManager {
         this.isMuted = false;
         this.volume = 0.1;
         this.effectVolume = 0.1;
+        this.settings = null;
+        this.activePools = [];
+        this.activeEffects = new Set();
     };
 
     queueDownload(path) {
@@ -98,14 +101,36 @@ class AssetManager {
     };
 
     playSoundEffect(path) {
-        const sound = this.cache[path];
-        if (sound && !this.isMuted) {
-            if (sound.paused || sound.ended) {
-                sound.volume = this.effectVolume;
-                sound.currentTime = 0;
-                sound.play();
-            }
-        }
+        // const sound = this.cache[path];
+        // if (sound && !this.isMuted) {
+        //     if (sound.paused || sound.ended) {
+        //         sound.volume = this.effectVolume;
+        //         sound.currentTime = 0;
+        //         sound.play();
+        //     }
+        // }
+        if (this.isMuted) return;
+        
+        const originalSound = this.cache[path];
+        if (!originalSound) return;
+        
+        // Create a temporary audio element
+        const tempSound = new Audio(originalSound.src);
+        tempSound.volume = this.effectVolume;
+        tempSound.loop = true;
+        
+        // Track this sound effect
+        this.activeEffects.add(tempSound);
+        
+        // Remove from tracking when it ends
+        tempSound.addEventListener('ended', () => {
+            this.activeEffects.delete(tempSound);
+            tempSound.src = '';
+        }, { once: true });
+        
+        tempSound.play().catch(e => console.error("Error playing sound:", e));
+        
+        return tempSound; // Return the sound so we can control it later
     }
     
 
@@ -174,12 +199,19 @@ class AssetManager {
             audio.volume = this.effectVolume;
             audioPool.push(audio);
         }
+
+        this.activePools.push(audioPool);
         
         return audioPool;
     }
 
     // Add this method to play from a pool
-    playFromPool(audioPool) {
+    playFromPool(audioPool, effectName) {
+
+        if (this.settings && !this.settings.isSoundEffectEnabled(effectName)) {
+            return;
+        }
+
         if (this.isMuted || audioPool.length === 0) return;
         
         // Find an audio element that's not playing
@@ -197,6 +229,26 @@ class AssetManager {
         const audio = audioPool[0];
         audio.currentTime = 0;
         audio.play().catch(e => console.error("Error playing audio:", e));
+    }
+
+    setSettings(settings) {
+        this.settings = settings;
+    }
+
+    stopAllSoundEffects() {
+        // Go through all pools and stop any playing sounds
+        this.activePools.forEach(pool => {
+            pool.forEach(audio => {
+                audio.pause();
+                audio.currentTime = 0;
+            });
+        });
+
+        this.activeEffects.forEach(audio => {
+            audio.pause();
+            audio.currentTime = 0;
+            this.activeEffects.delete(audio);
+        });
     }
 
 }

@@ -102,7 +102,9 @@ class EnemySpawner {
         //     }
         // }
 
-        ASSET_MANAGER.playFromPool(this.spawnSoundPool);
+        if (ASSET_MANAGER.settings.isSoundEffectEnabled('enemySpawn')) {
+            ASSET_MANAGER.playFromPool(this.spawnSoundPool, 'enemySpawn');
+        }
         console.log(`Spawned enemy at (${x}, ${y}) with ${enemy.health} HP.`);
     }
 

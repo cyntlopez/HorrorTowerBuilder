@@ -6,6 +6,12 @@ class Settings {
         this.width = 400;
         this.height = 500;
 
+        this.soundEffectStates = {
+            'walking': true,
+            'enemySpawn': true,
+            'enemySlash': true,
+        };
+
         // Get existing audio controls
         this.audioControls = document.querySelector('#musicControls');
         if (this.audioControls) {
@@ -179,6 +185,16 @@ class Settings {
         } else if (!this.active) { // Restart timer when audio is closed and settings are closed
             this.startTimer();
         }
+    }
+
+    toggleSoundEffect(effectName) {
+        if (effectName in this.soundEffectStates) {
+            this.soundEffectStates[effectName] = !this.soundEffectStates[effectName];
+        }
+    }
+
+    isSoundEffectEnabled(effectName) {
+        return this.soundEffectStates[effectName] ?? true; // Default to true if not found
     }
 
     update() {
