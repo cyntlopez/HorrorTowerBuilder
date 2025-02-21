@@ -113,20 +113,8 @@ class GameEngine {
     };
 
     addEntity(entity) {
-        if (entity) {
-            this.entities.push(entity);
-            console.log(`Entity added: ${entity.constructor.name}`);
-        } else {
-            console.error("Tried to add an undefined entity.");
-        }
-    }
-
-    removeEntity(entity) {
-        const index = this.entities.indexOf(entity);
-        if (index > -1) {
-            this.entities.splice(index, 1);
-        }
-    }
+        this.entities.push(entity);
+    };
 
     draw() {
         // Clear the whole canvas with transparent color (rgba(0, 0, 0, 0))
@@ -172,6 +160,17 @@ class GameEngine {
 
         if (this.enemySpawner) {
             this.enemySpawner.update();
+        }
+
+        let player = null;
+        let tilemap = null;
+
+        for (let entity of this.entities) {
+            if (entity instanceof Hero) {
+                player = entity;
+            } else if (entity instanceof TileMap) {
+                tilemap = entity;
+            }
         }
 
         let entitiesCount = this.entities.length;

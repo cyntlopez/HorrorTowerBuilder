@@ -112,9 +112,5 @@ class EnemySpawner {
     }
 
     draw(ctx) {
-        ctx.fillStyle = "white";
-        ctx.font = "20px Arial";
-        ctx.fillText(`Wave: ${this.waveNumber}`, 10, 30);
-        ctx.fillText(`Enemies Remaining: ${this.enemiesRemaining}`, 10, 60);
     }
 }

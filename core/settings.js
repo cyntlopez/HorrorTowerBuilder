@@ -7,7 +7,7 @@ class Settings {
         this.height = 500;
 
         // Get existing audio controls
-        this.audioControls = document.querySelector('div:not(#gameWorld)');
+        this.audioControls = document.querySelector('#musicControls');
         if (this.audioControls) {
             this.audioControls.style.cssText = `
                 position: fixed;
@@ -21,15 +21,14 @@ class Settings {
             `;
         }
 
-        // Create gear icon button
-        this.gearButton = document.createElement('button');
-        this.gearButton.innerHTML = `
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <circle cx="12" cy="12" r="3"></circle>
-                <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
-            </svg>
+        // Create pause icon button
+        this.pauseButton = document.createElement('button');
+        this.pauseButton.innerHTML = `
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"> 
+    <path d="M10 18V6M14 18V6" /> 
+</svg>
         `;
-        this.gearButton.style.cssText = `
+        this.pauseButton.style.cssText = `
             position: fixed;
             top: 10px;
             right: 10px;
@@ -66,8 +65,36 @@ class Settings {
             z-index: 1000;
         `;
 
+        this.hud = document.createElement('div');
+        this.hud.id = 'hud';
+        this.hud.style.cssText = `
+            position: fixed;
+            top: 60px; // Adjusted top position
+            left: 10px;
+            color: white;
+            font-family: sans-serif;
+            z-index: 1000;
+            pointer-events: none;
+            background-color: rgba(0, 0, 0, 0.5); // Added background
+            padding: 10px; // Added padding
+            border-radius: 5px; // Added border radius
+        `;
+
+
+        this.hud.innerHTML = `
+            Health: <span id="health">100</span><br>
+            Wave: <span id="resources">1</span><br>
+            Time: <span id="time">0:00</span>
+        `;
+
+        this.startTime = 0;
+        this.elapsedSeconds = 0;
+        this.timerPaused = true;
+        this.timerInterval = null;
+        this.timeOffset = 0;
+
         // Add hover effects
-        [this.gearButton, this.musicButton].forEach(button => {
+        [this.pauseButton, this.musicButton].forEach(button => {
             button.addEventListener('mouseover', () => {
                 button.style.backgroundColor = 'rgba(255, 255, 255, 0.1)';
             });
@@ -77,7 +104,7 @@ class Settings {
             });
         });
 
-        this.gearButton.addEventListener('click', () => {
+        this.pauseButton.addEventListener('click', () => {
             this.toggleSettings();
             if (this.showAudio) this.toggleAudio(); // Close audio if open
             this.game.timer.paused = this.active; // Pause when settings are open
@@ -89,13 +116,56 @@ class Settings {
             this.game.timer.paused = this.active || this.showAudio;  // Check both states
         });
 
-        document.body.appendChild(this.gearButton);
+
+
+        document.body.appendChild(this.pauseButton);
         document.body.appendChild(this.musicButton);
+        document.body.appendChild(this.hud);
+    }
+
+    startTimer() {
+        if (!this.timerInterval && !this.timerPaused) {
+            if (this.startTime === 0) { // Only set initial startTime once
+                this.startTime = Date.now();
+            } else {
+                this.startTime = Date.now() - this.timeOffset; // Adjust for paused time
+            }
+            this.timerInterval = setInterval(() => {
+                if (!this.timerPaused) {
+                    this.updateTime();
+                }
+            }, 1000);
+        }
+    }
+
+    stopTimer() {
+        if (this.timerInterval) {
+            clearInterval(this.timerInterval);
+            this.timerInterval = null;
+            this.timeOffset = Date.now() - this.startTime; // Store paused time
+        }
+    }
+
+    updateTime() {
+        this.elapsedSeconds = Math.floor((Date.now() - this.startTime) / 1000);
+        const minutes = Math.floor(this.elapsedSeconds / 60);
+        const seconds = this.elapsedSeconds % 60;
+        const formattedTime = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`; // Add leading zero
+
+        const timeSpan = document.getElementById('time');
+        if (timeSpan) {
+            timeSpan.textContent = formattedTime;
+        }
     }
 
     toggleSettings() {
         this.active = !this.active;
-        this.game.timer.paused = this.active || this.showAudio; // Pause for either menu
+        this.game.timer.paused = this.active || this.showAudio;
+        if (this.active) {
+            this.stopTimer(); // Stop when settings are open
+        } else if (!this.showAudio) { //Restart only if audio is not open
+            this.startTimer();   // Start only if settings are closed
+        }
     }
 
     toggleAudio() {
@@ -103,7 +173,12 @@ class Settings {
         if (this.audioControls) {
             this.audioControls.style.display = this.showAudio ? 'block' : 'none';
         }
-        this.game.timer.paused = this.active || this.showAudio; // Pause for either menu
+        this.game.timer.paused = this.active || this.showAudio;
+        if (this.showAudio) {
+            this.stopTimer(); // Stop when audio is open
+        } else if (!this.active) { // Restart timer when audio is closed and settings are closed
+            this.startTimer();
+        }
     }
 
     update() {
@@ -116,36 +191,29 @@ class Settings {
         ctx.save();
         this.game.camera.resetTransformations(ctx);
 
-        // Black background
-        ctx.fillStyle = 'rgb(0, 0, 0)';
+        // === Black transparent overlay ===
+        ctx.fillStyle = 'rgba(0, 0, 0, 0.7)'; // Semi-transparent black
         ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height);
 
-        // Settings panel
+        // === Settings Panel ===
         const panelX = (ctx.canvas.width - this.width) / 2;
         const panelY = (ctx.canvas.height - this.height) / 2;
 
-        // Draw a solid color rectangle first to completely cover grid lines
         ctx.fillStyle = 'rgb(20, 40, 20)';
-        // Make the background rectangle larger to cover all the text
         ctx.fillRect(panelX - 20, panelY - 20, this.width + 40, this.height + 40);
 
-        // White text
+        // === Settings Title ===
         ctx.fillStyle = '#FFFFFF';
         ctx.font = 'bold 24px Arial';
         ctx.textAlign = 'center';
-        ctx.fillText('Settings', panelX + this.width/2, panelY + 40);
-
+        // === Controls Title ===
         ctx.font = 'bold 20px Arial';
-        ctx.fillText('CONTROLS', panelX + this.width/2, panelY + 80);
+        ctx.fillText('Pause', panelX + this.width / 2, panelY + 80);
 
+        // === Controls List ===
         ctx.font = '18px Arial';
         ctx.textAlign = 'left';
         const controls = [
-            'Movement: WASD',
-            'Build Mode: B',
-            'Quick Heal: F',
-            'Attack: Space',
-            'Pause: ESC'
         ];
 
         controls.forEach((control, index) => {
@@ -154,4 +222,6 @@ class Settings {
 
         ctx.restore();
     }
+
+
 }

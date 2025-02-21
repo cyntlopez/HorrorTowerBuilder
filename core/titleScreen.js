@@ -83,6 +83,8 @@ class TitleScreen {
         this.hide();
         this.game.init(this.ctx, this.camera, this.enemySpawner);
         this.game.start();
+        this.game.settings.timerPaused = false;
+        this.game.settings.startTimer();
         setTimeout(() => document.getElementById("gameWorld").focus(), 0);
     }
 }

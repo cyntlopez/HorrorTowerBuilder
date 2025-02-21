@@ -67,7 +67,7 @@ ASSET_MANAGER.downloadAll(() => {
     });
 
     // Effect volume control from right snippet
-    document.getElementById("Sound Effect").addEventListener("input", (event) => {
+    document.getElementById("effectVolume").addEventListener("input", (event) => {
         const effectLevel = event.target.value;
         ASSET_MANAGER.adjustEffect(effectLevel);
         refocusCanvas();
@@ -84,11 +84,13 @@ ASSET_MANAGER.downloadAll(() => {
 
     // Important: Fix the TileMap creation by providing the grass spritesheet
     const grass = ASSET_MANAGER.getAsset("assets/sprites/landscape/grass.png");
-    const tilemap = new TileMap(20, 20, 40, gameEngine, grass);
+    const tree = ASSET_MANAGER.getAsset("assets/sprites/landscape/tree.png")
+    const tilemap = new TileMap(20, 20, 40, gameEngine, grass, tree);
 
     const heroWalking = ASSET_MANAGER.getAsset("assets/sprites/hero/hero_walking.png");
-    const player = new Hero(gameEngine, 50, 50, heroWalking, tilemap);
-    tilemap.player = player;
+    const centerX = canvas.width / 2;
+    const centerY = canvas.height / 2;
+    const player = new Hero(gameEngine, centerX, centerY, heroWalking, tilemap);
 
     const camera = new Camera(gameEngine, player, canvas.width, canvas.height);
 
@@ -97,6 +99,7 @@ ASSET_MANAGER.downloadAll(() => {
 
     const cabin = ASSET_MANAGER.getAsset("assets/sprites/landscape/cabin.png");
     const gameSetting = new Settings(gameEngine);
+    gameEngine.settings = gameSetting;
     const minimap = new Minimap(gameEngine);
     const resourceBar = new ResourceBar(gameEngine);
 
@@ -118,13 +121,12 @@ ASSET_MANAGER.downloadAll(() => {
     });
 
     // Add entities - ensuring no duplicates
-    gameEngine.addEntity(new Cabin(gameEngine, 600, 10, cabin));
     gameEngine.addEntity(tilemap);  // Only add tilemap once!
+    gameEngine.addEntity(new Cabin(gameEngine, 600, 10, cabin));
     gameEngine.addEntity(gameSetting);
     gameEngine.addEntity(player);
     gameEngine.addEntity(resourceBar);
     gameEngine.addEntity(minimap);
-    gameEngine.addEntity(loseScreen);
 
     // Create title screen
     new TitleScreen(gameEngine, ctx, camera, enemySpawner);
