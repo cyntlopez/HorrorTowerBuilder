@@ -49,11 +49,36 @@
       margin-top: 10px;
     }
 
+    #controls {
+      color: white;
+      font-family: sans-serif;
+      background-color: rgba(0, 0, 0, 0.5);
+      padding: 10px;
+      border-radius: 5px;
+      position: absolute;
+      top: 50%;
+      left: 20px; /* Adjust distance from left edge */
+      transform: translateY(-50%); /* Center vertically */
+    }
+
+    #controls img { /* Target images inside #controls */
+      width: 120px;  /* Adjust the value as needed */
+      height: 60px; /* Adjust the value as needed */
+    }
+
   </style>
 </head>
 <body>
 <canvas id="gameWorld" width="800" height="800" tabindex="0" autofocus></canvas>
-
+<div id="controls">
+  <h2>Controls</h2>
+  <p>Movement: </p>
+  <p><img src="assets/sprites/controls/wasd.png" alt="WASD keys"></p>
+  <p>Build Mode:</p>
+  <p>Attack:</p>
+  <p>Tower 1:</p>
+  <p>Tower 2:</p>
+</div>
 <div id="musicControls">
   <br />
   <label for="trackSelector"></label><select id="trackSelector">

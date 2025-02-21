@@ -98,6 +98,7 @@ ASSET_MANAGER.downloadAll(() => {
 
     const cabin = ASSET_MANAGER.getAsset("assets/sprites/landscape/cabin.png");
     const gameSetting = new Settings(gameEngine);
+    gameEngine.settings = gameSetting;
     const minimap = new Minimap(gameEngine);
     const resourceBar = new ResourceBar(gameEngine);
 
@@ -119,13 +120,12 @@ ASSET_MANAGER.downloadAll(() => {
     });
 
     // Add entities - ensuring no duplicates
-    gameEngine.addEntity(new Cabin(gameEngine, 600, 10, cabin));
     gameEngine.addEntity(tilemap);  // Only add tilemap once!
+    gameEngine.addEntity(new Cabin(gameEngine, 600, 10, cabin));
     gameEngine.addEntity(gameSetting);
     gameEngine.addEntity(player);
     gameEngine.addEntity(resourceBar);
     gameEngine.addEntity(minimap);
-    gameEngine.addEntity(loseScreen);
 
     // Create title screen
     new TitleScreen(gameEngine, ctx, camera, enemySpawner);
