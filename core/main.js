@@ -11,6 +11,15 @@ ASSET_MANAGER.queueDownload("assets/sprites/pumpkin_head/killer_walk.png");
 ASSET_MANAGER.queueDownload("assets/sprites/pumpkin_head/killer_attack.png");
 ASSET_MANAGER.queueDownload("assets/sprites/landscape/grass.png");
 
+// Resource images
+ASSET_MANAGER.queueDownload("assets/sprites/resources/wood.png");
+ASSET_MANAGER.queueDownload("assets/sprites/resources/stone.png");
+ASSET_MANAGER.queueDownload("assets/sprites/resources/ghost.png");
+ASSET_MANAGER.queueDownload("assets/sprites/resources/mage.png");
+ASSET_MANAGER.queueDownload("assets/sprites/resources/grave.png");
+ASSET_MANAGER.queueDownload("assets/sprites/resources/energy_drink.png");
+ASSET_MANAGER.queueDownload("assets/sprites/resources/energy_drink_static.png");
+
 // Music - combining both music paths
 ASSET_MANAGER.queueDownload("assets/audio/music/title-screen-music.wav");
 ASSET_MANAGER.queueDownload("assets/audio/music/title-screen-music2.wav");

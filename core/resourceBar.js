@@ -6,12 +6,14 @@ class ResourceBar {
         this.boxSize = 60;
         this.spacing = 20;
 
-        this.treeImage = ASSET_MANAGER.getAsset("assets/sprites/landscape/tree.png");
+        this.woodImage = ASSET_MANAGER.getAsset("assets/sprites/resources/wood.png");
+        this.drinkImage = ASSET_MANAGER.getAsset("assets/sprites/resources/energy_drink_static.png");
+        this.stoneImage = ASSET_MANAGER.getAsset("assets/sprites/resources/stone.png");
 
         this.resources = [
-            { isImage: true, image: this.treeImage, amount: 0 },
-            { color: '#FF4500', amount: 0 },
-            { color: '#20B2AA', amount: 0 }
+            { isImage: true, image: this.woodImage, amount: 0 }, // wood
+            { isImage: true, image: this.stoneImage, amount: 0 }, // stone
+            { isImage: true, image: this.drinkImage, amount: 0 } // energy drink
         ];
     }
 

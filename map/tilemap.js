@@ -4,25 +4,10 @@ class TileMap {
         this.spritesheet = spritesheet;
         this.cols = cols;
         this.tileSize = tileSize;
-        this.state = 0; // 0 = lit fire, 1 = dying fire
         this.game = game;
         this.player = null;
 
         this.grid = Array.from({ length: rows }, () => Array(cols).fill(null));
-
-        this.animation = [];
-        this.loadAnimation();
-    }
-
-    loadAnimation() {
-        for (let i = 0; i < 2; i++) { // 2 states
-            this.animation.push([]);
-        }
-
-        // TODO: Change campfire image
-        const campfireSpriteSheet = ASSET_MANAGER.getAsset("assets/sprites/resources/campfire.png");
-
-        this.animation[0] = new Animator(campfireSpriteSheet, 2, 2, 64.1, 63, 6, 0.5, 0, false, true);
     }
 
     update() {
@@ -58,11 +43,6 @@ class TileMap {
                 const building = this.grid[r][c];
                 if (building) {
                     building.draw(ctx);
-                }
-
-                // Optional: Draw campfire animation if a campfire exists.
-                if (this.grid[r][c] !== null && this.grid[r][c] instanceof Campfire) {
-                    this.animation[this.state].drawFrame(this.game.clockTick, ctx, x, y, 1);
                 }
             }
         }
