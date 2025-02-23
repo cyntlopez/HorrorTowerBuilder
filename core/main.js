@@ -11,21 +11,13 @@ ASSET_MANAGER.queueDownload("assets/sprites/pumpkin_head/killer_walk.png");
 ASSET_MANAGER.queueDownload("assets/sprites/pumpkin_head/killer_attack.png");
 ASSET_MANAGER.queueDownload("assets/sprites/landscape/grass.png");
 
-// Resource images
-ASSET_MANAGER.queueDownload("assets/sprites/resources/wood.png");
-ASSET_MANAGER.queueDownload("assets/sprites/resources/stone.png");
-ASSET_MANAGER.queueDownload("assets/sprites/resources/ghost.png");
-ASSET_MANAGER.queueDownload("assets/sprites/resources/mage.png");
-ASSET_MANAGER.queueDownload("assets/sprites/resources/grave.png");
-ASSET_MANAGER.queueDownload("assets/sprites/resources/energy_drink.png");
-ASSET_MANAGER.queueDownload("assets/sprites/resources/energy_drink_static.png");
-
-// Music - combining both music paths
+// Music
 ASSET_MANAGER.queueDownload("assets/audio/music/title-screen-music.wav");
 ASSET_MANAGER.queueDownload("assets/audio/music/title-screen-music2.wav");
 ASSET_MANAGER.queueDownload("assets/audio/music/level-1-music.wav");
 ASSET_MANAGER.queueDownload("assets/audio/music/level-2-music.wav");
 ASSET_MANAGER.queueDownload("assets/audio/music/Track-5-music.wav");
+ASSET_MANAGER.queueDownload("assets/audio/music/Track-6-music.wav");
 
 // Effects
 ASSET_MANAGER.queueDownload("assets/audio/effects/Grass_walk5.wav");
@@ -83,6 +75,27 @@ ASSET_MANAGER.downloadAll(() => {
 
     document.getElementById("trackSelector").addEventListener("change", refocusCanvas);
 
+    document.getElementById("enemySpawnToggle").addEventListener("change", (event) => {
+        gameSetting.toggleSoundEffect('enemySpawn');
+        refocusCanvas();
+    });
+    
+    document.getElementById("enemySlashToggle").addEventListener("change", (event) => {
+        gameSetting.toggleSoundEffect('enemySlash');
+        refocusCanvas();
+    });
+
+    document.getElementById("walkingToggle").addEventListener("change", (event) => {
+        gameSetting.toggleSoundEffect('walking');
+        // If turning off walking sound, stop it if it's currently playing
+        if (!event.target.checked && player.currentWalkSound) {
+            player.currentWalkSound.pause();
+            player.currentWalkSound.currentTime = 0;
+            player.isWalking = false;
+        }
+        refocusCanvas();
+    });
+
     // Game setup
     const loseScreen = new LoseScreen(gameEngine);
     gameEngine.loseScreen = loseScreen;
@@ -92,11 +105,13 @@ ASSET_MANAGER.downloadAll(() => {
 
     // Important: Fix the TileMap creation by providing the grass spritesheet
     const grass = ASSET_MANAGER.getAsset("assets/sprites/landscape/grass.png");
-    const tilemap = new TileMap(20, 20, 40, gameEngine, grass);
+    const tree = ASSET_MANAGER.getAsset("assets/sprites/landscape/tree.png")
+    const tilemap = new TileMap(20, 20, 40, gameEngine, grass, tree);
 
     const heroWalking = ASSET_MANAGER.getAsset("assets/sprites/hero/hero_walking.png");
-    const player = new Hero(gameEngine, 50, 50, heroWalking, tilemap);
-    tilemap.player = player;
+    const centerX = canvas.width / 2;
+    const centerY = canvas.height / 2;
+    const player = new Hero(gameEngine, centerX, centerY, heroWalking, tilemap);
 
     const camera = new Camera(gameEngine, player, canvas.width, canvas.height);
 
@@ -105,6 +120,8 @@ ASSET_MANAGER.downloadAll(() => {
 
     const cabin = ASSET_MANAGER.getAsset("assets/sprites/landscape/cabin.png");
     const gameSetting = new Settings(gameEngine);
+    gameEngine.settings = gameSetting;
+    ASSET_MANAGER.setSettings(gameSetting);
     const minimap = new Minimap(gameEngine);
     const resourceBar = new ResourceBar(gameEngine);
 
@@ -126,13 +143,12 @@ ASSET_MANAGER.downloadAll(() => {
     });
 
     // Add entities - ensuring no duplicates
-    gameEngine.addEntity(new Cabin(gameEngine, 600, 10, cabin));
     gameEngine.addEntity(tilemap);  // Only add tilemap once!
+    gameEngine.addEntity(new Cabin(gameEngine, 600, 10, cabin));
     gameEngine.addEntity(gameSetting);
     gameEngine.addEntity(player);
     gameEngine.addEntity(resourceBar);
     gameEngine.addEntity(minimap);
-    gameEngine.addEntity(loseScreen);
 
     // Create title screen
     new TitleScreen(gameEngine, ctx, camera, enemySpawner);

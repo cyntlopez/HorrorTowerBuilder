@@ -102,7 +102,9 @@ class EnemySpawner {
         //     }
         // }
 
-        ASSET_MANAGER.playFromPool(this.spawnSoundPool);
+        if (ASSET_MANAGER.settings.isSoundEffectEnabled('enemySpawn')) {
+            ASSET_MANAGER.playFromPool(this.spawnSoundPool, 'enemySpawn');
+        }
         console.log(`Spawned enemy at (${x}, ${y}) with ${enemy.health} HP.`);
     }
 
@@ -112,9 +114,5 @@ class EnemySpawner {
     }
 
     draw(ctx) {
-        ctx.fillStyle = "white";
-        ctx.font = "20px Arial";
-        ctx.fillText(`Wave: ${this.waveNumber}`, 10, 30);
-        ctx.fillText(`Enemies Remaining: ${this.enemiesRemaining}`, 10, 60);
     }
 }

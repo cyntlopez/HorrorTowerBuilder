@@ -41,36 +41,79 @@
       border: 2px solid black;
     }
 
-    /* ✅ GUI Styles */
-
-    /* ✅ Music Controls */
+    /* GUI Styles */
     #musicControls {
       display: flex;
       flex-direction: column;
       align-items: center;
       margin-top: 10px;
+      color: red;
     }
+
+    #controls {
+      color: white;
+      font-family: sans-serif;
+      background-color: rgba(0, 0, 0, 0.5);
+      padding: 10px;
+      border-radius: 5px;
+      position: absolute;
+      top: 50%;
+      left: 20px; /* Adjust distance from left edge */
+      transform: translateY(-50%); /* Center vertically */
+    }
+
+    #controls img { /* Target images inside #controls */
+      width: 120px;  /* Adjust the value as needed */
+      height: 60px; /* Adjust the value as needed */
+    }
+
   </style>
 </head>
 <body>
 <canvas id="gameWorld" width="800" height="800" tabindex="0" autofocus></canvas>
-  <div id="musicControls">
-    <br />
-    <label for="trackSelector"></label><select id="trackSelector">
-      <option value="assets/audio/music/title-screen-music.wav">Track 1</option>
-      <option value="assets/audio/music/title-screen-music2.wav">Track 2</option>
-      <option value="assets/audio/music/level-1-music.wav">Track 3</option>
-      <option value="assets/audio/music/level-2-music.wav">Track 4</option>
-      <option value="assets/audio/music/Track-5-music.wav">Track 5</option>
-    </select>
-    <br />
-    <button id="playMusic">Play</button>
-    <button id="stopMusic">Stop</button>
-    <button id="muteMusic">Mute</button>
-    <br />
-    <br />
-    <label for="volume"></label><input type="range" id="volume" min="0" max="1" value="0.1" step="0.05"> Volume
-    <label for="effectVolume"></label><input type="range" id="effectVolume" min="0" max="1" value="0.1" step="0.05"> effectVolume
+<div id="controls">
+  <h2>Controls</h2>
+  <p>Movement: </p>
+  <p><img src="assets/sprites/controls/wasd.png" alt="WASD keys"></p>
+  <p>Build Mode:</p>
+  <p>Attack:</p>
+  <p>Tower 1:</p>
+  <p>Tower 2:</p>
+</div>
+<div id="musicControls">
+  <br />
+  <label for="trackSelector"></label><select id="trackSelector">
+  <option value="assets/audio/music/title-screen-music.wav">Track 1</option>
+  <option value="assets/audio/music/title-screen-music2.wav">Track 2</option>
+  <option value="assets/audio/music/level-1-music.wav">Track 3</option>
+  <option value="assets/audio/music/level-2-music.wav">Track 4</option>
+  <option value="assets/audio/music/Track-5-music.wav">Track 5</option>
+  <option value="assets/audio/music/Track-6-music.wav">Track 6</option>
+</select>
+  <br />
+  <button id="playMusic">Play</button>
+  <button id="stopMusic">Stop</button>
+  <button id="muteMusic">Mute</button>
+  <br />
+  <br />
+  <label for="volume"></label><input type="range" id="volume" min="0" max="1" value="0.1" step="0.05"> Volume
+  <label for="effectVolume"></label><input type="range" id="effectVolume" min="0" max="1" value="0.1" step="0.05"> effectVolume
+
+  <div id="soundEffectToggles">
+    <h3>Sound Effects</h3>
+    <div>
+        <input type="checkbox" id="enemySpawnToggle" checked>
+        <label for="enemySpawnToggle">Enemy Spawn Sound</label>
+    </div>
+    <div>
+        <input type="checkbox" id="enemySlashToggle" checked>
+        <label for="enemySlashToggle">Enemy Slash Sound</label>
+    </div>
+    <div>
+      <input type="checkbox" id="walkingToggle" checked>
+      <label for="walkingToggle">Walking Sound</label>
   </div>
+</div>
+</div>
 </body>
 </html>
