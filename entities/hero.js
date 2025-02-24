@@ -48,8 +48,6 @@ class Hero {
                 }
             });
 
-            window.addEventListener("load", setupControls);
-
             canvas.addEventListener("mouseup", () => {
                 this.isAttacking = false;
             });
