@@ -110,7 +110,14 @@ ASSET_MANAGER.downloadAll(() => {
         refocusCanvas();
     });
 
-    const gameSetting = new Settings(gameEngine);
+    const heroWalking = ASSET_MANAGER.getAsset("assets/sprites/hero/hero_walking.png");
+    const centerX = canvas.width / 2;
+    const centerY = canvas.height / 2;
+    const grass = ASSET_MANAGER.getAsset("assets/sprites/landscape/grass.png");
+    const tree = ASSET_MANAGER.getAsset("assets/sprites/landscape/tree.png")
+    const tilemap = new TileMap(20, 20, 40, gameEngine, grass, tree);
+    const player = new Hero(gameEngine, centerX, centerY, heroWalking, tilemap);
+    const gameSetting = new Settings(gameEngine,player);
     gameSetting.settings = gameSetting;
     ASSET_MANAGER.setSettings(gameSetting);
 
@@ -122,16 +129,9 @@ ASSET_MANAGER.downloadAll(() => {
     const ctx = canvas.getContext("2d");
 
     // Important: Fix the TileMap creation by providing the grass spritesheet
-    const grass = ASSET_MANAGER.getAsset("assets/sprites/landscape/grass.png");
-    const tree = ASSET_MANAGER.getAsset("assets/sprites/landscape/tree.png")
     const stone = ASSET_MANAGER.getAsset("assets/sprites/resources/stone.png")
     const energy = ASSET_MANAGER.getAsset("assets/sprites/resources/energy_drink_static.png")
-    const tilemap = new TileMap(20, 20, 40, gameEngine, grass, tree);
 
-    const heroWalking = ASSET_MANAGER.getAsset("assets/sprites/hero/hero_walking.png");
-    const centerX = canvas.width / 2;
-    const centerY = canvas.height / 2;
-    const player = new Hero(gameEngine, centerX, centerY, heroWalking, tilemap);
 
     const camera = new Camera(gameEngine, player, canvas.width, canvas.height);
 
@@ -187,10 +187,10 @@ ASSET_MANAGER.downloadAll(() => {
 
     gameEngine.addEntity(new Tree(gameEngine, tree, 350, 300, treePosition.x, treePosition.y, player, tilemap));
     gameEngine.addEntity(new Stone(gameEngine, stone, 350, 300, stonePosition.x, stonePosition.y, player, tilemap));
-    gameEngine.addEntity(new Energy(gameEngine, energy, 350, 300, player, tilemap));
+    gameEngine.addEntity(new Energy(gameEngine, energy, 350, 300, player, tilemap, resourceBar));
     gameEngine.addEntity(gameSetting);
-    gameEngine.addEntity(player);
     gameEngine.addEntity(resourceBar);
+    gameEngine.addEntity(player);
     gameEngine.addEntity(minimap);
 
     // Create title screen

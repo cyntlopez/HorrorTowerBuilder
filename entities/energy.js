@@ -1,6 +1,6 @@
 class Energy {
-    constructor(game, spritesheet, cabinX, cabinY, player, tileMap) {
-        Object.assign(this, {game, spritesheet, player, tileMap});
+    constructor(game, spritesheet, cabinX, cabinY, player, tileMap, resourceBar) {
+        Object.assign(this, {game, spritesheet, player, tileMap, resourceBar});
 
         const randomOffsetX = 200 + Math.random() * 100;
         const randomOffsetY = 200 + Math.random() * 100;
@@ -13,7 +13,16 @@ class Energy {
         this.y = cabinY + dy;
     }
 
-    update() {}
+    update() {
+        const distanceToPlayer = Math.sqrt(
+            Math.pow(this.x - this.player.x, 2) + Math.pow(this.y - this.player.y, 2)
+        );
+
+        if (distanceToPlayer < 30) {
+            this.removeFromWorld = true;
+            this.resourceBar.setResourceAmount(2,1);
+        }
+    }
 
     draw(ctx) {
         const energyWidth = 45;
