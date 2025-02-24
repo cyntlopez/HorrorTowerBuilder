@@ -258,8 +258,8 @@ class Enemy {
         const distanceFromCamera = Math.sqrt(Math.pow(this.x - cameraX, 2) + Math.pow(this.y - cameraY, 2));
 
         const canvas = document.getElementById("gameWorld");
-        const cabinCircleX = (canvas.width / 2) + 250; // Adjust the x-coordinate as needed
-        const cabinCircleY = (canvas.height / 2) - 250; // Adjust the y-coordinate as needed
+        const cabinCircleX = (canvas.width / 2); // Adjust the x-coordinate as needed
+        const cabinCircleY = (canvas.height / 2); // Adjust the y-coordinate as needed
         const cabinCircleRadius = 5 * this.tileMap.tileSize; // Adjust the radius as needed
         const distanceFromCabin= Math.sqrt(Math.pow(this.x - cabinCircleX, 2) + Math.pow(this.y - cabinCircleY, 2));
 
