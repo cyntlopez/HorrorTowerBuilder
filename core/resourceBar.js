@@ -61,6 +61,12 @@ class ResourceBar {
         this.game.camera.applyTransformations(ctx);
     }
 
+    incrementAmount(index){
+        if (index >= 0 && index < this.resources.length) {
+            this.resources[index].amount++;
+        }
+    }
+
     setResourceAmount(index, amount) {
         if (index >= 0 && index < this.resources.length) {
             this.resources[index].amount = amount;

@@ -116,7 +116,8 @@ ASSET_MANAGER.downloadAll(() => {
     const grass = ASSET_MANAGER.getAsset("assets/sprites/landscape/grass.png");
     const tree = ASSET_MANAGER.getAsset("assets/sprites/landscape/tree.png")
     const tilemap = new TileMap(20, 20, 40, gameEngine, grass, tree);
-    const player = new Hero(gameEngine, centerX, centerY, heroWalking, tilemap);
+    const resourceBar = new ResourceBar(gameEngine);
+    const player = new Hero(gameEngine, centerX, centerY, heroWalking, tilemap, resourceBar);
     const gameSetting = new Settings(gameEngine,player);
     gameSetting.settings = gameSetting;
     ASSET_MANAGER.setSettings(gameSetting);
@@ -141,7 +142,7 @@ ASSET_MANAGER.downloadAll(() => {
     const cabin = ASSET_MANAGER.getAsset("assets/sprites/landscape/cabin.png");
 
     const minimap = new Minimap(gameEngine);
-    const resourceBar = new ResourceBar(gameEngine);
+
 
     // Draw override
     const originalDraw = gameEngine.draw.bind(gameEngine);

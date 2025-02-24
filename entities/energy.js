@@ -20,7 +20,7 @@ class Energy {
 
         if (distanceToPlayer < 30) {
             this.removeFromWorld = true;
-            this.resourceBar.setResourceAmount(2,1);
+            this.resourceBar.incrementAmount(2);
         }
     }
 

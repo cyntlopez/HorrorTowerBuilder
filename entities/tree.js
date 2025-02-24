@@ -11,6 +11,7 @@ class Tree {
 
     update() {}
 
+
     draw(ctx) {
         const treeWidth = 95;
         const treeHeight = 120;

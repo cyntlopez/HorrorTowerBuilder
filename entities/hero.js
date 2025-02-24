@@ -1,6 +1,6 @@
 class Hero {
-    constructor(game, x, y, spritesheet, tileMap) {
-        Object.assign(this, {game, x, y, spritesheet, tileMap});
+    constructor(game, x, y, spritesheet, tileMap, resourceBar) {
+        Object.assign(this, {game, x, y, spritesheet, tileMap,resourceBar});
 
         // hero's state variables
         this.facing = 0; // 0 = down, 1 = up, 2 = left, 3 = right
@@ -286,14 +286,21 @@ class Hero {
         else if (this.facing === 3) attackX += this.attackRange; // Right
 
         for (let entity of this.game.entities) {
+            const dx = entity.x - attackX;
+            const dy = entity.y - attackY;
+            const distance = Math.sqrt(dx * dx + dy * dy);
             if (entity instanceof Enemy) {
-                const dx = entity.x - attackX;
-                const dy = entity.y - attackY;
-                const distance = Math.sqrt(dx * dx + dy * dy);
-
                 if (distance < this.attackRange) {
                     entity.takeDamage(this.attackDamage);
                     console.log("Enemy hit!");
+                }
+            } else if (entity instanceof Tree) {
+                if (distance < this.attackRange) {
+                    this.resourceBar.incrementAmount(0);
+                }
+            } else if (entity instanceof Stone) {
+                if (distance < this.attackRange) {
+                    this.resourceBar.incrementAmount(1);
                 }
             }
         }
