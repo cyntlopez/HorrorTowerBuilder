@@ -169,6 +169,7 @@ class Settings {
         this.game.timer.paused = this.active || this.showAudio;
         if (this.active) {
             this.stopTimer(); // Stop when settings are open
+            ASSET_MANAGER.stopAllSoundEffects();
         } else if (!this.showAudio) { //Restart only if audio is not open
             this.startTimer();   // Start only if settings are closed
         }
@@ -182,6 +183,7 @@ class Settings {
         this.game.timer.paused = this.active || this.showAudio;
         if (this.showAudio) {
             this.stopTimer(); // Stop when audio is open
+            ASSET_MANAGER.stopAllSoundEffects();
         } else if (!this.active) { // Restart timer when audio is closed and settings are closed
             this.startTimer();
         }
