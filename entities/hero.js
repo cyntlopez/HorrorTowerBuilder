@@ -38,7 +38,6 @@ class Hero {
         const trySetupControls = () => {
             const canvas = this.game.ctx?.canvas;
             if (!canvas) {
-                console.error("Error: Game canvas is not available!");
                 setTimeout(trySetupControls, 100); // Retry the setupControls function itself after a delay
                 return;
             }
@@ -48,6 +47,8 @@ class Hero {
                     this.isAttacking = true;
                 }
             });
+
+            window.addEventListener("load", setupControls);
 
             canvas.addEventListener("mouseup", () => {
                 this.isAttacking = false;
