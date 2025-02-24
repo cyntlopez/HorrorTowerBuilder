@@ -6,6 +6,8 @@ class TitleScreen {
         this.createTitle();
         this.createButtons();
         this.show();
+
+
     }
 
     setupMenuStyles() {
@@ -21,19 +23,17 @@ class TitleScreen {
             justify-content: center;
             align-items: center;
             gap: 20px;
-            background: black;
             border: 1px solid #333;
         `;
     }
 
     createTitle() {
-        const title = document.createElement('h1'); 
-        title.textContent = 'Horror Hideout';
-        title.style.cssText = `
-            font-size: 36px;
-            color: red;
-            margin-bottom: 20px;
-        `;
+        const title = document.createElement('img');
+        title.src = "assets/sprites/resources/title.png";
+
+        title.width = 550;
+        title.height = 150;
+
         this.menuDiv.appendChild(title);
     }
 

@@ -4,32 +4,16 @@ class TileMap {
         this.spritesheet = spritesheet;
         this.cols = cols;
         this.tileSize = tileSize;
-        this.state = 0; // 0 = lit fire, 1 = dying fire
         this.game = game;
         this.player = null;
         this.grid = Array.from({ length: rows }, () => Array(cols).fill(null));
 
         this.visibilityRadius = 5;
         this.fogOfWarGrid = Array.from({ length: rows }, () => Array(cols).fill(false));
-
-        this.animation = [];
-        this.loadAnimation();
-    }
-
-    loadAnimation() {
-        for (let i = 0; i < 2; i++) { // 2 states
-            this.animation.push([]);
-        }
-
-        // TODO: Change campfire image
-        const campfireSpriteSheet = ASSET_MANAGER.getAsset("assets/sprites/resources/campfire.png");
-
-        this.animation[0] = new Animator(campfireSpriteSheet, 2, 2, 64.1, 63, 6, 0.5, 0,false, true);
-
     }
 
     update() {
-
+        // update logic if needed
     }
 
     draw(ctx, mousePos, validPlacementTiles) {
@@ -38,15 +22,9 @@ class TileMap {
 
         // Get player position - assuming player is the camera target
         const canvas = document.getElementById("gameWorld");
-        let centerX = (canvas.width / 2) + 250;
-        let centerY = (canvas.height / 2) - 250;
+        let centerX = (canvas.width / 2);
+        let centerY = (canvas.height / 2);
         let visRadiusInPixels = this.visibilityRadius * this.tileSize;
-
-        if (this.game.camera && this.game.camera.target) {
-            const player = this.game.camera.target;
-            centerX = player.x;
-            centerY = player.y;
-        }
 
         // First draw all tiles and objects across the entire map
         for (let r = 0; r < this.rows; r++) {
@@ -61,11 +39,6 @@ class TileMap {
                 // Draw building if exists
                 if (building) {
                     building.draw(ctx);
-                }
-
-                // Draw campfire animation if applicable
-                if (this.grid[r][c] !== null && this.state === 0) {
-                    this.animation[this.state].drawFrame(this.game.clockTick, ctx, x, y, 1);
                 }
 
                 // Highlight valid placement tiles if applicable

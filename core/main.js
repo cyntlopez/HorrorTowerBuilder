@@ -3,13 +3,27 @@ const ASSET_MANAGER = new AssetManager();
 
 // Sprites
 ASSET_MANAGER.queueDownload("assets/sprites/hero/hero_walking.png");
+ASSET_MANAGER.queueDownload("assets/sprites/hero/hero_running.png");
 ASSET_MANAGER.queueDownload("assets/sprites/hero/hero_dying.png");
 ASSET_MANAGER.queueDownload("assets/sprites/landscape/cabin.png");
 ASSET_MANAGER.queueDownload("assets/sprites/landscape/tree.png");
-ASSET_MANAGER.queueDownload("assets/sprites/resources/campfire.png");
 ASSET_MANAGER.queueDownload("assets/sprites/pumpkin_head/killer_walk.png");
 ASSET_MANAGER.queueDownload("assets/sprites/pumpkin_head/killer_attack.png");
 ASSET_MANAGER.queueDownload("assets/sprites/landscape/grass.png");
+ASSET_MANAGER.queueDownload("assets/sprites/pig_boss/pig_running.png");
+
+// Resources
+ASSET_MANAGER.queueDownload("assets/sprites/resources/wood.png");
+ASSET_MANAGER.queueDownload("assets/sprites/resources/campfire.png");
+ASSET_MANAGER.queueDownload("assets/sprites/resources/energy_drink_static.png");
+ASSET_MANAGER.queueDownload("assets/sprites/resources/stone.png");
+
+// Buildings
+ASSET_MANAGER.queueDownload("assets/sprites/resources/totem.png");
+ASSET_MANAGER.queueDownload("assets/sprites/resources/campfire.png");
+ASSET_MANAGER.queueDownload("assets/sprites/resources/mage.png");
+ASSET_MANAGER.queueDownload("assets/sprites/resources/ghost.png");
+ASSET_MANAGER.queueDownload("assets/sprites/resources/grave.png");
 
 // Music
 ASSET_MANAGER.queueDownload("assets/audio/music/title-screen-music.wav");
@@ -144,7 +158,7 @@ ASSET_MANAGER.downloadAll(() => {
 
     // Add entities - ensuring no duplicates
     gameEngine.addEntity(tilemap);  // Only add tilemap once!
-    gameEngine.addEntity(new Cabin(gameEngine, 600, 10, cabin));
+    gameEngine.addEntity(new Cabin(gameEngine, 350, 300, cabin));
     gameEngine.addEntity(gameSetting);
     gameEngine.addEntity(player);
     gameEngine.addEntity(resourceBar);
