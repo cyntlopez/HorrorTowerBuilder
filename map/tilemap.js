@@ -22,15 +22,9 @@ class TileMap {
 
         // Get player position - assuming player is the camera target
         const canvas = document.getElementById("gameWorld");
-        let centerX = (canvas.width / 2) + 250;
-        let centerY = (canvas.height / 2) - 250;
+        let centerX = (canvas.width / 2);
+        let centerY = (canvas.height / 2);
         let visRadiusInPixels = this.visibilityRadius * this.tileSize;
-
-        if (this.game.camera && this.game.camera.target) {
-            const player = this.game.camera.target;
-            centerX = player.x;
-            centerY = player.y;
-        }
 
         // First draw all tiles and objects across the entire map
         for (let r = 0; r < this.rows; r++) {
