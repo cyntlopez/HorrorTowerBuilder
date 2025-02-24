@@ -86,5 +86,6 @@ class TitleScreen {
         this.game.settings.timerPaused = false;
         this.game.settings.startTimer();
         setTimeout(() => document.getElementById("gameWorld").focus(), 0);
+        ASSET_MANAGER.playAsset("assets/audio/music/level-2-music.wav");
     }
 }
