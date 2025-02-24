@@ -1,7 +1,8 @@
 class LoseScreen {
-    constructor(game) {
+    constructor(game, gameSetting) {
         this.game = game;
         this.active = false;
+        this.setting = gameSetting;
     }
 
     update() {
@@ -25,6 +26,6 @@ class LoseScreen {
 
     activate() {
         this.active = true;
-        this.game.settings.stopTimer();
+        this.setting.stopTimer();
     }
 }

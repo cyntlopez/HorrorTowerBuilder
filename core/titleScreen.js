@@ -1,6 +1,7 @@
 class TitleScreen {
-    constructor(game, ctx, camera, enemySpawner) {
+    constructor(game, gameSetting, ctx, camera, enemySpawner) {
         Object.assign(this, {game, ctx, camera, enemySpawner});
+        this.setting = gameSetting;
         this.menuDiv = document.createElement('div');
         this.setupMenuStyles();
         this.createTitle();
@@ -84,7 +85,7 @@ class TitleScreen {
         this.game.init(this.ctx, this.camera, this.enemySpawner);
         this.game.start();
         this.game.settings.timerPaused = false;
-        this.game.settings.startTimer();
+        this.setting.startTimer();
         setTimeout(() => document.getElementById("gameWorld").focus(), 0);
         ASSET_MANAGER.playAsset("assets/audio/music/level-2-music.wav");
     }

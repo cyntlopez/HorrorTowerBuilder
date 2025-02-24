@@ -110,8 +110,12 @@ ASSET_MANAGER.downloadAll(() => {
         refocusCanvas();
     });
 
+    const gameSetting = new Settings(gameEngine);
+    gameSetting.settings = gameSetting;
+    ASSET_MANAGER.setSettings(gameSetting);
+
     // Game setup
-    const loseScreen = new LoseScreen(gameEngine);
+    const loseScreen = new LoseScreen(gameEngine, gameSetting);
     gameEngine.loseScreen = loseScreen;
 
     canvas.setAttribute("tabindex", "0");
@@ -120,6 +124,8 @@ ASSET_MANAGER.downloadAll(() => {
     // Important: Fix the TileMap creation by providing the grass spritesheet
     const grass = ASSET_MANAGER.getAsset("assets/sprites/landscape/grass.png");
     const tree = ASSET_MANAGER.getAsset("assets/sprites/landscape/tree.png")
+    const stone = ASSET_MANAGER.getAsset("assets/sprites/resources/stone.png")
+    const energy = ASSET_MANAGER.getAsset("assets/sprites/resources/energy_drink_static.png")
     const tilemap = new TileMap(20, 20, 40, gameEngine, grass, tree);
 
     const heroWalking = ASSET_MANAGER.getAsset("assets/sprites/hero/hero_walking.png");
@@ -133,9 +139,7 @@ ASSET_MANAGER.downloadAll(() => {
     const enemySpawner = new EnemySpawner(gameEngine, tilemap, player, enemyWalking);
 
     const cabin = ASSET_MANAGER.getAsset("assets/sprites/landscape/cabin.png");
-    const gameSetting = new Settings(gameEngine);
-    gameEngine.settings = gameSetting;
-    ASSET_MANAGER.setSettings(gameSetting);
+
     const minimap = new Minimap(gameEngine);
     const resourceBar = new ResourceBar(gameEngine);
 
@@ -159,11 +163,37 @@ ASSET_MANAGER.downloadAll(() => {
     // Add entities - ensuring no duplicates
     gameEngine.addEntity(tilemap);  // Only add tilemap once!
     gameEngine.addEntity(new Cabin(gameEngine, 350, 300, cabin));
+
+    function getRandomPosition() {
+        const directions = [
+            { dx: 0, dy: -280 },
+            { dx: 280, dy: 0 },
+            { dx: 0, dy: 280 },
+            { dx: -280, dy: 0 }
+        ];
+
+        const randomDirection = directions[Math.floor(Math.random() * directions.length)];
+        return {
+            x: randomDirection.dx,
+            y: randomDirection.dy
+        };
+    }
+
+    let treePosition, stonePosition;
+    do {
+        treePosition = getRandomPosition();
+        stonePosition = getRandomPosition();
+    } while (treePosition.x === stonePosition.x && treePosition.y === stonePosition.y);
+
+    gameEngine.addEntity(new Tree(gameEngine, tree, 350, 300, treePosition.x, treePosition.y, player, tilemap));
+    gameEngine.addEntity(new Stone(gameEngine, stone, 350, 300, stonePosition.x, stonePosition.y, player, tilemap));
+    gameEngine.addEntity(new Energy(gameEngine, energy, 350, 300, player, tilemap));
     gameEngine.addEntity(gameSetting);
     gameEngine.addEntity(player);
     gameEngine.addEntity(resourceBar);
     gameEngine.addEntity(minimap);
 
     // Create title screen
-    new TitleScreen(gameEngine, ctx, camera, enemySpawner);
+    new TitleScreen(gameEngine, gameSetting, ctx, camera, enemySpawner);
 });
+

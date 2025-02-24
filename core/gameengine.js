@@ -28,6 +28,12 @@ class GameEngine {
             debugging: false,
         };
 
+        this.settings = {
+            timerPaused: true,
+            startTimer: () => {
+                console.log("Timer started!");
+            }
+        };
 
     };
 

@@ -95,7 +95,7 @@ class Settings {
 
         this.startTime = 0;
         this.elapsedSeconds = 0;
-        this.timerPaused = true;
+        this.timerPaused = false;
         this.timerInterval = null;
         this.timeOffset = 0;
 
