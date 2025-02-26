@@ -131,6 +131,11 @@ class Enemy {
         const dy = targetY - this.y;
         const distance = Math.sqrt(dx * dx + dy * dy);
 
+        // if(this.x > 360 && this.x < 440 && this.y > 290 && this.y < 400){
+        //     this.x -= (dx / distance) * this.speed * this.game.clockTick;
+        //     this.y -= (dy / distance) * this.speed * this.game.clockTick;
+        // }
+
         if (distance > this.attackRange) {
             this.x += (dx / distance) * this.speed * this.game.clockTick;
             this.y += (dy / distance) * this.speed * this.game.clockTick;

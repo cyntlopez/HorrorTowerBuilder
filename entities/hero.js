@@ -32,6 +32,8 @@ class Hero {
         this.isWalking = false;
         this.currentWalkSound = null;
         this.visionRadius = 5;
+
+        this.cabinFlag = false;
     }
 
     setupControls() {
@@ -168,6 +170,12 @@ class Hero {
         // Apply movement
         this.x += movementDeltas.x * this.speed * this.game.clockTick;
         this.y += movementDeltas.y * this.speed * this.game.clockTick;
+
+        if(this.x > 360 && this.x < 440 && this.y > 290 && this.y < 400){
+            this.x -= movementDeltas.x * this.speed * this.game.clockTick;
+            this.y -= movementDeltas.y * this.speed * this.game.clockTick;
+        }
+
 
         // Update facing direction ONLY if moving in a single direction
         if ((movingUp || movingDown) && !(movingLeft || movingRight)) {
@@ -344,4 +352,32 @@ class Hero {
             ctx.fillRect(this.x - 20, this.y - 25, (40 * this.health) / 100, 5);
         }
     };
+
+    nearCabin(){
+        const cabinX = 350; // Use the provided cabinX
+        const cabinY = 300; // Use the provided cabinY
+        const cabinWidth = 95; // Use the provided cabinWidth
+        const cabinHeight = 120; // Use the provided cabinHeight
+
+        const cabinLeft = cabinX;
+        const cabinRight = cabinX + cabinWidth;
+        const cabinTop = cabinY;
+        const cabinBottom = cabinY + cabinHeight;
+
+        const playerLeft = this.x - 32; // Adjust 32 based on player size
+        const playerRight = this.x + 32;
+        const playerTop = this.y - 32;
+        const playerBottom = this.y + 32;
+
+        if (
+            playerLeft < cabinRight &&
+            playerRight > cabinLeft &&
+            playerTop < cabinBottom &&
+            playerBottom > cabinTop
+        ) {
+            this.cabinFlag = true;
+        } else {
+            this.cabinFlag = false;
+        }
+    }
 }
