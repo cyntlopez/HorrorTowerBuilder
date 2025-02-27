@@ -62,27 +62,27 @@ class LoseScreen {
         button.onmouseout = () => button.style.background = '#333';
 
         button.onclick = () => {
-            this.hide();
+            console.log("here");
             this.startOver();
         };
 
         buttonContainer.appendChild(button);
 
         this.loseDiv.appendChild(buttonContainer);
+
     }
 
-    hide() {
-        this.loseDiv.remove();
-    }
 
     startOver() {
-       new TitleScreen(gameEngine, this.gameSetting, this.ctx, this.camera, this.enemySpawner);
+        location.reload();
     }
 
 
     activateLose() {
-        this.active = true;
-        document.body.appendChild(this.loseDiv);
-        this.gameSetting.stopTimer();
+        if (!this.active) {
+            this.active = true;
+            document.body.appendChild(this.loseDiv); // Ensure the lose screen is added to the DOM
+            this.gameSetting.stopTimer();
+        }
     }
 }

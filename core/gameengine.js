@@ -34,7 +34,6 @@ class GameEngine {
                 console.log("Timer started!");
             }
         };
-
     };
 
     init(ctx, camera, enemySpawner) {

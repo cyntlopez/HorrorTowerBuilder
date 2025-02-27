@@ -79,6 +79,7 @@ class TileMap {
         ctx.beginPath();
         ctx.arc(centerX, centerY, visRadiusInPixels, 0, Math.PI * 2);
 
+
         // Calculate the second circle's position (fixed to camera center)
         const secondCircleX = this.game.camera.x + (this.game.ctx.canvas.width / 2) / this.game.camera.zoomLevel;
         const secondCircleY = this.game.camera.y + (this.game.ctx.canvas.height / 2) / this.game.camera.zoomLevel;
@@ -103,6 +104,31 @@ class TileMap {
         // Draw the second circle (invisible line)
         ctx.beginPath();
         ctx.arc(secondCircleX, secondCircleY, secondCircleRadius, 0, Math.PI * 2);
+
+
+        // --- Building and Resource Visibility ---
+        const entitiesToCheck = this.game.entities.filter(entity => entity instanceof Building || entity instanceof Tree || entity instanceof Stone);
+
+        entitiesToCheck.forEach(entity => {
+            const entityTile = this.screenToGrid(entity.x, entity.y);
+            const visionRadius = entity instanceof Building ? 3 : 1; // 3 tiles for buildings, 1 for resources
+
+            // Make tiles around the entity visible
+            for (let r = entityTile.row - visionRadius; r <= entityTile.row + visionRadius; r++) {
+                for (let c = entityTile.col - visionRadius; c <= entityTile.col + visionRadius; c++) {
+                    const distance = Math.sqrt(Math.pow(r - entityTile.row, 2) + Math.pow(c - entityTile.col, 2));
+                    if (distance <= visionRadius && this.isValidCell(r, c)) {
+                        this.fogOfWarGrid[r][c] = true;
+                    }
+                }
+            }
+
+            // Draw the entity's visibility circle (optional)
+            ctx.beginPath();
+            ctx.arc(entity.x, entity.y, visionRadius * this.tileSize, 0, Math.PI * 2);
+            ctx.strokeStyle = entity instanceof Building ? "rgba(0, 0, 255, 0.5)" : "rgba(255, 255, 0, 0.5)"; // Blue for buildings, yellow for resources
+            ctx.stroke();
+        });
 
         // Restore the original context state
         ctx.restore();
