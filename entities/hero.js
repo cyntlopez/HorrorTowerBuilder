@@ -32,6 +32,8 @@ class Hero {
         this.isWalking = false;
         this.currentWalkSound = null;
         this.visionRadius = 5;
+
+        this.cabinFlag = false;
     }
 
     setupControls() {
@@ -169,6 +171,48 @@ class Hero {
         this.x += movementDeltas.x * this.speed * this.game.clockTick;
         this.y += movementDeltas.y * this.speed * this.game.clockTick;
 
+        if(this.x > 360 && this.x < 440 && this.y > 290 && this.y < 400){
+
+            this.x -= movementDeltas.x * this.speed * this.game.clockTick;
+
+            this.y -= movementDeltas.y * this.speed * this.game.clockTick;
+
+        }
+
+        // --- Tree and Stone Collision Check ---
+        const entitiesToCheck = this.game.entities.filter(entity => entity instanceof Tree || entity instanceof Stone);
+
+        for (let entity of entitiesToCheck) {
+            const entityX = entity.x;
+            const entityY = entity.y;
+            const entityWidth = 40;
+            const entityHeight = 40;
+
+            // Calculate entity boundaries
+            const entityLeft = entityX - entityWidth / 2;
+            const entityRight = entityX + entityWidth / 2;
+            const entityTop = entityY - entityHeight / 2;
+            const entityBottom = entityY + entityHeight / 2;
+
+            // Calculate player boundaries
+            const playerLeft = this.x - 32; // Adjust 32 based on player size
+            const playerRight = this.x + 32;
+            const playerTop = this.y - 32;
+            const playerBottom = this.y + 32;
+
+            if (
+                playerLeft < entityRight &&
+                playerRight > entityLeft &&
+                playerTop < entityBottom &&
+                playerBottom > entityTop
+            ) {
+                // Collision detected, revert movement
+                this.x -= movementDeltas.x * this.speed * this.game.clockTick;
+                this.y -= movementDeltas.y * this.speed * this.game.clockTick;
+            }
+        }
+
+
         // Update facing direction ONLY if moving in a single direction
         if ((movingUp || movingDown) && !(movingLeft || movingRight)) {
             newFacing = movingUp ? 1 : 0; // 1 = Up, 0 = Down
@@ -243,7 +287,10 @@ class Hero {
             const { row, col } = this.tileMap.screenToGrid(worldX, worldY);
 
             // Check if the clicked tile is valid
-            if (this.validPlacementTiles.some(tile => tile.row === row && tile.col === col)) {
+            if (this.validPlacementTiles.some(tile => tile.row === row && tile.col === col) &&
+                !this.isTileOnCabin(row, col)  &&
+                !this.isTileOnResource(row, col)) {
+
                 const building = BuildingFactory.createBuilding(gameEngine.selectedBuilding, row, col, this.tileMap, this.tileMap.tileSize);
 
                 if (building) {
@@ -255,6 +302,11 @@ class Hero {
 
             this.game.click = null;
         }
+    }
+
+    isTileOnCabin(row, col) {
+        if(row >= 7 && row <= 10 && col >= 9 && col <= 10) return true;
+        return false; // No cabin found, so the tile is not on the cabin
     }
 
     calculateValidPlacementTiles() {
@@ -271,6 +323,23 @@ class Hero {
                 }
             }
         }
+    }
+
+    isTileOnResource(row, col) {
+        const resources = this.game.entities.filter(entity => entity instanceof Tree || entity instanceof Stone);
+        for (let resource of resources) {
+            const resourceTile = this.tileMap.screenToGrid(resource.x, resource.y);
+
+            // Check the 3x3 area around the resource tile
+            for (let r = resourceTile.row - 1; r <= resourceTile.row + 1; r++) {
+                for (let c = resourceTile.col - 1; c <= resourceTile.col + 1; c++) {
+                    if (row === r && col === c) {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false; // No resource found on this tile
     }
 
     attack() {
@@ -344,4 +413,32 @@ class Hero {
             ctx.fillRect(this.x - 20, this.y - 25, (40 * this.health) / 100, 5);
         }
     };
+
+    nearCabin(){
+        const cabinX = 350; // Use the provided cabinX
+        const cabinY = 300; // Use the provided cabinY
+        const cabinWidth = 95; // Use the provided cabinWidth
+        const cabinHeight = 120; // Use the provided cabinHeight
+
+        const cabinLeft = cabinX;
+        const cabinRight = cabinX + cabinWidth;
+        const cabinTop = cabinY;
+        const cabinBottom = cabinY + cabinHeight;
+
+        const playerLeft = this.x - 32; // Adjust 32 based on player size
+        const playerRight = this.x + 32;
+        const playerTop = this.y - 32;
+        const playerBottom = this.y + 32;
+
+        if (
+            playerLeft < cabinRight &&
+            playerRight > cabinLeft &&
+            playerTop < cabinBottom &&
+            playerBottom > cabinTop
+        ) {
+            this.cabinFlag = true;
+        } else {
+            this.cabinFlag = false;
+        }
+    }
 }
