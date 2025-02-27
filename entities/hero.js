@@ -288,7 +288,8 @@ class Hero {
 
             // Check if the clicked tile is valid
             if (this.validPlacementTiles.some(tile => tile.row === row && tile.col === col) &&
-                !this.isTileOnCabin(row, col)) {
+                !this.isTileOnCabin(row, col)  &&
+                !this.isTileOnResource(row, col)) {
 
                 const building = BuildingFactory.createBuilding(gameEngine.selectedBuilding, row, col, this.tileMap, this.tileMap.tileSize);
 
@@ -304,14 +305,6 @@ class Hero {
     }
 
     isTileOnCabin(row, col) {
-        // ArcherTower placed at (9, 10)
-        // hero.js:262 ArcherTower placed at (9, 9)
-        // hero.js:262 ArcherTower placed at (8, 9)
-        // hero.js:262 ArcherTower placed at (8, 10)
-        // hero.js:262 ArcherTower placed at (10, 10)
-        // hero.js:262 ArcherTower placed at (10, 9)
-        // hero.js:262 ArcherTower placed at (7, 10)
-        // hero.js:262 ArcherTower placed at (7, 9)
         if(row >= 7 && row <= 10 && col >= 9 && col <= 10) return true;
         return false; // No cabin found, so the tile is not on the cabin
     }
@@ -330,6 +323,23 @@ class Hero {
                 }
             }
         }
+    }
+
+    isTileOnResource(row, col) {
+        const resources = this.game.entities.filter(entity => entity instanceof Tree || entity instanceof Stone);
+        for (let resource of resources) {
+            const resourceTile = this.tileMap.screenToGrid(resource.x, resource.y);
+
+            // Check the 3x3 area around the resource tile
+            for (let r = resourceTile.row - 1; r <= resourceTile.row + 1; r++) {
+                for (let c = resourceTile.col - 1; c <= resourceTile.col + 1; c++) {
+                    if (row === r && col === c) {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false; // No resource found on this tile
     }
 
     attack() {
