@@ -1,14 +1,12 @@
 class TitleScreen {
     constructor(game, gameSetting, ctx, camera, enemySpawner) {
-        Object.assign(this, {game, ctx, camera, enemySpawner});
-        this.setting = gameSetting;
+        Object.assign(this, {game, gameSetting, ctx, camera, enemySpawner});
         this.menuDiv = document.createElement('div');
+        this.settings = gameSetting;
         this.setupMenuStyles();
         this.createTitle();
         this.createButtons();
         this.show();
-
-
     }
 
     setupMenuStyles() {
@@ -24,7 +22,6 @@ class TitleScreen {
             justify-content: center;
             align-items: center;
             gap: 20px;
-            border: 1px solid #333;
         `;
     }
 
@@ -85,7 +82,7 @@ class TitleScreen {
         this.game.init(this.ctx, this.camera, this.enemySpawner);
         this.game.start();
         this.game.settings.timerPaused = false;
-        this.setting.startTimer();
+        this.settings.startTimer();
         setTimeout(() => document.getElementById("gameWorld").focus(), 0);
         ASSET_MANAGER.playAsset("assets/audio/music/level-2-music.wav");
     }

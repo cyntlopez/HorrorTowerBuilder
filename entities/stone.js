@@ -12,8 +12,8 @@ class Stone {
     update() {}
 
     draw(ctx) {
-        const rockWidth = 95;
-        const rockHeight = 120;
+        const rockWidth = 50;
+        const rockHeight = 60;
 
         const offsetX = rockWidth / 2;
         const offsetY = rockHeight / 2;

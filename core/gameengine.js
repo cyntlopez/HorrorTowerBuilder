@@ -54,6 +54,10 @@ class GameEngine {
         gameLoop();
     };
 
+    stop() {
+        this.running = false;
+    }
+
     startInput() {
         const getXandY = e => ({
             x: e.clientX - this.ctx.canvas.getBoundingClientRect().left,

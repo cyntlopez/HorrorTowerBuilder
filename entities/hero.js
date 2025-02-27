@@ -115,7 +115,7 @@ class Hero {
             this.state = 3;
             console.log("Player died");
             ASSET_MANAGER.stopAllSoundEffects();
-            this.game.loseScreen.activate();
+            this.game.loseScreen.activateLose();
 
             return;
         }

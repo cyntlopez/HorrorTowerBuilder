@@ -10,11 +10,12 @@ ASSET_MANAGER.queueDownload("assets/sprites/landscape/tree.png");
 ASSET_MANAGER.queueDownload("assets/sprites/pumpkin_head/killer_walk.png");
 ASSET_MANAGER.queueDownload("assets/sprites/pumpkin_head/killer_attack.png");
 ASSET_MANAGER.queueDownload("assets/sprites/landscape/grass.png");
+ASSET_MANAGER.queueDownload("assets/sprites/resources/magic.png");
+ASSET_MANAGER.queueDownload("assets/sprites/resources/lose.png");
 ASSET_MANAGER.queueDownload("assets/sprites/pig_boss/pig_running.png");
 
 // Resources
 ASSET_MANAGER.queueDownload("assets/sprites/resources/wood.png");
-ASSET_MANAGER.queueDownload("assets/sprites/resources/campfire.png");
 ASSET_MANAGER.queueDownload("assets/sprites/resources/energy_drink_static.png");
 ASSET_MANAGER.queueDownload("assets/sprites/resources/stone.png");
 
@@ -151,7 +152,7 @@ ASSET_MANAGER.downloadAll(() => {
         originalDraw();
 
         if (loseScreen.active) {
-            loseScreen.draw(ctx);
+            loseScreen.activateLose();
         }
     };
 

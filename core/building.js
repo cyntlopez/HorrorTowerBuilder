@@ -90,11 +90,7 @@ class Wall extends Building {
         const x = this.col * this.width;
         const y = this.row * this.height;
 
-        ctx.fillStyle = "gray";
-        ctx.fillRect(x, y, this.width, this.height);
-
-        ctx.strokeStyle = "black";
-        ctx.strokeRect(x, y, this.width, this.height);
+        ctx.drawImage(ASSET_MANAGER.getAsset("assets/sprites/resources/grave.png"), x, y, this.width, this.height);
     }
 }
 
@@ -110,12 +106,7 @@ class ArcherTower extends Building {
         const x = this.col * this.width;
         const y = this.row * this.height;
 
-        ctx.fillStyle = 'orange';
-        ctx.fillRect(x, y, this.width, this.height);
-
-        // Optional: Draw outline
-        ctx.strokeStyle = 'black';
-        ctx.strokeRect(x, y, this.width, this.height);
+        ctx.drawImage(ASSET_MANAGER.getAsset("assets/sprites/resources/ghost.png"), x, y, this.width, this.height);
 
         this.drawFiringRadius(ctx, this.range);
 
@@ -158,11 +149,7 @@ class Campfire extends Building {
         const x = this.col * this.width;
         const y = this.row * this.height;
 
-        ctx.fillStyle = "purple";
-        ctx.fillRect(x, y, this.width, this.height);
-
-        ctx.strokeStyle = "black";
-        ctx.strokeRect(x, y, this.width, this.height);
+        ctx.drawImage(ASSET_MANAGER.getAsset("assets/sprites/resources/campfire.png"), x, y, this.width, this.height);
     }
 }
 
@@ -178,11 +165,7 @@ class MageTower extends Building {
         const x = this.col * this.width;
         const y = this.row * this.height;
 
-        ctx.fillStyle = "cyan";
-        ctx.fillRect(x, y, this.width, this.height);
-
-        ctx.strokeStyle = "black";
-        ctx.strokeRect(x, y, this.width, this.height);
+        ctx.drawImage(ASSET_MANAGER.getAsset("assets/sprites/resources/mage.png"), x, y, this.width, this.height);
 
         this.drawFiringRadius(ctx, this.range);
     }
@@ -224,11 +207,7 @@ class BombTower extends Building {
         const x = this.col * this.width;
         const y = this.row * this.height;
 
-        ctx.fillStyle = "orange";
-        ctx.fillRect(x, y, this.width, this.height);
-
-        ctx.strokeStyle = "black";
-        ctx.strokeRect(x, y, this.width, this.height);
+        ctx.drawImage(ASSET_MANAGER.getAsset("assets/sprites/resources/totem.png"), x, y, this.width, this.height);
 
         this.drawFiringRadius(ctx, this.range);
     }

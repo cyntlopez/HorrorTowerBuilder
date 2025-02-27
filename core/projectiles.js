@@ -60,13 +60,13 @@ class Projectile {
     draw(ctx) {
         switch (this.type) {
             case "arrow":
-                ctx.fillStyle = "black";
+                ctx.fillStyle = "white";
                 break;
             case "bomb":
                 ctx.fillStyle = "red";
                 break;
             case "spell":
-                ctx.fillStyle = "blue";
+                ctx.fillStyle = "yellow";
                 break;
             default:
                 ctx.fillStyle = "gray";
