@@ -68,6 +68,24 @@
       width: 150px;  /* Adjust the value as needed */
       height: 60px; /* Adjust the value as needed */
     }
+    #resourceCost {
+      color: white;
+      font-family: sans-serif;
+      background-color: rgba(0, 0, 0, 0.5);
+      padding: 10px;
+      border-radius: 5px;
+      position: absolute;
+      top: 50%;
+      right: 20px; /* Adjust distance from left edge */
+      transform: translateY(-50%); /* Center vertically */
+    }
+
+    #resourceCost img { /* Target images inside #controls */
+      width: 30px;  /* Adjust the value as needed */
+      height: 30px; /* Adjust the value as needed */
+      margin: 0;
+      padding: 0;
+    }
 
   </style>
 </head>
@@ -80,6 +98,18 @@
   <h3>Attack: Mouse-Click</h3>
   <h3>Build Mode: B key</h3>
   <p>➤ Ghost: '1' key</p>
+  <p>➤ Grave: '2' key</p>
+  <p>➤ Campfire: '3' key</p>
+  <p>➤ Mage: '4' key</p>
+  <p>➤ Totem: '5' key</p>
+</div>
+<div id="resourceCost">
+  <h1>Building Costs</h1>
+  <p>
+    ➤<img src="assets/sprites/resources/ghost.png" alt="ghost" width="20" height="20"/>:
+    <img src="assets/sprites/resources/wood.png" alt="wood" width="20" height="20">
+    <img src="assets/sprites/resources/stone.png" alt="stone" width="20" height="20">
+  </p>
   <p>➤ Grave: '2' key</p>
   <p>➤ Campfire: '3' key</p>
   <p>➤ Mage: '4' key</p>
