@@ -72,4 +72,10 @@ class ResourceBar {
             this.resources[index].amount = amount;
         }
     }
+
+    getResourceAmount(index) {
+        if (index >= 0 && index < this.resources.length) {
+            return this.resources[index].amount;
+        }
+    }
 }

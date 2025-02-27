@@ -271,3 +271,4 @@ class MeleeTower extends Building {
         ctx.stroke();
     }
 }
+
