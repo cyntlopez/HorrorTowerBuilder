@@ -172,8 +172,44 @@ class Hero {
         this.y += movementDeltas.y * this.speed * this.game.clockTick;
 
         if(this.x > 360 && this.x < 440 && this.y > 290 && this.y < 400){
+
             this.x -= movementDeltas.x * this.speed * this.game.clockTick;
+
             this.y -= movementDeltas.y * this.speed * this.game.clockTick;
+
+        }
+
+        // --- Tree and Stone Collision Check ---
+        const entitiesToCheck = this.game.entities.filter(entity => entity instanceof Tree || entity instanceof Stone);
+
+        for (let entity of entitiesToCheck) {
+            const entityX = entity.x;
+            const entityY = entity.y;
+            const entityWidth = 40;
+            const entityHeight = 40;
+
+            // Calculate entity boundaries
+            const entityLeft = entityX - entityWidth / 2;
+            const entityRight = entityX + entityWidth / 2;
+            const entityTop = entityY - entityHeight / 2;
+            const entityBottom = entityY + entityHeight / 2;
+
+            // Calculate player boundaries
+            const playerLeft = this.x - 32; // Adjust 32 based on player size
+            const playerRight = this.x + 32;
+            const playerTop = this.y - 32;
+            const playerBottom = this.y + 32;
+
+            if (
+                playerLeft < entityRight &&
+                playerRight > entityLeft &&
+                playerTop < entityBottom &&
+                playerBottom > entityTop
+            ) {
+                // Collision detected, revert movement
+                this.x -= movementDeltas.x * this.speed * this.game.clockTick;
+                this.y -= movementDeltas.y * this.speed * this.game.clockTick;
+            }
         }
 
 
@@ -251,7 +287,9 @@ class Hero {
             const { row, col } = this.tileMap.screenToGrid(worldX, worldY);
 
             // Check if the clicked tile is valid
-            if (this.validPlacementTiles.some(tile => tile.row === row && tile.col === col)) {
+            if (this.validPlacementTiles.some(tile => tile.row === row && tile.col === col) &&
+                !this.isTileOnCabin(row, col)) {
+
                 const building = BuildingFactory.createBuilding(gameEngine.selectedBuilding, row, col, this.tileMap, this.tileMap.tileSize);
 
                 if (building) {
@@ -263,6 +301,19 @@ class Hero {
 
             this.game.click = null;
         }
+    }
+
+    isTileOnCabin(row, col) {
+        // ArcherTower placed at (9, 10)
+        // hero.js:262 ArcherTower placed at (9, 9)
+        // hero.js:262 ArcherTower placed at (8, 9)
+        // hero.js:262 ArcherTower placed at (8, 10)
+        // hero.js:262 ArcherTower placed at (10, 10)
+        // hero.js:262 ArcherTower placed at (10, 9)
+        // hero.js:262 ArcherTower placed at (7, 10)
+        // hero.js:262 ArcherTower placed at (7, 9)
+        if(row >= 7 && row <= 10 && col >= 9 && col <= 10) return true;
+        return false; // No cabin found, so the tile is not on the cabin
     }
 
     calculateValidPlacementTiles() {
