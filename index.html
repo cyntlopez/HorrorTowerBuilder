@@ -87,6 +87,16 @@
       padding: 0;
     }
 
+    .tooltip {
+      position: absolute;
+      background-color: rgba(0, 0, 0, 0.8);
+      color: white;
+      padding: 5px;
+      border-radius: 5px;
+      display: none;
+      z-index: 1;
+    }
+
   </style>
 </head>
 <body>
@@ -105,22 +115,34 @@
 </div>
 <div id="resourceCost">
   <h1>Building Costs</h1>
-  <p>
-    ➤<img src="assets/sprites/resources/ghost.png" alt="ghost" width="20" height="20"/>:
+  <div class="resource-description">
+  <p>➤<img src="assets/sprites/resources/ghost.png" alt="ghost" width="20" height="20"/>:
     <img src="assets/sprites/resources/wood.png" alt="wood" width="20" height="20">
     <img src="assets/sprites/resources/stone.png" alt="stone" width="20" height="20">
   </p>
+    <div class="tooltip">Ghost: used for ....</div>
+  </div>
+  <div class="resource-description">
   <p>➤<img src="assets/sprites/resources/grave.png" alt="grave" width="20" height="20"/>:
     <img src="assets/sprites/resources/stone.png" alt="stone" width="20" height="20">
     <img src="assets/sprites/resources/stone.png" alt="stone" width="20" height="20"></p>
+    <div class="tooltip">Grave: Used for ....</div>
+  </div>
+  <div class="resource-description">
   <p>➤<img src="assets/sprites/resources/campfire.png" alt="campfire" width="20" height="20"/>:
     <img src="assets/sprites/resources/wood.png" alt="wood" width="20" height="20">
     <img src="assets/sprites/resources/wood.png" alt="wood" width="20" height="20"></p>
+    <div class="tooltip">Campfire: used for ....</div>
+  </div>
+  <div class="resource-description">
   <p>➤<img src="assets/sprites/resources/mage.png" alt="mage" width="20" height="20"/>:
     <img src="assets/sprites/resources/wood.png" alt="wood" width="20" height="20">
     <img src="assets/sprites/resources/wood.png" alt="wood" width="20" height="20">
     <img src="assets/sprites/resources/stone.png" alt="stone" width="20" height="20">
     <img src="assets/sprites/resources/stone.png" alt="stone" width="20" height="20"></p>
+    <div class="tooltip">Mage: used for ....</div>
+  </div>
+  <div class="resource-description">
   <p>➤<img src="assets/sprites/resources/totem.png" alt="totem" width="20" height="20"/>:
     <img src="assets/sprites/resources/wood.png" alt="wood" width="20" height="20">
     <img src="assets/sprites/resources/wood.png" alt="wood" width="20" height="20">
@@ -128,6 +150,8 @@
     <img src="assets/sprites/resources/stone.png" alt="stone" width="20" height="20">
     <img src="assets/sprites/resources/stone.png" alt="stone" width="20" height="20">
     <img src="assets/sprites/resources/stone.png" alt="stone" width="20" height="20"></p>
+    <div class="tooltip">Totem: used for ....</div>
+  </div>
 </div>
 <div id="musicControls">
   <br />
