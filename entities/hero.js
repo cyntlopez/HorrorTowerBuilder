@@ -292,15 +292,78 @@ class Hero {
 
                 const building = BuildingFactory.createBuilding(gameEngine.selectedBuilding, row, col, this.tileMap, this.tileMap.tileSize);
 
-                if (building) {
+                if (building && this.checkResources(gameEngine.selectedBuilding)) {
                     this.tileMap.placeBuilding(row, col, building);
                     this.game.addEntity(building);
-                    console.log(`${gameEngine.selectedBuilding} placed at (${row}, ${col})`);
+                    this.consumeResources(building);
                 }
             }
 
             this.game.click = null;
         }
+    }
+
+    checkResources() {
+        let woodCost = 0;
+        let stoneCost = 0;
+        console.log(gameEngine.selectedBuilding);
+        switch (gameEngine.selectedBuilding) {
+            case "ArcherTower":
+                woodCost = 1;
+                stoneCost = 1;
+                break;
+            case "Wall":
+                stoneCost = 2;
+                break;
+            case "Campfire":
+                woodCost = 2;
+                break;
+            case "MageTower":
+                woodCost = 2;
+                stoneCost = 2;
+                break;
+            case "Totem":
+                woodCost = 3;
+                stoneCost = 3;
+                break;
+        }
+
+
+        if (this.resourceBar.getResourceAmount(0) >= woodCost &&
+            this.resourceBar.getResourceAmount(1) >= stoneCost) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    consumeResources() {
+        let woodCost = 0;
+        let stoneCost = 0;
+
+        switch (gameEngine.selectedBuilding) {
+            case "ArcherTower":
+                woodCost = 1;
+                stoneCost = 1;
+                break;
+            case "Wall":
+                stoneCost = 2;
+                break;
+            case "Campfire":
+                woodCost = 2;
+                break;
+            case "MageTower":
+                woodCost = 2;
+                stoneCost = 2;
+                break;
+            case "BombTower":
+                woodCost = 3;
+                stoneCost = 3;
+                break;
+        }
+
+        this.resourceBar.setResourceAmount(0, this.resourceBar.getResourceAmount(0) - woodCost);
+        this.resourceBar.setResourceAmount(1, this.resourceBar.getResourceAmount(1) - stoneCost);
     }
 
     isTileOnCabin(row, col) {

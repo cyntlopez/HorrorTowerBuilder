@@ -198,3 +198,18 @@ ASSET_MANAGER.downloadAll(() => {
     new TitleScreen(gameEngine, gameSetting, ctx, camera, enemySpawner);
 });
 
+document.addEventListener('DOMContentLoaded', function() {
+    const resourceDescriptions = document.querySelectorAll('.resource-description');
+
+    resourceDescriptions.forEach(description => {
+        const tooltip = description.querySelector('.tooltip');
+
+        description.addEventListener('mouseover', () => {
+            tooltip.style.display = 'block';
+        });
+
+        description.addEventListener('mouseout', () => {
+            tooltip.style.display = 'none';
+        });
+    });
+});
