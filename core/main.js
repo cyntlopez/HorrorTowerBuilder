@@ -3,14 +3,13 @@ const ASSET_MANAGER = new AssetManager();
 
 // Sprites
 ASSET_MANAGER.queueDownload("assets/sprites/hero/hero_walking.png");
-ASSET_MANAGER.queueDownload("assets/sprites/hero/hero_running.png");
+ASSET_MANAGER.queueDownload("assets/sprites/hero/hero_attacking.png");
 ASSET_MANAGER.queueDownload("assets/sprites/hero/hero_dying.png");
 ASSET_MANAGER.queueDownload("assets/sprites/landscape/cabin.png");
 ASSET_MANAGER.queueDownload("assets/sprites/landscape/tree.png");
 ASSET_MANAGER.queueDownload("assets/sprites/pumpkin_head/killer_walk.png");
 ASSET_MANAGER.queueDownload("assets/sprites/pumpkin_head/killer_attack.png");
 ASSET_MANAGER.queueDownload("assets/sprites/landscape/grass.png");
-ASSET_MANAGER.queueDownload("assets/sprites/resources/magic.png");
 ASSET_MANAGER.queueDownload("assets/sprites/resources/lose.png");
 ASSET_MANAGER.queueDownload("assets/sprites/pig_boss/pig_running.png");
 

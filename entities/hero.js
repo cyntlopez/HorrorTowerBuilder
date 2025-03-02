@@ -62,7 +62,7 @@ class Hero {
 
 
     loadAnimation() {
-        for (let i = 0; i < 4; i++) { // 4 states
+        for (let i = 0; i <= 4; i++) { // 4 states
             this.animation.push([]);
             for (let j = 0; j < 4; j++) { // 4 facing directions
                 this.animation[i].push([]);
@@ -109,6 +109,19 @@ class Hero {
         // facing right = 3
         this.animation[3][3] = new Animator(dyingSheet, 0, 0, 64, 64.5, 6, 0.5, 0,false, false);
 
+        //attacking animation for state = 4
+        const attackSheet = ASSET_MANAGER.getAsset("assets/sprites/hero/hero_attacking.png");
+        // facing down = 0
+        this.animation[4][0] = new Animator(attackSheet, 0, 260, 128, 126, 6, 0.1, 0,false, true);
+
+        //facing up = 1
+        this.animation[4][1] = new Animator(attackSheet, 0, 0, 128, 126, 6, 0.1, 0,false, true);
+
+        // facing left = 2
+        this.animation[4][2] = new Animator(attackSheet, 0, 131, 128, 126, 6, 0.1, 0,false, true);
+
+        // facing right = 3
+        this.animation[4][3] = new Animator(attackSheet, 0, 390, 128, 126, 6, 0.1, 0,false, true);
     }
 
     update() {
@@ -121,11 +134,14 @@ class Hero {
             return;
         }
 
-        this.handleMovement();
+        if (!this.isAttacking) {
+            this.handleMovement();
+        }
 
         this.handlePlacementMode();
 
         if (this.isAttacking && (this.game.timer.gameTime - this.lastAttackTime) >= this.attackCooldown) {
+            this.state = 4;
             this.attack();
             this.lastAttackTime = this.game.timer.gameTime;
         }
@@ -223,22 +239,6 @@ class Hero {
 
         // Set animation state (1 = walking, 0 = idle)
         this.state = (magnitude > 0) ? 1 : 0;
-        
-        // if (this.state === 1) {
-        //     if (!this.isWalking) {
-        //         ASSET_MANAGER.playSoundEffect(this.walkingSoundPath);
-        //         this.isWalking = true;
-        //     }
-        // } else {
-        //     if (this.isWalking) {
-        //         const sound = ASSET_MANAGER.getAsset(this.walkingSoundPath);
-        //         if (sound) {
-        //             sound.pause();
-        //             sound.currentTime = 0;
-        //         }
-        //         this.isWalking = false;
-        //     }
-        // }
 
         if (this.state === 1) {
             if (!this.isWalking && ASSET_MANAGER.settings.isSoundEffectEnabled('walking')) {
