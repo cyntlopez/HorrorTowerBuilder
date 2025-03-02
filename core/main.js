@@ -10,11 +10,12 @@ ASSET_MANAGER.queueDownload("assets/sprites/landscape/tree.png");
 ASSET_MANAGER.queueDownload("assets/sprites/pumpkin_head/killer_walk.png");
 ASSET_MANAGER.queueDownload("assets/sprites/pumpkin_head/killer_attack.png");
 ASSET_MANAGER.queueDownload("assets/sprites/landscape/grass.png");
+ASSET_MANAGER.queueDownload("assets/sprites/resources/magic.png");
+ASSET_MANAGER.queueDownload("assets/sprites/resources/lose.png");
 ASSET_MANAGER.queueDownload("assets/sprites/pig_boss/pig_running.png");
 
 // Resources
 ASSET_MANAGER.queueDownload("assets/sprites/resources/wood.png");
-ASSET_MANAGER.queueDownload("assets/sprites/resources/campfire.png");
 ASSET_MANAGER.queueDownload("assets/sprites/resources/energy_drink_static.png");
 ASSET_MANAGER.queueDownload("assets/sprites/resources/stone.png");
 
@@ -110,22 +111,29 @@ ASSET_MANAGER.downloadAll(() => {
         refocusCanvas();
     });
 
+    const heroWalking = ASSET_MANAGER.getAsset("assets/sprites/hero/hero_walking.png");
+    const centerX = canvas.width / 2;
+    const centerY = canvas.height / 2;
+    const grass = ASSET_MANAGER.getAsset("assets/sprites/landscape/grass.png");
+    const tree = ASSET_MANAGER.getAsset("assets/sprites/landscape/tree.png")
+    const tilemap = new TileMap(20, 20, 40, gameEngine, grass, tree);
+    const resourceBar = new ResourceBar(gameEngine);
+    const player = new Hero(gameEngine, centerX, centerY, heroWalking, tilemap, resourceBar);
+    const gameSetting = new Settings(gameEngine,player);
+    gameSetting.settings = gameSetting;
+    ASSET_MANAGER.setSettings(gameSetting);
+
     // Game setup
-    const loseScreen = new LoseScreen(gameEngine);
+    const loseScreen = new LoseScreen(gameEngine, gameSetting);
     gameEngine.loseScreen = loseScreen;
 
     canvas.setAttribute("tabindex", "0");
     const ctx = canvas.getContext("2d");
 
     // Important: Fix the TileMap creation by providing the grass spritesheet
-    const grass = ASSET_MANAGER.getAsset("assets/sprites/landscape/grass.png");
-    const tree = ASSET_MANAGER.getAsset("assets/sprites/landscape/tree.png")
-    const tilemap = new TileMap(20, 20, 40, gameEngine, grass, tree);
+    const stone = ASSET_MANAGER.getAsset("assets/sprites/resources/stone.png")
+    const energy = ASSET_MANAGER.getAsset("assets/sprites/resources/energy_drink_static.png")
 
-    const heroWalking = ASSET_MANAGER.getAsset("assets/sprites/hero/hero_walking.png");
-    const centerX = canvas.width / 2;
-    const centerY = canvas.height / 2;
-    const player = new Hero(gameEngine, centerX, centerY, heroWalking, tilemap);
 
     const camera = new Camera(gameEngine, player, canvas.width, canvas.height);
 
@@ -133,11 +141,9 @@ ASSET_MANAGER.downloadAll(() => {
     const enemySpawner = new EnemySpawner(gameEngine, tilemap, player, enemyWalking);
 
     const cabin = ASSET_MANAGER.getAsset("assets/sprites/landscape/cabin.png");
-    const gameSetting = new Settings(gameEngine);
-    gameEngine.settings = gameSetting;
-    ASSET_MANAGER.setSettings(gameSetting);
+
     const minimap = new Minimap(gameEngine);
-    const resourceBar = new ResourceBar(gameEngine);
+
 
     // Draw override
     const originalDraw = gameEngine.draw.bind(gameEngine);
@@ -146,7 +152,7 @@ ASSET_MANAGER.downloadAll(() => {
         originalDraw();
 
         if (loseScreen.active) {
-            loseScreen.draw(ctx);
+            loseScreen.activateLose();
         }
     };
 
@@ -159,11 +165,52 @@ ASSET_MANAGER.downloadAll(() => {
     // Add entities - ensuring no duplicates
     gameEngine.addEntity(tilemap);  // Only add tilemap once!
     gameEngine.addEntity(new Cabin(gameEngine, 350, 300, cabin));
+
+    function getRandomPosition() {
+        const directions = [
+            { dx: 0, dy: -280 },
+            { dx: 280, dy: 0 },
+            { dx: 0, dy: 280 },
+            { dx: -280, dy: 0 }
+        ];
+
+        const randomDirection = directions[Math.floor(Math.random() * directions.length)];
+        return {
+            x: randomDirection.dx,
+            y: randomDirection.dy
+        };
+    }
+
+    let treePosition, stonePosition;
+    do {
+        treePosition = getRandomPosition();
+        stonePosition = getRandomPosition();
+    } while (treePosition.x === stonePosition.x && treePosition.y === stonePosition.y);
+
+    gameEngine.addEntity(new Tree(gameEngine, tree, 350, 300, treePosition.x, treePosition.y, player, tilemap));
+    gameEngine.addEntity(new Stone(gameEngine, stone, 350, 300, stonePosition.x, stonePosition.y, player, tilemap));
+    gameEngine.addEntity(new Energy(gameEngine, energy, 350, 300, player, tilemap, resourceBar));
     gameEngine.addEntity(gameSetting);
-    gameEngine.addEntity(player);
     gameEngine.addEntity(resourceBar);
+    gameEngine.addEntity(player);
     gameEngine.addEntity(minimap);
 
     // Create title screen
-    new TitleScreen(gameEngine, ctx, camera, enemySpawner);
+    new TitleScreen(gameEngine, gameSetting, ctx, camera, enemySpawner);
+});
+
+document.addEventListener('DOMContentLoaded', function() {
+    const resourceDescriptions = document.querySelectorAll('.resource-description');
+
+    resourceDescriptions.forEach(description => {
+        const tooltip = description.querySelector('.tooltip');
+
+        description.addEventListener('mouseover', () => {
+            tooltip.style.display = 'block';
+        });
+
+        description.addEventListener('mouseout', () => {
+            tooltip.style.display = 'none';
+        });
+    });
 });

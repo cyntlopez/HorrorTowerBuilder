@@ -1,10 +1,11 @@
 class Settings {
-    constructor(game) {
+    constructor(game, player) {
         this.game = game;
         this.active = false;
         this.showAudio = false;
         this.width = 400;
         this.height = 500;
+        this.player = player;
 
         this.soundEffectStates = {
             'walking': true,
@@ -87,15 +88,12 @@ class Settings {
         `;
 
 
-        this.hud.innerHTML = `
-            Health: <span id="health">100</span><br>
-            Wave: <span id="resources">1</span><br>
-            Time: <span id="time">0:00</span>
-        `;
+
+        this.updateHUD()
 
         this.startTime = 0;
         this.elapsedSeconds = 0;
-        this.timerPaused = true;
+        this.timerPaused = false;
         this.timerInterval = null;
         this.timeOffset = 0;
 
@@ -165,6 +163,7 @@ class Settings {
     }
 
     toggleSettings() {
+
         this.active = !this.active;
         this.game.timer.paused = this.active || this.showAudio;
         if (this.active) {
@@ -199,8 +198,22 @@ class Settings {
         return this.soundEffectStates[effectName] ?? true; // Default to true if not found
     }
 
+    updateHUD() {
+        const currentHealth = Math.max(0, this.player.health);
+
+        this.hud.innerHTML = `
+            Health: <span id="health">${currentHealth}</span><br>
+            Wave: <span id="resources">1</span><br>
+            Time: <span id="time">0:00</span>
+        `;
+    }
+
+
     update() {
-        // Update logic if needed
+        if (!this.active) {
+            this.updateHUD();
+            this.updateTime();
+        }
     }
 
     draw(ctx) {

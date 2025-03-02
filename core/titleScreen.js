@@ -1,12 +1,12 @@
 class TitleScreen {
-    constructor(game, ctx, camera, enemySpawner) {
-        Object.assign(this, {game, ctx, camera, enemySpawner});
+    constructor(game, gameSetting, ctx, camera, enemySpawner) {
+        Object.assign(this, {game, gameSetting, ctx, camera, enemySpawner});
         this.menuDiv = document.createElement('div');
+        this.settings = gameSetting;
         this.setupMenuStyles();
         this.createTitle();
         this.createButtons();
         this.show();
-
 
     }
 
@@ -22,8 +22,7 @@ class TitleScreen {
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            gap: 20px;
-            border: 1px solid #333;
+            gap: 100px;
         `;
     }
 
@@ -34,6 +33,13 @@ class TitleScreen {
         title.width = 550;
         title.height = 150;
 
+        const imageContainer = document.createElement('div');
+        imageContainer.style.cssText = `
+            display: flex;
+            justify-content: center; 
+            align-items: center;     
+            gap: 50px;              
+        `;
         this.menuDiv.appendChild(title);
     }
 
@@ -84,8 +90,24 @@ class TitleScreen {
         this.game.init(this.ctx, this.camera, this.enemySpawner);
         this.game.start();
         this.game.settings.timerPaused = false;
-        this.game.settings.startTimer();
+        this.settings.startTimer();
         setTimeout(() => document.getElementById("gameWorld").focus(), 0);
         ASSET_MANAGER.playAsset("assets/audio/music/level-2-music.wav");
     }
+
+    update() {
+        this.heroX += this.heroSpeed * this.game.clockTick;
+
+        // If the hero goes off-screen to the right, reset position
+        if (this.heroX > this.game.ctx.canvas.width + 100) {
+            this.heroX = -100;
+        }
+
+    }
+
+    draw(ctx) {
+        // Clear the canvas or draw background if needed
+        ctx.clearRect(0, 0, this.game.ctx.canvas.width, this.game.ctx.canvas.height);
+    }
+
 }

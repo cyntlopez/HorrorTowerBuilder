@@ -28,7 +28,12 @@ class GameEngine {
             debugging: false,
         };
 
-
+        this.settings = {
+            timerPaused: true,
+            startTimer: () => {
+                console.log("Timer started!");
+            }
+        };
     };
 
     init(ctx, camera, enemySpawner) {
@@ -47,6 +52,10 @@ class GameEngine {
         };
         gameLoop();
     };
+
+    stop() {
+        this.running = false;
+    }
 
     startInput() {
         const getXandY = e => ({
