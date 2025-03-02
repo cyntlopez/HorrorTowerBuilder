@@ -7,6 +7,7 @@ class TitleScreen {
         this.createTitle();
         this.createButtons();
         this.show();
+
     }
 
     setupMenuStyles() {
@@ -21,7 +22,7 @@ class TitleScreen {
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            gap: 20px;
+            gap: 100px;
         `;
     }
 
@@ -32,6 +33,13 @@ class TitleScreen {
         title.width = 550;
         title.height = 150;
 
+        const imageContainer = document.createElement('div');
+        imageContainer.style.cssText = `
+            display: flex;
+            justify-content: center; 
+            align-items: center;     
+            gap: 50px;              
+        `;
         this.menuDiv.appendChild(title);
     }
 
@@ -86,4 +94,20 @@ class TitleScreen {
         setTimeout(() => document.getElementById("gameWorld").focus(), 0);
         ASSET_MANAGER.playAsset("assets/audio/music/level-2-music.wav");
     }
+
+    update() {
+        this.heroX += this.heroSpeed * this.game.clockTick;
+
+        // If the hero goes off-screen to the right, reset position
+        if (this.heroX > this.game.ctx.canvas.width + 100) {
+            this.heroX = -100;
+        }
+
+    }
+
+    draw(ctx) {
+        // Clear the canvas or draw background if needed
+        ctx.clearRect(0, 0, this.game.ctx.canvas.width, this.game.ctx.canvas.height);
+    }
+
 }
