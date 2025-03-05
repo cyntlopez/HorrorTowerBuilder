@@ -118,7 +118,9 @@ ASSET_MANAGER.downloadAll(() => {
     const tilemap = new TileMap(20, 20, 40, gameEngine, grass, tree);
     const resourceBar = new ResourceBar(gameEngine);
     const player = new Hero(gameEngine, centerX, centerY, heroWalking, tilemap, resourceBar);
-    const gameSetting = new Settings(gameEngine,player);
+    const enemyWalking = ASSET_MANAGER.getAsset("assets/sprites/pumpkin_head/killer_walk.png");
+    const enemySpawner = new EnemySpawner(gameEngine, tilemap, player, enemyWalking);
+    const gameSetting = new Settings(gameEngine,player, enemySpawner);
     gameSetting.settings = gameSetting;
     ASSET_MANAGER.setSettings(gameSetting);
 
@@ -135,9 +137,6 @@ ASSET_MANAGER.downloadAll(() => {
 
 
     const camera = new Camera(gameEngine, player, canvas.width, canvas.height);
-
-    const enemyWalking = ASSET_MANAGER.getAsset("assets/sprites/pumpkin_head/killer_walk.png");
-    const enemySpawner = new EnemySpawner(gameEngine, tilemap, player, enemyWalking);
 
     const cabin = ASSET_MANAGER.getAsset("assets/sprites/landscape/cabin.png");
 
