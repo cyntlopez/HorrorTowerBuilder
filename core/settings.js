@@ -1,8 +1,9 @@
 class Settings {
-    constructor(game, player) {
+    constructor(game, player, enemySpawner) {
         this.game = game;
         this.active = false;
         this.showAudio = false;
+        this.enemySpawner = enemySpawner;
         this.width = 400;
         this.height = 500;
         this.player = player;
@@ -200,10 +201,11 @@ class Settings {
 
     updateHUD() {
         const currentHealth = Math.max(0, this.player.health);
+        const currentWave = this.enemySpawner.waveNumber - 1;
 
         this.hud.innerHTML = `
             Health: <span id="health">${currentHealth}</span><br>
-            Wave: <span id="resources">1</span><br>
+            Wave: <span id="resources">${currentWave}</span><br>
             Time: <span id="time">0:00</span>
         `;
     }

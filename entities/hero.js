@@ -440,13 +440,26 @@ class Hero {
         const spriteWidth = 64;
         const spriteHeight = 64;
 
+        const attackSpriteWidth = 128 / 2;
+        const attackSpriteHeight = 126 / 2;
+
         const offsetX = spriteWidth / 2;
         const offsetY = spriteHeight / 2;
+
+        const attackOffsetX = attackSpriteWidth / 2;
+        const attackOffsetY = attackSpriteHeight / 2;
 
         const drawX = this.x - offsetX;
         const drawY = this.y - offsetY;
 
-        this.animation[this.state][this.facing].drawFrame(this.game.clockTick, ctx, drawX, drawY, 1);
+        const drawAttackX = this.x - attackOffsetX;
+        const drawAttackY = this.y - attackOffsetY;
+
+        if (this.isAttacking) {
+            this.animation[this.state][this.facing].drawFrame(this.game.clockTick, ctx, drawAttackX - 25, drawAttackY - 10, 1);
+        } else {
+            this.animation[this.state][this.facing].drawFrame(this.game.clockTick, ctx, drawX, drawY, 1);
+        }
 
         // Draw the placement radius if in placement mode
         if (this.placementMode) {
