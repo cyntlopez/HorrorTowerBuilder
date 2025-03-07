@@ -123,6 +123,20 @@ class Enemy {
                 }
             }
         }
+
+        for (let entity of this.game.entities) {
+            if (entity instanceof Cabin) {
+                const dx = entity.x + 64 - this.x;
+                const dy = entity.y  + 64 - this.y;
+                const distance = Math.sqrt(dx * dx + dy * dy);
+
+                if (distance < closestDistance) {
+                    closestBuilding = entity;
+                    closestDistance = distance;
+                }
+            }
+        }
+
         return closestBuilding;
     }
 
