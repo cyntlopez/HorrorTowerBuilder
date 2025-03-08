@@ -73,36 +73,45 @@ class Enemy {
         }
 
         const nearestBuilding = this.findNearestBuilding();
-        if (nearestBuilding) {
-            const dx = (nearestBuilding.col * this.tileMap.tileSize + this.tileMap.tileSize / 2) - this.x;
-            const dy = (nearestBuilding.row * this.tileMap.tileSize + this.tileMap.tileSize / 2) - this.y;
-            const distance = Math.sqrt(dx * dx + dy * dy);
+        const playerDistance = this.getDistance(this.player.x, this.player.y);
+        const buildingDistance = nearestBuilding ? this.getDistance(nearestBuilding.x, nearestBuilding.y) : Infinity;
 
-            if (distance > this.attackRange) {
-                // Move towards the building
-                this.state = 0;
-                this.x += (dx / distance) * this.speed * this.game.clockTick;
-                this.y += (dy / distance) * this.speed * this.game.clockTick;
+        let target = null;
+        let targetDistance = Infinity;
 
+        // Prioritize player if they are closer or if in attack range
+        if (playerDistance < buildingDistance || this.isInAttackRange(this.player.x, this.player.y)) {
+            target = this.player;
+            targetDistance = playerDistance;
+        } else if (nearestBuilding) {
+            target = nearestBuilding;
+            targetDistance = buildingDistance;
+        }
+
+        // Move towards the selected target
+        if (target) {
+            if (targetDistance > this.attackRange) {
+                this.state = 0; // Walking state
+                this.moveToward(target.x, target.y);
             } else {
-                // Attack the building if in range
-                this.state = 1;
-                this.attack(nearestBuilding);
-            }
-        } else {
-            this.state = 0;
-            this.moveToward(this.player.x, this.player.y);
-
-            if (this.isInAttackRange(this.player.x, this.player.y)) {
-                this.state = 1;
-                this.attackPlayer();
+                this.state = 1; // Attacking state
+                if (target === this.player) {
+                    this.attackPlayer();
+                } else {
+                    this.attack(target);
+                }
             }
         }
+
         this.avoidOtherEnemies();
-
-
-
     }
+
+    getDistance(targetX, targetY) {
+        const dx = targetX - this.x;
+        const dy = targetY - this.y;
+        return Math.sqrt(dx * dx + dy * dy);
+    }
+
 
     findNearestBuilding() {
         let closestBuilding = null;

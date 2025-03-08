@@ -160,10 +160,8 @@ ASSET_MANAGER.downloadAll(() => {
         camera.adjustZoom(e.deltaY > 0 ? -0.1 : 0.1);
     });
 
-    // Add entities - ensuring no duplicates
-    gameEngine.addEntity(tilemap);  // Only add tilemap once!
+    gameEngine.addEntity(tilemap);
     gameEngine.addEntity(new Cabin(gameEngine, 350, 300, cabin, tilemap));
-
 
 
     function getRandomPosition() {
