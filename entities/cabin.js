@@ -1,5 +1,5 @@
 class Cabin extends Building {
-    constructor(game, x, y, spritesheet, tilemap) {
+    constructor(game, x, y, spritesheet, tilemap, player) {
         // Convert x, y (pixels) to row, col (tile units)
         const tileSize = tilemap.tileSize;
         const row = Math.floor(y / tileSize);
@@ -10,7 +10,7 @@ class Cabin extends Building {
         this.width = 95;
         this.height = 120;
 
-        Object.assign(this, {game, x, y, spritesheet});
+        Object.assign(this, {game, x, y, spritesheet, player});
 
         this.health = 300;
     }
@@ -18,12 +18,14 @@ class Cabin extends Building {
     takeDamage(amount) {
         this.health -= amount;
         if (this.health <= 0) {
+            this.health = 0
             this.destroy();
         }
     }
 
     destroy() {
         console.log("Cabin destroyed");
+        this.player.health = 0; // so player doesnt move
         this.game.loseScreen.activateLose();
     }
 

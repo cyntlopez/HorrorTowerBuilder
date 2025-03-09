@@ -162,7 +162,7 @@ ASSET_MANAGER.downloadAll(() => {
 
     // Add entities - ensuring no duplicates
     gameEngine.addEntity(tilemap);  // Only add tilemap once!
-    gameEngine.addEntity(new Cabin(gameEngine, 350, 300, cabin, tilemap));
+    gameEngine.addEntity(new Cabin(gameEngine, 350, 300, cabin, tilemap, player));
 
 
 

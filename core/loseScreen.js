@@ -81,7 +81,7 @@ class LoseScreen {
     activateLose() {
         if (!this.active) {
             this.active = true;
-            document.body.appendChild(this.loseDiv); // Ensure the lose screen is added to the DOM
+            document.body.appendChild(this.loseDiv);
             this.gameSetting.stopTimer();
         }
     }

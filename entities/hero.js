@@ -44,6 +44,12 @@ class Hero {
                 return;
             }
 
+            canvas.addEventListener("keydown", (event) => {
+                if (event.key === "Enter") {
+                    this.consumeEnergyDrink();
+                }
+            });
+
             canvas.addEventListener("mousedown", () => {
                 if (!this.placementMode) {
                     this.isAttacking = true;
@@ -164,10 +170,10 @@ class Hero {
         const movementDeltas = { x: 0, y: 0 };
         let newFacing = this.facing; // Keep current facing direction by default
 
-        const movingUp = this.game.keys["w"] || this.game.keys["ArrowUp"];
-        const movingDown = this.game.keys["s"] || this.game.keys["ArrowDown"];
-        const movingLeft = this.game.keys["a"] || this.game.keys["ArrowLeft"];
-        const movingRight = this.game.keys["d"] || this.game.keys["ArrowRight"];
+        const movingUp = this.game.keys["w"] || this.game.keys["ArrowUp"] || this.game.keys["W"];
+        const movingDown = this.game.keys["s"] || this.game.keys["ArrowDown"] || this.game.keys["S"];
+        const movingLeft = this.game.keys["a"] || this.game.keys["ArrowLeft"] || this.game.keys["A"];
+        const movingRight = this.game.keys["d"] || this.game.keys["ArrowRight"] || this.game.keys["D"];
 
         // Apply movement but don't change facing if diagonal
         if (movingUp) movementDeltas.y -= 1;
@@ -262,9 +268,10 @@ class Hero {
 
     handlePlacementMode() {
         // Toggle building placement mode
-        if (this.game.keys["b"]) {
+        if (this.game.keys["b"] || this.game.keys["B"]) {
             this.placementMode = !this.placementMode;
             this.game.keys["b"] = false; // Prevent toggling multiple times on a single press
+            this.game.keys["B"] = false;
 
             if (this.placementMode) {
                 this.game.click = null; // resets click to maintain building bound
@@ -335,6 +342,19 @@ class Hero {
         } else {
             return false;
         }
+    }
+
+    consumeEnergyDrink() {
+            const energyDrinkCount = this.resourceBar.getResourceAmount(2);
+
+            if (energyDrinkCount > 0) {
+                this.resourceBar.setResourceAmount(2, energyDrinkCount - 1); // Reduce drink count
+                this.health = Math.min(this.health + 30, 100); // Heal, but cap at max health
+                console.log("Hero consumed an energy drink! Health:", this.health);
+
+            } else {
+                console.log("No energy drinks left!");
+            }
     }
 
     consumeResources() {

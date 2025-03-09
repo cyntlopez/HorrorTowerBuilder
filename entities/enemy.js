@@ -99,9 +99,6 @@ class Enemy {
             }
         }
         this.avoidOtherEnemies();
-
-
-
     }
 
     findNearestBuilding() {
