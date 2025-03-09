@@ -15,7 +15,12 @@ class Hero {
         this.attackCooldown = 0.5;
         this.lastAttackTime = 0;
         this.attackRange = 40;
-        this.attackDamage = 20;
+        this.attackDamage = 40;
+
+        // Attack Position
+        this.attackX = 0;
+        this.attackY = 0;
+        this.attackRadius = 25;
 
         this.setupControls();
 
@@ -58,6 +63,12 @@ class Hero {
 
             canvas.addEventListener("mouseup", () => {
                 this.isAttacking = false;
+            });
+
+            canvas.addEventListener("mousemove", (event) => {
+                const rect = canvas.getBoundingClientRect();
+                this.mouseX = event.clientX - rect.left;
+                this.mouseY = event.clientY - rect.top;
             });
 
             console.log("Attack controls set up successfully.");
@@ -427,29 +438,51 @@ class Hero {
     attack() {
         console.log("Player attacking");
 
-        let attackX = this.x;
-        let attackY = this.y;
+        // Convert mouse position to world coordinates
+        const camera = this.game.camera;
+        const worldMouseX = (this.mouseX / camera.zoomLevel) + camera.x;
+        const worldMouseY = (this.mouseY / camera.zoomLevel) + camera.y;
 
-        if (this.facing === 0) attackY += this.attackRange; // Down
-        else if (this.facing === 1) attackY -= this.attackRange; // Up
-        else if (this.facing === 2) attackX -= this.attackRange; // Left
-        else if (this.facing === 3) attackX += this.attackRange; // Right
+        // Compute direction vector from hero to mouse
+        const dx = worldMouseX - this.x;
+        const dy = worldMouseY - this.y;
+        const distance = Math.sqrt(dx * dx + dy * dy);
 
+        if (distance === 0) return; // Prevent division by zero
+
+        // Normalize direction
+        const dirX = dx / distance;
+        const dirY = dy / distance;
+
+        // Set facing direction based on attack direction**
+        if (Math.abs(dirX) > Math.abs(dirY)) {
+            this.facing = dirX > 0 ? 3 : 2; // Right = 3, Left = 2
+        } else {
+            this.facing = dirY > 0 ? 0 : 1; // Down = 0, Up = 1
+        }
+
+        // Set attack starting point a bit away from hero
+        const attackStartX = this.x + dirX * 20; // Move 20 pixels in direction of attack
+        const attackStartY = this.y + dirY * 20;
+
+        // Set attack hit area
+        this.attackX = attackStartX + dirX * this.attackRange; // Move attack outward
+        this.attackY = attackStartY + dirY * this.attackRange;
+        this.attackRadius = 25; // Area of effect around attack point
+
+        // Apply attack logic
         for (let entity of this.game.entities) {
-            const dx = entity.x - attackX;
-            const dy = entity.y - attackY;
-            const distance = Math.sqrt(dx * dx + dy * dy);
-            if (entity instanceof Enemy) {
-                if (distance < this.attackRange) {
+            const distToEntity = Math.sqrt(
+                Math.pow(entity.x - this.attackX, 2) + Math.pow(entity.y - this.attackY, 2)
+            );
+
+            if (distToEntity < this.attackRadius) {
+                if (entity instanceof Enemy) {
                     entity.takeDamage(this.attackDamage);
                     console.log("Enemy hit!");
-                }
-            } else if (entity instanceof Tree) {
-                if (distance < this.attackRange) {
+                } else if (entity instanceof Tree) {
                     this.resourceBar.incrementAmount(0);
-                }
-            } else if (entity instanceof Stone) {
-                if (distance < this.attackRange) {
+                } else if (entity instanceof Stone) {
                     this.resourceBar.incrementAmount(1);
                 }
             }
@@ -477,6 +510,10 @@ class Hero {
 
         if (this.isAttacking) {
             this.animation[this.state][this.facing].drawFrame(this.game.clockTick, ctx, drawAttackX - 25, drawAttackY - 10, 1);
+            ctx.fillStyle = "rgba(255, 0, 0, 0.5)";
+            ctx.beginPath();
+            ctx.arc(this.attackX, this.attackY, this.attackRadius, 0, Math.PI * 2);
+            ctx.fill();
         } else {
             this.animation[this.state][this.facing].drawFrame(this.game.clockTick, ctx, drawX, drawY, 1);
         }
@@ -487,19 +524,6 @@ class Hero {
             ctx.beginPath();
             ctx.arc(this.x, this.y, this.placementRadius * this.tileMap.tileSize, 0, Math.PI * 2);
             ctx.stroke();
-        }
-
-        if (this.isAttacking) {
-            ctx.fillStyle = "rgba(255, 0, 0, 0.5)";
-            let attackX = this.x, attackY = this.y;
-            if (this.facing === 0) attackY += this.attackRange;
-            else if (this.facing === 1) attackY -= this.attackRange;
-            else if (this.facing === 2) attackX -= this.attackRange;
-            else if (this.facing === 3) attackX += this.attackRange;
-
-            ctx.beginPath();
-            ctx.arc(attackX, attackY, 15, 0, Math.PI * 2);
-            ctx.fill();
         }
 
         // Health bar
