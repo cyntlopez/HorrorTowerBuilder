@@ -32,6 +32,10 @@ ASSET_MANAGER.queueDownload("assets/audio/music/level-1-music.wav");
 ASSET_MANAGER.queueDownload("assets/audio/music/level-2-music.wav");
 ASSET_MANAGER.queueDownload("assets/audio/music/Track-5-music.wav");
 ASSET_MANAGER.queueDownload("assets/audio/music/Track-6-music.wav");
+ASSET_MANAGER.queueDownload("assets/audio/music/trailer_song.wav");
+ASSET_MANAGER.queueDownload("assets/audio/music/track-8.wav");
+ASSET_MANAGER.queueDownload("assets/audio/music/lose_music.wav");
+ASSET_MANAGER.queueDownload("assets/audio/music/track-9.wav");
 
 // Effects
 ASSET_MANAGER.queueDownload("assets/audio/effects/Grass_walk5.wav");
