@@ -11,7 +11,7 @@ class EnemySpawner {
 
         //this.isSoundPlaying = false;
         this.enemySpawnPath = "assets/audio/effects/enemy_entrance.wav";
-        this.spawnSoundPool = ASSET_MANAGER.createAudioPool(this.enemySpawnPath, 3);
+        this.spawnSoundPool = ASSET_MANAGER.createAudioPool(this.enemySpawnPath, 4);
         this.waveNumber = 1;
         this.enemiesRemaining = 0;
         this.timeBetweenWaves = 10; // Seconds

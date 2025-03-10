@@ -24,7 +24,9 @@ class Enemy {
         this.loadAnimation();
 
         this.slashSoundPath = "assets/audio/effects/killer-slash.wav";
-        this.slashSoundPool = ASSET_MANAGER.createAudioPool(this.slashSoundPath, 3);
+        this.slashSoundPool = ASSET_MANAGER.createAudioPool(this.slashSoundPath, 4);
+        this.enemyDeathPath = "assets/audio/effects/enemy death.wav";
+        this.enemyDeathPool = ASSET_MANAGER.createAudioPool(this.enemyDeathPath, 4);
      //   this.isSlashing = false;
     }
 
@@ -259,6 +261,11 @@ class Enemy {
         this.health -= damage;
 
         if (this.health <= 0) {
+
+            if (ASSET_MANAGER.settings.isSoundEffectEnabled('enemy death')) {
+                ASSET_MANAGER.playFromPool(this.enemyDeathPool, 'enemyDeath');
+            }
+
             this.removeFromWorld = true;
         }
     }
