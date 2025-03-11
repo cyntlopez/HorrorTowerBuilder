@@ -52,7 +52,6 @@ class LoseScreen {
                 width: 210px;
                 font-size: 18px;
                 background: #333;
-                font-family: regularFont,serif;
                 color: white;
                 border: none;
                 cursor: pointer;
@@ -82,7 +81,11 @@ class LoseScreen {
     activateLose() {
         if (!this.active) {
             this.active = true;
-            document.body.appendChild(this.loseDiv);
+            document.body.appendChild(this.loseDiv); // Ensure the lose screen is added to the DOM
+            const defaultTrack = "assets/audio/music/lose_music.wav";
+            console.log("Played successfully");
+            ASSET_MANAGER.playAsset(defaultTrack);
+            ASSET_MANAGER.adjustVolume(0.5);
             this.gameSetting.stopTimer();
         }
     }

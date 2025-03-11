@@ -12,6 +12,7 @@ class Settings {
             'walking': true,
             'enemySpawn': true,
             'enemySlash': true,
+            'enemyDeath' : true,
         };
 
         // Get existing audio controls

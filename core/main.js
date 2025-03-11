@@ -32,12 +32,17 @@ ASSET_MANAGER.queueDownload("assets/audio/music/level-1-music.wav");
 ASSET_MANAGER.queueDownload("assets/audio/music/level-2-music.wav");
 ASSET_MANAGER.queueDownload("assets/audio/music/Track-5-music.wav");
 ASSET_MANAGER.queueDownload("assets/audio/music/Track-6-music.wav");
+ASSET_MANAGER.queueDownload("assets/audio/music/trailer_song.wav");
+ASSET_MANAGER.queueDownload("assets/audio/music/track-8.wav");
+ASSET_MANAGER.queueDownload("assets/audio/music/lose_music.wav");
+ASSET_MANAGER.queueDownload("assets/audio/music/track-9.wav");
 
 // Effects
 ASSET_MANAGER.queueDownload("assets/audio/effects/Grass_walk5.wav");
 ASSET_MANAGER.queueDownload("assets/audio/effects/killer-slash.wav");
 ASSET_MANAGER.queueDownload("assets/audio/effects/enemySpawn.wav");
 ASSET_MANAGER.queueDownload("assets/audio/effects/enemy_entrance.wav");
+ASSET_MANAGER.queueDownload("assets/audio/effects/enemy death.wav");
 
 ASSET_MANAGER.downloadAll(() => {
     const canvas = document.getElementById("gameWorld");
@@ -96,6 +101,11 @@ ASSET_MANAGER.downloadAll(() => {
     
     document.getElementById("enemySlashToggle").addEventListener("change", (event) => {
         gameSetting.toggleSoundEffect('enemySlash');
+        refocusCanvas();
+    });
+
+    document.getElementById("enemyDeathToggle").addEventListener("change", (event) => {
+        gameSetting.toggleSoundEffect('enemyDeath');
         refocusCanvas();
     });
 
