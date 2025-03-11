@@ -93,6 +93,7 @@ class TitleScreen {
         this.settings.startTimer();
         setTimeout(() => document.getElementById("gameWorld").focus(), 0);
         ASSET_MANAGER.playAsset("assets/audio/music/level-2-music.wav");
+        this.settings.startWaveCountdown();
     }
 
     update() {

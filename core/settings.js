@@ -8,6 +8,11 @@ class Settings {
         this.height = 500;
         this.player = player;
 
+        this.waveCountdown = 25;
+        this.waveCountdownInternal = null;
+        this.waveEnded = false;
+
+
         this.soundEffectStates = {
             'walking': true,
             'enemySpawn': true,
@@ -144,6 +149,26 @@ class Settings {
         }
     }
 
+    startWaveCountdown() {
+        if (this.waveCountdownInterval) {
+            clearInterval(this.waveCountdownInterval);
+        }
+        this.waveCountdown = 25;
+
+        this.waveCountdownInterval = setInterval(() => {
+            if (!this.timerPaused && !this.active && !this.showAudio && this.enemySpawner.enemiesRemaining <= 0 && !this.enemySpawner.spawning) {
+                if (this.waveCountdown > 0) {
+                    this.waveCountdown--;
+                }
+            }
+            this.updateHUD(); // Update the HUD every second
+        }, 1000);
+    }
+    
+    resetWaveCountdown() {
+        this.waveCountdown = 25;
+    }
+
     stopTimer() {
         if (this.timerInterval) {
             clearInterval(this.timerInterval);
@@ -174,6 +199,7 @@ class Settings {
         } else if (!this.showAudio) { //Restart only if audio is not open
             this.startTimer();   // Start only if settings are closed
         }
+        this.updateHUD();
     }
 
     toggleAudio() {
@@ -188,6 +214,7 @@ class Settings {
         } else if (!this.active) { // Restart timer when audio is closed and settings are closed
             this.startTimer();
         }
+        this.updateHUD();
     }
 
     toggleSoundEffect(effectName) {
@@ -201,13 +228,42 @@ class Settings {
     }
 
     updateHUD() {
+
+        if (!this.player || !this.enemySpawner) return;
+
+        
+        
+
         const currentHealth = Math.max(0, this.player.health);
         const currentWave = this.enemySpawner.waveNumber - 1;
+
+        let nextWaveTimer = "";
+
+        if (this.enemySpawner.enemiesRemaining <= 0 && !this.enemySpawner.spawning) {
+            if (this.enemySpawner.waveNumber <= this.enemySpawner.totalWaves + 1) {
+                if (!this.waveEnded) {
+                    this.waveCountdown = 25;
+                    this.waveEnded = true;
+                }
+                nextWaveTimer = `Next Wave: ${this.waveCountdown}s`;
+            } else {
+                nextWaveTimer = "Game Complete!";
+            }
+        } else if (this.enemySpawner.spawning) {
+            nextWaveTimer = "Wave in progress...";
+            this.waveEnded = false;
+        } else {
+            nextWaveTimer = `Enemies left: ${this.enemySpawner.enemiesRemaining}`;
+            this.waveEnded = false;
+        }
+
+        console.log(nextWaveTimer);
 
         this.hud.innerHTML = `
             Health: <span id="health">${currentHealth}</span><br>
             Wave: <span id="resources">${currentWave}</span><br>
-            Time: <span id="time">0:00</span>
+            Total Time: <span id="time">0:00</span><br>
+            <span id="next-wave-timer">${nextWaveTimer}</span>
         `;
     }
 
