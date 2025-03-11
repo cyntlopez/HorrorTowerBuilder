@@ -10,6 +10,8 @@ class Enemy {
         this.facing = 0; // 0 = down, 1 = up, 2 = left, 3 = right
         this.state = 0; // 0 = walking, 1 = attacking
 
+        this.targetIndex = 0;
+
         this.speed = 50;
         this.health = 100;
         this.attackPower = 10;
@@ -76,27 +78,47 @@ class Enemy {
 
         const nearestBuilding = this.findNearestBuilding();
         const playerDistance = this.getDistance(this.player.x, this.player.y);
-        const buildingDistance = nearestBuilding ? this.getDistance(nearestBuilding.x, nearestBuilding.y) : Infinity;
+        const buildingDistance = nearestBuilding ? this.getDistance(nearestBuilding.col * nearestBuilding.width + nearestBuilding.width / 2, nearestBuilding.row * nearestBuilding.height + nearestBuilding.height / 2) : Infinity;
+
+        const possibleTargets = [
+            { x: 360, y: 310 }, //top left
+            { x: 414, y: 310 }, //top right
+            { x: 360, y: 428 }, //bottom left
+            { x: 414, y: 428 } //bottom right
+        ];
 
         let target = null;
         let targetDistance = Infinity;
 
-        // Prioritize player if they are closer or if in attack range
-        if (playerDistance < buildingDistance || this.isInAttackRange(this.player.x, this.player.y)) {
+        // Prioritize attacking the player if they're close
+        if (playerDistance < 32) {
             target = this.player;
             targetDistance = playerDistance;
-        } else if (nearestBuilding) {
+        } else if (nearestBuilding instanceof Cabin) {
+            target = nearestBuilding;
+            targetDistance = this.getDistance(possibleTargets[this.targetIndex].x, possibleTargets[this.targetIndex].y);
+        } else {
             target = nearestBuilding;
             targetDistance = buildingDistance;
         }
 
-        // Move towards the selected target
         if (target) {
             if (targetDistance > this.attackRange) {
-                this.state = 0; // Walking state
-                this.moveToward(target.x, target.y);
-            } else {
-                this.state = 1; // Attacking state
+                // Move toward the target if not in range
+                this.state = 0; // Walking
+
+                if (target instanceof Hero) {
+                    this.moveToward(target.x, target.y);
+                } else if (!(target instanceof Cabin)) {
+                    this.moveToward(nearestBuilding.col * nearestBuilding.width + nearestBuilding.width / 2, nearestBuilding.row * nearestBuilding.height + nearestBuilding.height / 2);
+                } else {
+                    this.moveToward(possibleTargets[this.targetIndex].x, possibleTargets[this.targetIndex].y);
+                }
+
+
+            } else if (targetDistance <= this.attackRange) {
+                // Only attack if in range
+                this.state = 1; // Attacking
                 if (target === this.player) {
                     this.attackPlayer();
                 } else {
@@ -114,39 +136,46 @@ class Enemy {
         return Math.sqrt(dx * dx + dy * dy);
     }
 
-
     findNearestBuilding() {
         let closestBuilding = null;
         let closestDistance = Infinity;
 
-        for (let row = 0; row < this.tileMap.rows; row++) {
-            for (let col = 0; col < this.tileMap.cols; col++) {
-                const building = this.tileMap.grid[row][col];
-                if (building) {
-                    const dx = (col * this.tileMap.tileSize + this.tileMap.tileSize / 2) - this.x;
-                    const dy = (row * this.tileMap.tileSize + this.tileMap.tileSize / 2) - this.y;
-                    const distance = Math.sqrt(dx * dx + dy * dy);
+        for (let entity of this.game.entities) {
+            if (entity instanceof Building && !(entity instanceof Cabin)) {
+                // Calculate building center coordinates
+                const buildingCenterX = (entity.col * entity.width) + (entity.width / 2);
+                const buildingCenterY = (entity.row * entity.height) + (entity.height / 2);
 
+                // Compute distance
+                const distance = this.getDistance(buildingCenterX, buildingCenterY);
+
+                // Update closest building if it's nearer
+                if (distance < closestDistance) {
+                    closestBuilding = entity;
+                    closestDistance = distance;
+                }
+            } else if (entity instanceof Cabin) {
+                const possibleTargets = [
+                    { x: 360, y: 310 }, //top left
+                    { x: 414, y: 310 }, //top right
+                    { x: 360, y: 428 }, //bottom left
+                    { x: 414, y: 428 } //bottom right
+                ];
+
+                for (let i = 0; i < possibleTargets.length; i++) {
+                    // Compute distance
+                    const distance = this.getDistance(possibleTargets[i].x, possibleTargets[i].y);
+
+                    // Update closest building if it's nearer
                     if (distance < closestDistance) {
-                        closestBuilding = building;
+                        closestBuilding = entity;
                         closestDistance = distance;
+                        this.targetIndex = i;
                     }
                 }
             }
         }
 
-        for (let entity of this.game.entities) {
-            if (entity instanceof Cabin) {
-                const dx = entity.x + 64 - this.x;
-                const dy = entity.y  + 64 - this.y;
-                const distance = Math.sqrt(dx * dx + dy * dy);
-
-                if (distance < closestDistance) {
-                    closestBuilding = entity;
-                    closestDistance = distance;
-                }
-            }
-        }
 
         return closestBuilding;
     }
@@ -308,3 +337,59 @@ class Enemy {
         }
     }
 }
+
+class BossEnemy extends Enemy {
+    constructor(game, x, y, targetX, targetY, tileMap, player, spritesheet) {
+        super(game, x, y, targetX, targetY, tileMap, player, spritesheet);
+
+        this.health = 1000; // Boss has much more HP
+        this.speed = 40; // Slightly slower
+        this.attackPower = 50; // Hits much harder
+        this.attackCooldown = 1.5; // Attacks every 1.5 seconds
+        this.width = 128; // Twice the size of normal enemies
+        this.height = 128;
+
+        console.log("Boss has spawned!");
+    }
+
+    draw(ctx) {
+        const enemyWidth = this.width;
+        const enemyHeight = this.height;
+
+        const offsetX = enemyWidth / 2;
+        const offsetY = enemyHeight / 2;
+
+        const drawX = this.x - offsetX;
+        const drawY = this.y - offsetY;
+
+        // Check if enemy is within the first visibility circle (around the player)
+        const playerX = this.player.x;
+        const playerY = this.player.y;
+        const visRadiusInPixels = (this.player.visionRadius * this.tileMap.tileSize) / 2;
+        const distanceFromPlayer = Math.sqrt(Math.pow(this.x - playerX, 2) + Math.pow(this.y - playerY, 2));
+
+        // Check if enemy is within the second visibility circle (camera center)
+        const cameraX = this.game.camera.x + (this.game.ctx.canvas.width / 2) / this.game.camera.zoomLevel;
+        const cameraY = this.game.camera.y + (this.game.ctx.canvas.height / 2) / this.game.camera.zoomLevel;
+        const secondCircleRadius = visRadiusInPixels / 2;
+        const distanceFromCamera = Math.sqrt(Math.pow(this.x - cameraX, 2) + Math.pow(this.y - cameraY, 2));
+
+        const canvas = document.getElementById("gameWorld");
+        const cabinCircleX = (canvas.width / 2);
+        const cabinCircleY = (canvas.height / 2);
+        const cabinCircleRadius = 5 * this.tileMap.tileSize;
+        const distanceFromCabin= Math.sqrt(Math.pow(this.x - cabinCircleX, 2) + Math.pow(this.y - cabinCircleY, 2));
+
+        // Draw the enemy only if it's within one of the visibility circles
+        if (distanceFromPlayer <= visRadiusInPixels || distanceFromCamera <= secondCircleRadius || distanceFromCabin <= cabinCircleRadius) {
+            this.animation[this.state][this.facing].drawFrame(this.game.clockTick, ctx, drawX, drawY, 1);
+
+            // Boss health bar
+            ctx.fillStyle = "red";
+            ctx.fillRect(this.x - 50, this.y - 70, 100, 10);
+            ctx.fillStyle = "green";
+            ctx.fillRect(this.x - 50, this.y - 70, (this.health / 1000) * 100, 10);
+        }
+    }
+}
+
