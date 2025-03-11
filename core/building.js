@@ -79,7 +79,6 @@ class Building {
 
 }
 
-// TODO: change all buildings to images
 class Wall extends Building {
     constructor(row, col, tileMap, tileSize) {
         super(row, col, tileMap, tileSize);

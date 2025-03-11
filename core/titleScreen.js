@@ -36,6 +36,7 @@ class TitleScreen {
         const imageContainer = document.createElement('div');
         imageContainer.style.cssText = `
             display: flex;
+            
             justify-content: center; 
             align-items: center;     
             gap: 50px;              
@@ -57,11 +58,13 @@ class TitleScreen {
             button.style.cssText = `
                 padding: 15px 30px;
                 width: 200px;
+                font-family: boldFont,serif;
                 font-size: 18px;
                 background: #333;
                 color: white;
                 border: none;
                 cursor: pointer;
+                border-radius: 12px;
                 transition: background 0.3s;
             `;
 

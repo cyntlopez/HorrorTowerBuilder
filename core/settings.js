@@ -80,7 +80,7 @@ class Settings {
             top: 60px; // Adjusted top position
             left: 10px;
             color: white;
-            font-family: sans-serif;
+            font-family: regularFont;
             z-index: 1000;
             pointer-events: none;
             background-color: rgba(0, 0, 0, 0.5); // Added background
@@ -204,7 +204,7 @@ class Settings {
         const currentWave = this.enemySpawner.waveNumber - 1;
 
         this.hud.innerHTML = `
-            Health: <span id="health">${currentHealth}</span><br>
+            Health: <span id="health"> ${currentHealth}</span><br>
             Wave: <span id="resources">${currentWave}</span><br>
             Time: <span id="time">0:00</span>
         `;

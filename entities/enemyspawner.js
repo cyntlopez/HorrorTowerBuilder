@@ -14,7 +14,7 @@ class EnemySpawner {
         this.spawnSoundPool = ASSET_MANAGER.createAudioPool(this.enemySpawnPath, 3);
         this.waveNumber = 1;
         this.enemiesRemaining = 0;
-        this.timeBetweenWaves = 10; // Seconds
+        this.timeBetweenWaves = 50; // Seconds
         this.lastWaveEndTime = 0;
         this.spawning = false;
     }

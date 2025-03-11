@@ -52,6 +52,7 @@ class LoseScreen {
                 width: 210px;
                 font-size: 18px;
                 background: #333;
+                font-family: regularFont,serif;
                 color: white;
                 border: none;
                 cursor: pointer;
