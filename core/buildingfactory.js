@@ -11,8 +11,6 @@ class BuildingFactory {
                 return new MageTower(row, col, tileMap, tileSize);
             case "BombTower":
                 return new BombTower(row, col, tileMap, tileSize);
-            case "MeleeTower":
-                return new MeleeTower(row, col, tileMap, tileSize);
             default:
                 console.error(`Unknown building type: ${type}`);
                 return null;

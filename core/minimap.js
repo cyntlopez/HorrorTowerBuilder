@@ -72,6 +72,46 @@ class Minimap {
             ctx.fillRect(playerX, playerY, this.scale, this.scale);
         }
 
+        const energy = this.game.entities.find(entity => entity instanceof Energy);
+        if (energy && tilemap) {
+            const energyX = minimapX + ((energy.x / tilemap.tileSize) * this.scale);
+            const energyY = minimapY + ((energy.y / tilemap.tileSize) * this.scale);
+            ctx.fillStyle = 'purple';
+            ctx.fillRect(energyX, energyY, this.scale, this.scale);
+        }
+
+        const tree = this.game.entities.find(entity => entity instanceof Tree);
+        if (tree && tilemap) {
+            const treeX = minimapX + ((tree.x / tilemap.tileSize) * this.scale);
+            const treeY = minimapY + ((tree.y / tilemap.tileSize) * this.scale);
+            ctx.fillStyle = 'yellow';
+            ctx.fillRect(treeX, treeY, this.scale, this.scale);
+        }
+
+        const stone = this.game.entities.find(entity => entity instanceof Stone);
+        if (stone && tilemap) {
+            const stoneX = minimapX + ((stone.x / tilemap.tileSize) * this.scale);
+            const stoneY = minimapY + ((stone.y / tilemap.tileSize) * this.scale);
+            ctx.fillStyle = 'yellow';
+            ctx.fillRect(stoneX, stoneY, this.scale, this.scale);
+        }
+
+        const enemy = this.game.entities.find(entity => entity instanceof Enemy);
+        if (enemy && tilemap) {
+            const enemyX = minimapX + ((enemy.x / tilemap.tileSize) * this.scale);
+            const enemyY = minimapY + ((enemy.y / tilemap.tileSize) * this.scale);
+            ctx.fillStyle = 'red';
+            ctx.fillRect(enemyX, enemyY, this.scale, this.scale);
+        }
+
+        const cabin = this.game.entities.find(entity => entity instanceof Cabin);
+        if (cabin && tilemap) {
+            const cabinX = minimapX + ((cabin.x / tilemap.tileSize) * this.scale);
+            const cabinY = minimapY + ((cabin.y / tilemap.tileSize) * this.scale);
+            ctx.fillStyle = 'green';
+            ctx.fillRect(cabinX, cabinY, this.scale, this.scale);
+        }
+
         this.game.camera.applyTransformations(ctx);
     }
 

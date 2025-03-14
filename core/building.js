@@ -237,38 +237,3 @@ class BombTower extends Building {
     }
 }
 
-
-
-class MeleeTower extends Building {
-    constructor(row, col, tileMap, tileSize) {
-        super(row, col, tileMap, tileSize);
-        this.range = 100;
-        this.attackPower = 20;
-        this.attackCooldown = 1;
-        this.lastAttackTime = 0;
-    }
-
-    update() {
-        if (gameEngine.timer.gameTime - this.lastAttackTime >= this.attackCooldown) {
-            const target = this.findNearestEnemy();
-            if (target) {
-                target.takeDamage(this.attackPower);
-                this.lastAttackTime = gameEngine.timer.gameTime;
-            }
-        }
-    }
-
-    draw(ctx) {
-        const x = this.col * this.width;
-        const y = this.row * this.height;
-
-        ctx.fillStyle = "green";
-        ctx.fillRect(x, y, this.width, this.height);
-
-        ctx.strokeStyle = "rgba(0, 255, 0, 0.5)";
-        ctx.beginPath();
-        ctx.arc(x + this.width / 2, y + this.height / 2, this.range, 0, Math.PI * 2);
-        ctx.stroke();
-    }
-}
-

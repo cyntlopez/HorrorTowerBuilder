@@ -112,9 +112,6 @@ class GameEngine {
                 case '5':
                     this.selectedBuilding = "BombTower";
                     break;
-                case '6':
-                    this.selectedBuilding = "MeleeTower";
-                    break;
             }
         });
         this.ctx.canvas.addEventListener("keyup", event => this.keys[event.key] = false);
