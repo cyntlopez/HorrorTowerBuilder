@@ -49,6 +49,12 @@ class Hero {
                 return;
             }
 
+            canvas.addEventListener("keydown", (event) => {
+                if (event.key === "Enter") {
+                    this.consumeEnergyDrink();
+                }
+            });
+
             canvas.addEventListener("mousedown", () => {
                 if (!this.placementMode) {
                     this.isAttacking = true;
@@ -273,9 +279,10 @@ class Hero {
 
     handlePlacementMode() {
         // Toggle building placement mode
-        if (this.game.keys["b"]) {
+        if (this.game.keys["b"] || this.game.keys["B"]) {
             this.placementMode = !this.placementMode;
             this.game.keys["b"] = false; // Prevent toggling multiple times on a single press
+            this.game.keys["B"] = false;
 
             if (this.placementMode) {
                 this.game.click = null; // resets click to maintain building bound
@@ -345,6 +352,19 @@ class Hero {
             return true;
         } else {
             return false;
+        }
+    }
+
+    consumeEnergyDrink() {
+        const energyDrinkCount = this.resourceBar.getResourceAmount(2);
+
+        if (energyDrinkCount > 0) {
+            this.resourceBar.setResourceAmount(2, energyDrinkCount - 1); // Reduce drink count
+            this.health = Math.min(this.health + 30, 100);
+            console.log("Hero consumed an energy drink! Health:", this.health);
+
+        } else {
+            console.log("No energy drinks left!");
         }
     }
 
