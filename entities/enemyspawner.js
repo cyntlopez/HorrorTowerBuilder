@@ -40,7 +40,7 @@ class EnemySpawner {
         console.log(`Starting Wave ${this.waveNumber}`);
 
         this.spawning = true;
-        const enemiesToSpawn = 5 + this.waveNumber * 2; // Scale enemy count
+        const enemiesToSpawn = 5 + this.waveNumber; // Scale enemy count
 
         this.enemiesRemaining = enemiesToSpawn;
         let enemiesSpawned = 0;
@@ -132,8 +132,7 @@ class EnemySpawner {
             this.tileMap.cols * this.tileMap.tileSize / 2,
             this.tileMap.rows * this.tileMap.tileSize / 2,
             this.tileMap,
-            this.player,
-            this.spritesheet
+            this.player
         );
 
         this.game.addEntity(boss);
@@ -148,8 +147,9 @@ class EnemySpawner {
         this.enemiesRemaining--;
         console.log(`Enemy defeated! ${this.enemiesRemaining} remaining.`);
 
-        if (this.waveNumber > this.totalWaves && this.enemiesRemaining <= 0) {
+        if (this.waveNumber > this.totalWaves + 1 && this.enemiesRemaining <= 0) {
             console.log("Game Complete! You survived all waves.");
+            this.game.winScreen.activateWin();
         }
     }
 

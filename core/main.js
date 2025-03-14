@@ -11,7 +11,7 @@ ASSET_MANAGER.queueDownload("assets/sprites/pumpkin_head/killer_walk.png");
 ASSET_MANAGER.queueDownload("assets/sprites/pumpkin_head/killer_attack.png");
 ASSET_MANAGER.queueDownload("assets/sprites/landscape/grass.png");
 ASSET_MANAGER.queueDownload("assets/sprites/resources/lose.png");
-ASSET_MANAGER.queueDownload("assets/sprites/pig_boss/pig_running.png");
+ASSET_MANAGER.queueDownload("assets/sprites/boss/final_boss.png");
 
 // Resources
 ASSET_MANAGER.queueDownload("assets/sprites/resources/wood.png");
@@ -137,6 +137,8 @@ ASSET_MANAGER.downloadAll(() => {
     // Game setup
     const loseScreen = new LoseScreen(gameEngine, gameSetting);
     gameEngine.loseScreen = loseScreen;
+
+    gameEngine.winScreen = new WinScreen(gameEngine, gameSetting);
 
     canvas.setAttribute("tabindex", "0");
     const ctx = canvas.getContext("2d");

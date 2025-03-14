@@ -318,17 +318,37 @@ class Enemy {
 }
 
 class BossEnemy extends Enemy {
-    constructor(game, x, y, targetX, targetY, tileMap, player, spritesheet) {
-        super(game, x, y, targetX, targetY, tileMap, player, spritesheet);
+    constructor(game, x, y, targetX, targetY, tileMap, player) {
+        super(game, x, y, targetX, targetY, tileMap, player);
 
-        this.health = 1000; // Boss has much more HP
+        this.health = 1500; // Boss has much more HP
         this.speed = 40; // Slightly slower
         this.attackPower = 50; // Hits much harder
         this.attackCooldown = 1.5; // Attacks every 1.5 seconds
         this.width = 128; // Twice the size of normal enemies
         this.height = 128;
 
+        this.animation = [];
+        this.loadAnimation();
+
         console.log("Boss has spawned!");
+    }
+
+    loadAnimation() {
+        for (let i = 0; i < 4; i++) { // 4 directions
+            this.animation.push([]);
+        }
+        // final boss animation
+        const finalBoss = ASSET_MANAGER.getAsset("assets/sprites/boss/final_boss.png");
+        // down = 0
+        this.animation[0] = new Animator(finalBoss, 0, 0, 40, 40, 4, 0.1, 0, false, true);
+        // up = 1
+        this.animation[1] = new Animator(finalBoss, 0, 41, 40, 40, 4, 0.1, 0, false, true);
+        // left = 2
+        this.animation[2] = new Animator(finalBoss, 0, 86, 40, 40, 4, 0.1, 0, false, true);
+        // right = 3
+        this.animation[3] = new Animator(finalBoss, 0, 127, 40, 40, 4, 0.1, 0, false, true);
+
     }
 
     draw(ctx) {
@@ -361,7 +381,7 @@ class BossEnemy extends Enemy {
 
         // Draw the enemy only if it's within one of the visibility circles
         if (distanceFromPlayer <= visRadiusInPixels || distanceFromCamera <= secondCircleRadius || distanceFromCabin <= cabinCircleRadius) {
-            this.animation[this.state][this.facing].drawFrame(this.game.clockTick, ctx, drawX, drawY, 1);
+            this.animation[this.facing].drawFrame(this.game.clockTick, ctx, drawX, drawY, 2);
 
             // Boss health bar
             ctx.fillStyle = "red";
