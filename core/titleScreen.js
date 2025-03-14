@@ -58,6 +58,7 @@ class TitleScreen {
                 padding: 15px 30px;
                 width: 200px;
                 font-size: 18px;
+                font-family: boldFont,serif;
                 background: #333;
                 color: white;
                 border: none;

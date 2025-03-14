@@ -29,6 +29,14 @@
   <script type="text/javascript" src="core/main.js"></script>
 
   <style>
+    @font-face {
+      font-family: regularFont;
+      src: url(assets/font/pixel_font_reg.ttf);
+    }
+    @font-face {
+      font-family: boldFont;
+      src: url(assets/font/pixel_font_bold.ttf);
+    }
     body {
       margin: 0;
       background-color: black;
@@ -47,6 +55,7 @@
     /* GUI Styles */
     #musicControls {
       display: flex;
+      font-family: regularFont,serif;
       flex-direction: column;
       align-items: center;
       margin-top: 10px;
@@ -55,7 +64,7 @@
 
     #controls {
       color: white;
-      font-family: sans-serif;
+      font-family: regularFont,serif;
       background-color: rgba(0, 0, 0, 0.5);
       padding: 10px;
       border-radius: 5px;
@@ -71,7 +80,7 @@
     }
     #resourceCost {
       color: white;
-      font-family: sans-serif;
+      font-family: regularFont,serif;
       background-color: rgba(0, 0, 0, 0.5);
       padding: 10px;
       border-radius: 5px;

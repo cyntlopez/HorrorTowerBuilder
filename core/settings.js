@@ -86,7 +86,7 @@ class Settings {
             top: 60px; // Adjusted top position
             left: 10px;
             color: white;
-            font-family: sans-serif;
+            font-family: regularFont,serif;
             z-index: 1000;
             pointer-events: none;
             background-color: rgba(0, 0, 0, 0.5); // Added background
@@ -230,9 +230,6 @@ class Settings {
     updateHUD() {
 
         if (!this.player || !this.enemySpawner) return;
-
-        
-        
 
         const currentHealth = Math.max(0, this.player.health);
         const currentWave = this.enemySpawner.waveNumber - 1;

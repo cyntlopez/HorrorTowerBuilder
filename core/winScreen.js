@@ -51,6 +51,7 @@ class WinScreen {
                 width: 210px;
                 font-size: 18px;
                 background: #333;
+                font-family: boldFont,serif;
                 color: white;
                 border: none;
                 cursor: pointer;
