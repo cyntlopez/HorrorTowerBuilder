@@ -45,6 +45,7 @@ ASSET_MANAGER.queueDownload("assets/audio/effects/enemy_entrance.wav");
 ASSET_MANAGER.queueDownload("assets/audio/effects/enemy death.wav");
 ASSET_MANAGER.queueDownload("assets/audio/effects/Ghost_spawn.wav");
 ASSET_MANAGER.queueDownload("assets/audio/effects/Grave_spawn.wav");
+ASSET_MANAGER.queueDownload("assets/audio/effects/Campfire_spawn.wav");
 
 ASSET_MANAGER.downloadAll(() => {
     const canvas = document.getElementById("gameWorld");
@@ -123,6 +124,11 @@ ASSET_MANAGER.downloadAll(() => {
 
     document.getElementById("graveSpawnToggle").addEventListener("change", (event) => {
         gameSetting.toggleSoundEffect('graveSpawn');
+        refocusCanvas();
+    });
+
+    document.getElementById("campfireSpawnToggle").addEventListener("change", (event) => {
+        gameSetting.toggleSoundEffect('campfireSpawn');
         refocusCanvas();
     });
 

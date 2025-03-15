@@ -45,6 +45,9 @@ class Hero {
 
         this.graveSpawnPath = "assets/audio/effects/Grave_spawn.wav";
         this.graveSoundPool = ASSET_MANAGER.createAudioPool(this.graveSpawnPath, 4);
+
+        this.campfireSpawnPath = "assets/audio/effects/Campfire_spawn.wav";
+        this.campfireSoundPool = ASSET_MANAGER.createAudioPool(this.campfireSpawnPath, 4);
     }
 
     setupControls() {
@@ -394,6 +397,9 @@ class Hero {
                 break;
             case "Campfire":
                 woodCost = 2;
+                if (ASSET_MANAGER.settings.isSoundEffectEnabled('campfireSpawn')) {
+                    ASSET_MANAGER.playFromPool(this.campfireSoundPool, 'campfireSpawn');
+                }
                 break;
             case "MageTower":
                 woodCost = 2;

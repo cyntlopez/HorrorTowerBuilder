@@ -21,6 +21,7 @@ class Settings {
             'enemyWave' : true,
             'ghostSpawn' : true,
             'graveSpawn' : true,
+            'campfireSpawn' : true,
         };
 
         // Get existing audio controls
