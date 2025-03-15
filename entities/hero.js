@@ -42,6 +42,9 @@ class Hero {
 
         this.ghostSpawnPath = "assets/audio/effects/Ghost_spawn.wav";
         this.ghostSoundPool = ASSET_MANAGER.createAudioPool(this.ghostSpawnPath, 4);
+
+        this.graveSpawnPath = "assets/audio/effects/Grave_spawn.wav";
+        this.graveSoundPool = ASSET_MANAGER.createAudioPool(this.graveSpawnPath, 4);
     }
 
     setupControls() {
@@ -385,6 +388,9 @@ class Hero {
                 break;
             case "Wall":
                 stoneCost = 2;
+                if (ASSET_MANAGER.settings.isSoundEffectEnabled('graveSpawn')) {
+                    ASSET_MANAGER.playFromPool(this.graveSoundPool, 'graveSpawn');
+                }
                 break;
             case "Campfire":
                 woodCost = 2;
