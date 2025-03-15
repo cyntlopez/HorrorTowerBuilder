@@ -43,6 +43,7 @@ ASSET_MANAGER.queueDownload("assets/audio/effects/killer-slash.wav");
 ASSET_MANAGER.queueDownload("assets/audio/effects/enemySpawn.wav");
 ASSET_MANAGER.queueDownload("assets/audio/effects/enemy_entrance.wav");
 ASSET_MANAGER.queueDownload("assets/audio/effects/enemy death.wav");
+ASSET_MANAGER.queueDownload("assets/audio/effects/Ghost_spawn.wav");
 
 ASSET_MANAGER.downloadAll(() => {
     const canvas = document.getElementById("gameWorld");
@@ -111,6 +112,11 @@ ASSET_MANAGER.downloadAll(() => {
 
     document.getElementById("enemyWaveToggle").addEventListener("change", (event) => {
         gameSetting.toggleSoundEffect('enemyWave');
+        refocusCanvas();
+    });
+
+    document.getElementById("ghostSpawnToggle").addEventListener("change", (event) => {
+        gameSetting.toggleSoundEffect('ghostSpawn');
         refocusCanvas();
     });
 

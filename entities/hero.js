@@ -39,6 +39,9 @@ class Hero {
         this.visionRadius = 5;
 
         this.cabinFlag = false;
+
+        this.ghostSpawnPath = "assets/audio/effects/Ghost_spawn.wav";
+        this.ghostSoundPool = ASSET_MANAGER.createAudioPool(this.ghostSpawnPath, 4);
     }
 
     setupControls() {
@@ -376,6 +379,9 @@ class Hero {
             case "ArcherTower":
                 woodCost = 1;
                 stoneCost = 1;
+                if (ASSET_MANAGER.settings.isSoundEffectEnabled('ghostSpawn')) {
+                    ASSET_MANAGER.playFromPool(this.ghostSoundPool, 'ghostSpawn');
+                }
                 break;
             case "Wall":
                 stoneCost = 2;

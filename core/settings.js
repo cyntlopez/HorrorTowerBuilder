@@ -19,6 +19,7 @@ class Settings {
             'enemySlash': true,
             'enemyDeath' : true,
             'enemyWave' : true,
+            'ghostSpawn' : true,
         };
 
         // Get existing audio controls
