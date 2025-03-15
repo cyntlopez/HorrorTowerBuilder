@@ -532,6 +532,13 @@ class Hero {
             ctx.beginPath();
             ctx.arc(this.attackX, this.attackY, this.attackRadius, 0, Math.PI * 2);
             ctx.fill();
+        } else if (this.game.loseScreen.active) {
+            this.health = 0;
+            this.state = 3;
+        } else if (this.game.winScreen.active) {
+            this.state = 3;
+            this.isWalking = false;
+            this.currentWalkSound.pause();
         } else {
             this.animation[this.state][this.facing].drawFrame(this.game.clockTick, ctx, drawX, drawY, 1);
         }

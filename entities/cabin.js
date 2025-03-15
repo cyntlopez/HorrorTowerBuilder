@@ -19,6 +19,7 @@ class Cabin extends Building {
         this.health -= amount;
         if (this.health <= 0) {
             this.destroy();
+            this.health = 0;
         }
     }
 

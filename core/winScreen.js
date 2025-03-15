@@ -81,7 +81,12 @@ class WinScreen {
             this.active = true;
             document.body.appendChild(this.winDiv);
             this.game.stop();
-            this.gameSetting.stopTimer();
+            ASSET_MANAGER.pauseBackgroundMusic();
+            const defaultTrack = "assets/audio/music/track-9.wav";
+            console.log("Played win music successfully");
+            ASSET_MANAGER.playAsset(defaultTrack);
+            ASSET_MANAGER.adjustVolume(0.3);
+            this.game.stopTimer();
         }
     }
 }

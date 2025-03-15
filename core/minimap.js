@@ -96,13 +96,13 @@ class Minimap {
             ctx.fillRect(stoneX, stoneY, this.scale, this.scale);
         }
 
-        const enemy = this.game.entities.find(entity => entity instanceof Enemy);
-        if (enemy && tilemap) {
+        const enemies = this.game.entities.filter(entity => entity instanceof Enemy);
+        enemies.forEach(enemy => {
             const enemyX = minimapX + ((enemy.x / tilemap.tileSize) * this.scale);
             const enemyY = minimapY + ((enemy.y / tilemap.tileSize) * this.scale);
             ctx.fillStyle = 'red';
             ctx.fillRect(enemyX, enemyY, this.scale, this.scale);
-        }
+        });
 
         const cabin = this.game.entities.find(entity => entity instanceof Cabin);
         if (cabin && tilemap) {

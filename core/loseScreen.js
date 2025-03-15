@@ -83,10 +83,11 @@ class LoseScreen {
         if (!this.active) {
             this.active = true;
             document.body.appendChild(this.loseDiv); // Ensure the lose screen is added to the DOM
+            ASSET_MANAGER.pauseBackgroundMusic();
             const defaultTrack = "assets/audio/music/lose_music.wav";
             console.log("Played successfully");
             ASSET_MANAGER.playAsset(defaultTrack);
-            ASSET_MANAGER.adjustVolume(0.5);
+            ASSET_MANAGER.adjustVolume(0.3);
             this.gameSetting.stopTimer();
         }
     }
