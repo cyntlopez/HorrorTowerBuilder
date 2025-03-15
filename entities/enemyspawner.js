@@ -6,9 +6,11 @@ class EnemySpawner {
         this.player = player;
         this.spritesheet = spritesheet;
 
-        //this.isSoundPlaying = false;
         this.enemySpawnPath = "assets/audio/effects/enemy_entrance.wav";
         this.spawnSoundPool = ASSET_MANAGER.createAudioPool(this.enemySpawnPath, 4);
+
+        this.enemyWavePath = "assets/audio/effects/enemySpawn.wav";
+        this.waveSoundPool = ASSET_MANAGER.createAudioPool(this.enemyWavePath, 4);
 
         this.totalWaves = 10;
         this.waveNumber = 1;
@@ -24,6 +26,9 @@ class EnemySpawner {
         if (this.enemiesRemaining <= 0 && !this.spawning) {
             if (this.waveNumber <= this.totalWaves) {
                 if (currentTime - this.lastWaveEndTime >= this.timeBetweenWaves) {
+                    if (ASSET_MANAGER.settings.isSoundEffectEnabled('enemyWave')) {
+                        ASSET_MANAGER.playFromPool(this.waveSoundPool, 'enemyWave');
+                    }
                     this.startNextWave();
                 }
             } else if (this.waveNumber === this.totalWaves + 1) {
@@ -92,25 +97,6 @@ class EnemySpawner {
         enemy.speed = 50 + this.waveNumber * 2;
 
         this.game.addEntity(enemy);
-
-        //  // Only play sound if it's not already playing
-        //  if (!this.isSoundPlaying) {
-        //     // Make sure to get the sound before going to the if statement.
-        //     const sound = ASSET_MANAGER.getAsset(this.enemySpawnPath);
-        //     if (sound) {
-        //         sound.loop = false;
-        //         this.isSoundPlaying = true;
-                
-        //         // Set up the ended event listener
-        //         const onSoundEnd = () => {
-        //             this.isSoundPlaying = false;
-        //             sound.removeEventListener('ended', onSoundEnd);
-        //         };
-                
-        //         sound.addEventListener('ended', onSoundEnd);
-        //         ASSET_MANAGER.playSoundEffect(this.enemySpawnPath);
-        //     }
-        // }
 
         if (ASSET_MANAGER.settings.isSoundEffectEnabled('enemySpawn')) {
             ASSET_MANAGER.playFromPool(this.spawnSoundPool, 'enemySpawn');

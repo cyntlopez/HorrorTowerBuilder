@@ -109,6 +109,11 @@ ASSET_MANAGER.downloadAll(() => {
         refocusCanvas();
     });
 
+    document.getElementById("enemyWaveToggle").addEventListener("change", (event) => {
+        gameSetting.toggleSoundEffect('enemyWave');
+        refocusCanvas();
+    });
+
     document.getElementById("walkingToggle").addEventListener("change", (event) => {
         gameSetting.toggleSoundEffect('walking');
         // If turning off walking sound, stop it if it's currently playing
