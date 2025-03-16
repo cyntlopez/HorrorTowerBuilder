@@ -93,7 +93,21 @@ class TitleScreen {
         this.game.settings.timerPaused = false;
         this.settings.startTimer();
         setTimeout(() => document.getElementById("gameWorld").focus(), 0);
-        ASSET_MANAGER.playAsset("assets/audio/music/level-2-music.wav");
+
+        const tracks = [
+            "assets/audio/music/title-screen-music.wav",
+            "assets/audio/music/title-screen-music2.wav",
+            "assets/audio/music/level-1-music.wav",
+            "assets/audio/music/level-2-music.wav",
+            "assets/audio/music/Track-5-music.wav",
+            "assets/audio/music/Track-6-music.wav",
+            "assets/audio/music/trailer_song.wav",
+            "assets/audio/music/track-8.wav",
+            "assets/audio/music/track-9.wav",
+            "assets/audio/music/game_complete.wav"
+        ];
+        const randomTrack = tracks[Math.floor(Math.random() * tracks.length)];
+        ASSET_MANAGER.playAsset(randomTrack);
         this.settings.startWaveCountdown();
     }
 

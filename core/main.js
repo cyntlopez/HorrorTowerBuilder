@@ -36,6 +36,7 @@ ASSET_MANAGER.queueDownload("assets/audio/music/trailer_song.wav");
 ASSET_MANAGER.queueDownload("assets/audio/music/track-8.wav");
 ASSET_MANAGER.queueDownload("assets/audio/music/lose_music.wav");
 ASSET_MANAGER.queueDownload("assets/audio/music/track-9.wav");
+ASSET_MANAGER.queueDownload("assets/audio/music/game_complete.wav");
 
 // Effects
 ASSET_MANAGER.queueDownload("assets/audio/effects/Grass_walk5.wav");

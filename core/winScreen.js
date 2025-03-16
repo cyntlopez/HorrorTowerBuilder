@@ -82,7 +82,7 @@ class WinScreen {
             document.body.appendChild(this.winDiv);
             this.game.stop();
             ASSET_MANAGER.pauseBackgroundMusic();
-            const defaultTrack = "assets/audio/music/track-9.wav";
+            const defaultTrack = "assets/audio/music/game_complete.wav";
             console.log("Played win music successfully");
             ASSET_MANAGER.playAsset(defaultTrack);
             ASSET_MANAGER.adjustVolume(0.3);
