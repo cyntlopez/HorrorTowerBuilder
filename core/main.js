@@ -46,6 +46,8 @@ ASSET_MANAGER.queueDownload("assets/audio/effects/enemy death.wav");
 ASSET_MANAGER.queueDownload("assets/audio/effects/Ghost_spawn.wav");
 ASSET_MANAGER.queueDownload("assets/audio/effects/Grave_spawn.wav");
 ASSET_MANAGER.queueDownload("assets/audio/effects/Campfire_spawn.wav");
+ASSET_MANAGER.queueDownload("assets/audio/effects/Mage_spawn.wav");
+ASSET_MANAGER.queueDownload("assets/audio/effects/Totem_spawn.wav");
 
 ASSET_MANAGER.downloadAll(() => {
     const canvas = document.getElementById("gameWorld");
@@ -129,6 +131,16 @@ ASSET_MANAGER.downloadAll(() => {
 
     document.getElementById("campfireSpawnToggle").addEventListener("change", (event) => {
         gameSetting.toggleSoundEffect('campfireSpawn');
+        refocusCanvas();
+    });
+
+    document.getElementById("MageSpawnToggle").addEventListener("change", (event) => {
+        gameSetting.toggleSoundEffect('mageSpawn');
+        refocusCanvas();
+    });
+
+    document.getElementById("TotemSpawnToggle").addEventListener("change", (event) => {
+        gameSetting.toggleSoundEffect('totemSpawn');
         refocusCanvas();
     });
 

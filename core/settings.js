@@ -22,6 +22,8 @@ class Settings {
             'ghostSpawn' : true,
             'graveSpawn' : true,
             'campfireSpawn' : true,
+            'mageSpawn' : true,
+            'totemSpawn' : true,
         };
 
         // Get existing audio controls

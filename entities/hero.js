@@ -48,6 +48,12 @@ class Hero {
 
         this.campfireSpawnPath = "assets/audio/effects/Campfire_spawn.wav";
         this.campfireSoundPool = ASSET_MANAGER.createAudioPool(this.campfireSpawnPath, 4);
+
+        this.mageSpawnPath = "assets/audio/effects/Mage_spawn.wav";
+        this.mageSoundPool = ASSET_MANAGER.createAudioPool(this.mageSpawnPath, 4);
+
+        this.totemSpawnPath = "assets/audio/effects/Totem_spawn.wav";
+        this.totemSoundPool = ASSET_MANAGER.createAudioPool(this.totemSpawnPath, 4);
     }
 
     setupControls() {
@@ -404,10 +410,16 @@ class Hero {
             case "MageTower":
                 woodCost = 2;
                 stoneCost = 2;
+                if (ASSET_MANAGER.settings.isSoundEffectEnabled('mageSpawn')) {
+                    ASSET_MANAGER.playFromPool(this.mageSoundPool, 'mageSpawn');
+                }
                 break;
             case "BombTower":
                 woodCost = 3;
                 stoneCost = 3;
+                if (ASSET_MANAGER.settings.isSoundEffectEnabled('totemSpawn')) {
+                    ASSET_MANAGER.playFromPool(this.totemSoundPool, 'totemSpawn');
+                }
                 break;
         }
 
