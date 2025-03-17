@@ -13,8 +13,8 @@ class Tree {
 
 
     draw(ctx) {
-        const treeWidth = 95;
-        const treeHeight = 120;
+        const treeWidth = 70;
+        const treeHeight = 100;
 
         const offsetX = treeWidth / 2;
         const offsetY = treeHeight / 2;

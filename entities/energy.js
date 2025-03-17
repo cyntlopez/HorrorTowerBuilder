@@ -11,6 +11,9 @@ class Energy {
 
         this.x = cabinX + dx;
         this.y = cabinY + dy;
+
+        this.animator = new Animator(this.spritesheet, 0, 0, 64, 64.5, 6, 0.1, 0,false, true);
+
     }
 
     update() {
@@ -47,7 +50,7 @@ class Energy {
 
 
         if (distanceFromPlayer <= visRadiusInPixels || distanceFromCamera <= secondCircleRadius ) {
-            ctx.drawImage(this.spritesheet, drawX, drawY, energyWidth, energyHeight);
+            this.animator.drawFrame(this.game.clockTick, ctx, drawX, drawY,1);
         }
     }
 }

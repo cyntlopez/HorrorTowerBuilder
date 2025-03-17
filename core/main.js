@@ -16,6 +16,7 @@ ASSET_MANAGER.queueDownload("assets/sprites/boss/final_boss.png");
 // Resources
 ASSET_MANAGER.queueDownload("assets/sprites/resources/wood.png");
 ASSET_MANAGER.queueDownload("assets/sprites/resources/energy_drink_static.png");
+ASSET_MANAGER.queueDownload("assets/sprites/resources/energy_drink.png");
 ASSET_MANAGER.queueDownload("assets/sprites/resources/stone.png");
 
 // Buildings
@@ -181,6 +182,7 @@ ASSET_MANAGER.downloadAll(() => {
 
     // Important: Fix the TileMap creation by providing the grass spritesheet
     const stone = ASSET_MANAGER.getAsset("assets/sprites/resources/stone.png")
+    const energyAnimate = ASSET_MANAGER.getAsset("assets/sprites/resources/energy_drink.png")
     const energy = ASSET_MANAGER.getAsset("assets/sprites/resources/energy_drink_static.png")
 
 
@@ -235,7 +237,7 @@ ASSET_MANAGER.downloadAll(() => {
 
     gameEngine.addEntity(new Tree(gameEngine, tree, 350, 300, treePosition.x, treePosition.y, player, tilemap));
     gameEngine.addEntity(new Stone(gameEngine, stone, 350, 300, stonePosition.x, stonePosition.y, player, tilemap));
-    gameEngine.addEntity(new Energy(gameEngine, energy, 350, 300, player, tilemap, resourceBar));
+    gameEngine.addEntity(new Energy(gameEngine, energyAnimate, 350, 300, player, tilemap, resourceBar));
     gameEngine.addEntity(gameSetting);
     gameEngine.addEntity(resourceBar);
     gameEngine.addEntity(player);
