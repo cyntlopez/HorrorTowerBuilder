@@ -124,10 +124,10 @@ class TileMap {
             }
 
             // Draw the entity's visibility circle (optional)
-            ctx.beginPath();
-            ctx.arc(entity.x, entity.y, visionRadius * this.tileSize, 0, Math.PI * 2);
-            ctx.strokeStyle = entity instanceof Building ? "rgba(0, 0, 255, 0.5)" : "rgba(255, 255, 0, 0.5)"; // Blue for buildings, yellow for resources
-            ctx.stroke();
+            // ctx.beginPath();
+            // ctx.arc(entity.x, entity.y, visionRadius * this.tileSize, 0, Math.PI * 2);
+            // ctx.strokeStyle = entity instanceof Building ? "rgba(0, 0, 255, 0.5)" : "rgba(255, 255, 0, 0.5)"; // Blue for buildings, yellow for resources
+            // ctx.stroke();
         });
 
         // Restore the original context state

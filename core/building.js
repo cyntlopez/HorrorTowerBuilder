@@ -69,10 +69,10 @@ class Building {
         const y = this.row * this.height + this.height / 2;
 
         if (range) {  // Only draw if the building has a range
-            ctx.strokeStyle = "rgba(0, 255, 0, 0.5)"; // Light green circle
+            // ctx.strokeStyle = "rgba(0, 255, 0, 0.5)"; // Light green circle
             ctx.lineWidth = 2;
             ctx.beginPath();
-            ctx.arc(x, y, range, 0, Math.PI * 2);
+            // ctx.arc(x, y, range, 0, Math.PI * 2);
             ctx.stroke();
         }
     }
